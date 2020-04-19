@@ -4,6 +4,6 @@ import './styles.css';
 
 export default function Home() {
     return (
-        <div>sdsd</div>
+        <div>Salve!</div>
     )
 }
