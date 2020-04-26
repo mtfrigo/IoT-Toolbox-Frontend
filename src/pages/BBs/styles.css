@@ -1,0 +1,13 @@
+
+.bb-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bb-item {
+  width: 80%;
+  height: 200px;
+  padding: 20px;
+}

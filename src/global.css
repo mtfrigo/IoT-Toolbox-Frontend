@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css?family=:wRoboto:wght@300;400;500;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -6,6 +9,7 @@
 }
 
 body {
+  font: 400 14px Manrope, sans-serif;
   background: #f0f0f0;
   -webkit-font-smoothing: antialised;
 }
@@ -17,18 +21,15 @@ body {
 
 }
 
-.sidemenu {
-  padding: 10px;
-  width: 300px;
-  background: #fff;
-}
 
-.sidemenu-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-.content {
+.container .parent {
   flex: 1;
   padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.container .parent .content {
+  flex: 1;
 }
