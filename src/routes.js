@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import HomePage from './pages/Home';
 import RequirementsPage from './pages/Requirements';
@@ -8,9 +8,13 @@ import BuildingBlocksPage from './pages/BBs';
 import Sidebar from './components/Sidebar';
 import ProgressBar from './components/ProgressBar';
 
+import { GlobalStateProvider } from "./context";
+
+
 export default function Routes() {
     return (
         <BrowserRouter>
+          <GlobalStateProvider>
             <div className="container">
               <Sidebar />
 
@@ -27,6 +31,8 @@ export default function Routes() {
 
               </div>
             </div>
+          </GlobalStateProvider>
+
         </BrowserRouter>
     )
 }

@@ -4,19 +4,34 @@ import './styles.css';
 
 import Paper from '@material-ui/core/Paper';
 
+import { ProgressStateContext } from '../../context';
+
+
 export default function ProgressBar() {
-  
+
+  const steps = [
+    {id: 0, step: 'Requirements Specification'},
+    {id: 1, step: 'Building Block Selection'},
+    {id: 2, step: 'Process Creation'},
+    {id: 3, step: 'Process Execution'},
+    {id: 4, step: 'IoT Environment Adaptation'},
+    {id: 5, step: 'IoT Environment Retirement<'}
+  ]
+
+
 
   return (
-    <div className="progressbar-container">
-    
-    
-      <Paper className="step-box">Requirements Specification</Paper>
-      <Paper className="step-box">Building Block Selection</Paper>
-      <Paper className="step-box">Process Creation</Paper>
-      <Paper className="step-box">Process Execution</Paper>
-      <Paper className="step-box">IoT Environment Adaptation</Paper>
-      <Paper className="step-box">IoT Environment Retirement</Paper>
-    </div>
+    <ProgressStateContext.Consumer>
+    {ctx => {
+      return (
+       <div className="progressbar-container">
+       {
+         steps.map((s) => (
+          <Paper className={ctx.progress === s.id ? "step-box-selected" : "step-box"} onClick={() => ctx.setProgress(s.id)}>{s.step}</Paper>
+         ))
+       }
+      </div>)
+    }}
+    </ProgressStateContext.Consumer>
   )
 }

@@ -2,7 +2,7 @@ import React from 'react';
 
 import './styles.css';
 
-import ReqTable from '../../components/ReqTable'
+import ReqTable from '../../components/ReqTable';
 
 
 export default function RequirementsPage() {
