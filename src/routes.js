@@ -8,13 +8,11 @@ import BuildingBlocksPage from './pages/BBs';
 import Sidebar from './components/Sidebar';
 import ProgressBar from './components/ProgressBar';
 
-import { GlobalStateProvider } from "./context";
-
+import { MatchingProvider } from './contexts/matching'
 
 export default function Routes() {
     return (
         <BrowserRouter>
-          <GlobalStateProvider>
             <div className="container">
               <Sidebar />
 
@@ -22,17 +20,17 @@ export default function Routes() {
                 <ProgressBar />
 
                 <div className="content">
-                  <Switch>
-                      <Route path="/" exact component={HomePage}/>
-                      <Route path="/requirements" exact component={RequirementsPage}/>
-                      <Route path="/bbs" exact component={BuildingBlocksPage}/>
-                  </Switch>
+                 <MatchingProvider>
+                    <Switch>
+                        <Route path="/" exact component={HomePage}/>
+                        <Route path="/requirements" exact component={RequirementsPage}/>
+                        <Route path="/bbs" exact component={BuildingBlocksPage}/>
+                    </Switch>
+                 </MatchingProvider>
                 </div>
 
               </div>
             </div>
-          </GlobalStateProvider>
-
         </BrowserRouter>
     )
 }

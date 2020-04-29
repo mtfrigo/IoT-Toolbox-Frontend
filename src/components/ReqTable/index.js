@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 
 import './styles.css';
 
@@ -29,7 +29,8 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 
   
 
-import { ReqStateContext } from '../../context';
+import ProgressContext from '../../contexts/progress';
+import MatchingContext from '../../contexts/matching';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -202,6 +203,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ReqTable() {
+  const { step, setStep } = useContext(ProgressContext);
+  const { selectedRequirements, selectRequirements } = useContext(MatchingContext);
 
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
@@ -220,32 +223,31 @@ export default function ReqTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = requirements.map((n) => n.reference);
-      setSelected(newSelecteds);
+      const newSelecteds = requirements.map((n) => n.id);
+      selectRequirements(newSelecteds);
       return;
     }
-    setSelected([]);
+    selectRequirements([]);
   };
 
-  const handleClick = (event, name, ctx) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, name) => {
+    const selectedIndex = selectedRequirements.indexOf(name);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selectedRequirements, name);
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
+      newSelected = newSelected.concat(selectedRequirements.slice(1));
     } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
+      newSelected = newSelected.concat(selectedRequirements.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selectedRequirements.slice(0, selectedIndex),
+        selectedRequirements.slice(selectedIndex + 1),
       );
     }
 
-    ctx.selectReq(newSelected)
-    setSelected(newSelected);
+    selectRequirements(newSelected)
   };
 
   const handleChangePage = (event, newPage) => {
@@ -257,12 +259,13 @@ export default function ReqTable() {
     //setPage(0);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (id) => selectedRequirements.indexOf(id) !== -1;
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, requirements.length - page * rowsPerPage);
 
   useEffect(() => {
     getRequirements();
+    setStep(0)
   }, [])
 
   async function getRequirements() {
@@ -270,85 +273,73 @@ export default function ReqTable() {
     setRequirements(res.data)
   }
   
-
-
-
   return (
-    <ReqStateContext.Consumer >
-    {
-      ctx => {
-        console.log()
-        return (
-          <div className={classes.root}>
-            <Paper className={classes.paper}>
-              <EnhancedTableToolbar numSelected={selected.length} />
-              <TableContainer>
-                <Table
-                  className={classes.table}
-                  aria-labelledby="tableTitle"
-                  size={dense ? 'small' : 'medium'}
-                  aria-label="enhanced table"
-                >
-                  <EnhancedTableHead
-                    classes={classes}
-                    numSelected={selected.length}
-                    order={order}
-                    orderBy={orderBy}
-                    onSelectAllClick={handleSelectAllClick}
-                    onRequestSort={handleRequestSort}
-                    rowCount={requirements.length}
-                  />
-                  <TableBody>
-                    {stableSort(requirements, getComparator(order, orderBy))
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((row, index) => {
-                        const isItemSelected = isSelected(row.id);
-                        const labelId = `enhanced-table-checkbox-${index}`;
+        <div className={classes.root}>
+          <Paper className={classes.paper}>
+            <EnhancedTableToolbar numSelected={selected.length} />
+            <TableContainer>
+              <Table
+                className={classes.table}
+                aria-labelledby="tableTitle"
+                size={dense ? 'small' : 'medium'}
+                aria-label="enhanced table"
+              >
+                <EnhancedTableHead
+                  classes={classes}
+                  numSelected={selectedRequirements.length}
+                  order={order}
+                  orderBy={orderBy}
+                  onSelectAllClick={handleSelectAllClick}
+                  onRequestSort={handleRequestSort}
+                  rowCount={requirements.length}
+                />
+                <TableBody>
+                  {stableSort(requirements, getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                      const isItemSelected = isSelected(row.id);
+                      const labelId = `enhanced-table-checkbox-${index}`;
 
-                        return (
-                          <TableRow
-                            hover
-                            onClick={(event) => handleClick(event, row.id, ctx)}
-                            role="checkbox"
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={row.id}
-                            selected={isItemSelected}
-                          >
-                            <TableCell padding="checkbox">
-                              <Checkbox
-                                checked={isItemSelected}
-                                inputProps={{ 'aria-labelledby': labelId }}
-                              />
-                            </TableCell>
-                            <TableCell component="th" id={labelId} scope="row" padding="none">
-                              Req-{row.id}
-                            </TableCell>
-                            <TableCell align="left">{row.description}</TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    {emptyRows > 0 && (
-                      <TableRow style={{ height: 53 * emptyRows }}>
-                        <TableCell colSpan={6} />
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <TablePagination
-                component="div"
-                count={requirements.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                //onChangeRowsPerPage={handleChangeRowsPerPage}
-              />
-            </Paper>
-          </div>
-        )
-      }
-    }
-    </ReqStateContext.Consumer>
+                      return (
+                        <TableRow
+                          hover
+                          onClick={(event) => handleClick(event, row.id)}
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={row.id}
+                          selected={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              inputProps={{ 'aria-labelledby': labelId }}
+                            />
+                          </TableCell>
+                          <TableCell component="th" id={labelId} scope="row" padding="none">
+                            Req-{row.id}
+                          </TableCell>
+                          <TableCell align="left">{row.description}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              component="div"
+              count={requirements.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={handleChangePage}
+              //onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+          </Paper>
+        </div>
   )
-}
+};
