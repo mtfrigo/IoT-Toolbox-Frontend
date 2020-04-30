@@ -1,56 +1,19 @@
-.progressbar-container {
-  height: 140px;
-  width: 100%;
+.bar-footer {
+
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
-.progressbar-container .step-box {
-  padding: 10px;
-  margin: 5px;
-  height: 75px;
-  width: 150px;
-  font-size: 16px;
-  text-align: center;
-  line-height: 26px;
-
-  background-color: #fff;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
-  opacity: 0.4;
-  transition: opacity 0.4s;
-  transition: width 0.4s;
-  transition: height 0.4s;
+.progress-bar {
+  background-color: aqua;
 }
 
-.progressbar-container .step-box-selected {
-  padding: 10px;
-  margin: 5px;
-  height: 100px;
-  width: 165px;
-  font-size: 18px;
-  text-align: center;
-  line-height: 26px;
-
-  background-color: #fff;
-
+.bar-footer .buttons-container{
+  width: 100%;
   display: flex;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
-
-  cursor: pointer;
-  opacity: 1;
-  transition: opacity 0.4s;
-  transition: width 0.4s;
-  transition: height 0.4s;
-}
-
-.progressbar-container .step-box:hover {
-  opacity: 1;
+  margin: 10px 0;
 }

@@ -1,8 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import './styles.css';
 
 import Paper from '@material-ui/core/Paper';
+
+import api from '../../services/api';
 
 
 import ProgressContext from '../../contexts/progress';
@@ -10,14 +12,21 @@ import MatchingContext from '../../contexts/matching';
 
 export default function BuildingBlocksPage() {
 
-  const { step, setStep } = useContext(ProgressContext);
+  const { activeStep, setActiveStep } = useContext(ProgressContext);
   const { selectedRequirements, selectRequirements } = useContext(MatchingContext);
 
-  
+  const [ buildingBlocks, setBuildingBlocks ] = useState('');
+
   useEffect(() => {
-    console.log(selectedRequirements)
-    setStep(1)
+    getBuildingBlocks();
+    setActiveStep(1)
   }, [])
+
+  async function getBuildingBlocks() {
+    const res = await api.get('/building-blocks');
+    setBuildingBlocks(res.data)
+    console.log(res.data)
+  }
 
 
   return (

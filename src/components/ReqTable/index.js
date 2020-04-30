@@ -203,7 +203,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ReqTable() {
-  const { step, setStep } = useContext(ProgressContext);
+  const { activeStep, setActiveStep } = useContext(ProgressContext);
   const { selectedRequirements, selectRequirements } = useContext(MatchingContext);
 
   const classes = useStyles();
@@ -265,7 +265,7 @@ export default function ReqTable() {
 
   useEffect(() => {
     getRequirements();
-    setStep(0)
+    setActiveStep(0)
   }, [])
 
   async function getRequirements() {
