@@ -1,13 +1,29 @@
 
-.bb-container {
+.bb-page {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  height: 100%;
+}
+
+.bb-container {
+  padding: 24px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  max-height: 100%;
+  flex-grow: 2;
 }
 
 .bb-item {
-  width: 80%;
-  height: 200px;
+  width: 240px;
+  height: 120px;
   padding: 20px;
+  margin-top: 24px;
+}
+
+.bb-page .block-details {
+  height: 100%;
+  width: 300px;
+  padding-top: 20px;
 }

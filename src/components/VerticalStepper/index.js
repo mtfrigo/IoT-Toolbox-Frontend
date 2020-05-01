@@ -7,6 +7,8 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepConnector from '@material-ui/core/StepConnector';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import StepContent from '@material-ui/core/StepContent';
 //import Typography from '@material-ui/core/Typography';
 
 
@@ -27,10 +29,8 @@ import './styles.css';
 
 const useQontoStepIconStyles = makeStyles({
   root: {
-    color: '#eaeaf0',
-    display: 'flex',
-    height: 22,
-    alignItems: 'center',
+    width: '100%',
+    height: '100%'
   },
   active: {
     color: '#784af4',
@@ -50,7 +50,8 @@ const useQontoStepIconStyles = makeStyles({
 
 function QontoStepIcon(props) {
   const classes = useQontoStepIconStyles();
-  const { active, completed } = props;
+  const active = true;
+  const completed = true;
 
   return (
     <div
@@ -123,7 +124,8 @@ const useColorlibStepIconStyles = makeStyles({
 
 function ColorlibStepIcon(props) {
   const classes = useColorlibStepIconStyles();
-  const { active, completed } = props;
+  const active = true;
+  const completed = true;
   const { steps } = useContext(ProgressContext);
 
   return (
@@ -169,90 +171,32 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
     background: '#ccc',
   },
+  description: {
+    paddingLeft: 60,
+    borderLeftStyle: 'solid',
+    borderLeftWidth: 1,
+    position: 'relative',
+    marginLeft: 12,
+    borderColor: '#bdbdbd'
+
+  }
 }));
 
-export default function CustomizedSteppers() {
+export default function VerticalStepper() {
   const classes = useStyles();
-  const { activeStep, setActiveStep, steps, show } = useContext(ProgressContext);
+  const { activeStep, setActiveStep, steps } = useContext(ProgressContext);
   
-  let history = useHistory();
-
-  function redirect(step) {
-    switch (step) {
-      case 0:
-        history.push('/requirements'); break;
-      case 1:
-        history.push('/bbs'); break;
-      default:
-        history.push('/');
-    }
-  }
- 
-  function handleNext()  {
-    var newStep = activeStep + 1;
-    setActiveStep(newStep);
-    redirect(newStep);
-  };
-
-  function handleBack()  {
-    var newStep = activeStep - 1;
-    setActiveStep(newStep);
-    redirect(newStep);
-  };
-
-  function handleReset()  {
-    var newStep = 0;
-    setActiveStep(newStep);
-    redirect(newStep);
-  };
-
   return (
+    <div className={classes.root}>
+      <Stepper orientation='vertical'>
+        {steps.map((step) => (
+          <Step key={step.id}>
+            <StepLabel StepIconComponent={ColorlibStepIcon}>{step.name}</StepLabel>
+              <Typography className={classes.description}>{step.name}</Typography>
+          </Step>
+        ))}
+      </Stepper>
 
-    <div>
-    {
-      show ? (
-        <div className={classes.root}>
-          <Stepper className={classes.bar} alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
-            {steps.map((step) => (
-              <Step key={step.id}>
-                <StepLabel StepIconComponent={ColorlibStepIcon}>{step.name}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-
-          
-          <div className="bar-footer">
-            {activeStep === steps.length ? (
-              <div>
-                <div className='buttons-container'>
-                  <Button onClick={() => handleReset()} className={classes.button}>
-                    Reset
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div>
-                <div className='buttons-container'>
-                  <Button disabled={activeStep === 0} onClick={() => handleBack()} className={classes.button}>
-                    Back
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleNext()}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      ) : null
-    }
     </div>
-
-    
   );
 }

@@ -15,6 +15,7 @@ const ProgressContext = createContext();
 
 export const ProgressProvider = ({children}) => {
   const [activeStep, setActiveStep] = useState(1);
+  const [show, setShowBar] = useState(false);
 
   const steps = [
     { 
@@ -55,7 +56,7 @@ export const ProgressProvider = ({children}) => {
   ];
 
   return (
-    <ProgressContext.Provider value={{activeStep, setActiveStep, steps}}>
+    <ProgressContext.Provider value={{activeStep, setActiveStep, steps, show, setShowBar}}>
       {children}
     </ProgressContext.Provider>
   );

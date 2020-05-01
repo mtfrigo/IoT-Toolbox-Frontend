@@ -203,16 +203,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ReqTable() {
-  const { activeStep, setActiveStep } = useContext(ProgressContext);
+  const { setActiveStep } = useContext(ProgressContext);
   const { selectedRequirements, selectRequirements } = useContext(MatchingContext);
 
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('reference');
-  const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [dense] = React.useState(false);
+  const [rowsPerPage] = React.useState(10);
   const [requirements, setRequirements] = React.useState([]);
 
   const handleRequestSort = (event, property) => {
@@ -238,7 +237,7 @@ export default function ReqTable() {
       newSelected = newSelected.concat(selectedRequirements, name);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selectedRequirements.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
+    } else if (selectedIndex === selectedRequirements.length - 1) {
       newSelected = newSelected.concat(selectedRequirements.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
@@ -254,10 +253,6 @@ export default function ReqTable() {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    //setRowsPerPage(parseInt(event.target.value, 10));
-    //setPage(0);
-  };
 
   const isSelected = (id) => selectedRequirements.indexOf(id) !== -1;
 
@@ -276,7 +271,7 @@ export default function ReqTable() {
   return (
         <div className={classes.root}>
           <Paper className={classes.paper}>
-            <EnhancedTableToolbar numSelected={selected.length} />
+            <EnhancedTableToolbar numSelected={selectedRequirements.length} />
             <TableContainer>
               <Table
                 className={classes.table}
