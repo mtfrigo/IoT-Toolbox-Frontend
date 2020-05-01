@@ -30,9 +30,8 @@ import './styles.css'
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
-    right: -4,
-    top: 5,
-    border: `2px solid ${theme.palette.background.paper}`,
+    right: -6,
+    top: 7,
     padding: '0 5px',
   },
 }))(Badge);
@@ -100,6 +99,9 @@ const useStyles = makeStyles((theme) => ({
   },
   selected: {
     background: '#f1f1f1'
+  },
+  matched: {
+    background: 'rgba(0, 255, 78, 0.25)'
   }
 }));
 
@@ -184,7 +186,7 @@ export default function RecipeReviewCard(props) {
       <CardContent className={clsx(classes.content, {[classes.justified]: infos.length < 3})} >
         <Typography variant="body2" color="textPrimary" component="div">
           {
-            infos.length > 0 ? infos.map((info, i) => <p className={classes.item} key={i}> {info.name}</p>) : <p className={classes.item} >No info to show</p>
+            infos.length > 0 ? infos.map((info, i) => <p className={classes.item} key={i}> {info.name}</p>) : <p className={classes.item} style={{background: 'rgb(255, 226, 236)', color: 'red'}}>No data</p>
           }
         </Typography>
       </CardContent>

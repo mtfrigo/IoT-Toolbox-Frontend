@@ -137,7 +137,7 @@ export default function BuildingBlockDetails(props) {
               {
                 info.items.length ?  
                   info.items.map((item, j) => <div key={j} className={classes.infoItem}>{item.name}</div>) : 
-                  <div className={classes.infoItem}>{info.zero}</div>
+                  <div className={classes.infoItem} style={{background: 'rgb(255, 226, 236)', color: 'red'}}>{info.zero}</div>
               }
             </div>
           </div>

@@ -30,7 +30,7 @@ import './styles.css';
 const useQontoStepIconStyles = makeStyles({
   root: {
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   active: {
     color: '#784af4',
@@ -192,7 +192,7 @@ export default function VerticalStepper() {
         {steps.map((step) => (
           <Step key={step.id}>
             <StepLabel StepIconComponent={ColorlibStepIcon}>{step.name}</StepLabel>
-              <Typography className={classes.description}>{step.name}</Typography>
+              <Typography variant="body" color="textPrimary" component="div" className={classes.description}>{step.description}</Typography>
           </Step>
         ))}
       </Stepper>

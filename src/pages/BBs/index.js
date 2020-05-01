@@ -14,7 +14,7 @@ import BuildingBlockDetails from '../../components/BuildingBlockDetails'
 
 export default function BuildingBlocksPage() {
 
-  const { setActiveStep } = useContext(ProgressContext);
+  const { setActiveStep, setShowBar } = useContext(ProgressContext);
   const { selectedRequirements, selectRequirements, selectedBlock, selectBlock } = useContext(MatchingContext);
 
   const [ buildingBlocks, setBuildingBlocks ] = useState([]);
@@ -22,6 +22,7 @@ export default function BuildingBlocksPage() {
   useEffect(() => {
     getBuildingBlocks();
     setActiveStep(1);
+    setShowBar(true)
   }, [])
 
   async function getBuildingBlocks() {

@@ -56,9 +56,9 @@ export default function HomePage() {
             }
                 
             </div>
-            <div className='stepper'>
+            <Paper className='stepper'>
                 <VerticalStepper />
-            </div>
+            </Paper>
         </div>
     )
 }
