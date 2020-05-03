@@ -211,7 +211,7 @@ export default function ReqTable() {
   const [orderBy, setOrderBy] = React.useState('reference');
   const [page, setPage] = React.useState(0);
   const [dense] = React.useState(false);
-  const [rowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [requirements, setRequirements] = React.useState([]);
 
   const handleRequestSort = (event, property) => {
@@ -260,6 +260,7 @@ export default function ReqTable() {
 
   useEffect(() => {
     getRequirements();
+    document.getElementsByClassName('table-container')[0].clientHeight > 800 ? setRowsPerPage(10) : setRowsPerPage(5)
     setActiveStep(0)
   }, [])
 

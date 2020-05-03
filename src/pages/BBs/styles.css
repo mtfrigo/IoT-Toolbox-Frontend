@@ -11,8 +11,9 @@
   flex-direction: row;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  max-height: 100%;
+  max-height: calc(100vh - 186px);
   flex-grow: 2;
+  overflow-y: auto;
 }
 
 .bb-item {
@@ -26,4 +27,5 @@
   height: 100%;
   width: 300px;
   padding-top: 20px;
+  max-height: calc(100vh - 186px);
 }
