@@ -2,8 +2,6 @@ import React, { useEffect, useContext } from 'react';
 
 import './styles.css';
 
-import api from '../../services/api';
-
 // MATERIAL ICON TABLE IMPORTS
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -26,12 +24,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 //import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-
   
-
 import ProgressContext from '../../contexts/progress';
 import MatchingContext from '../../contexts/matching';
-
+import RequirementsContext from '../../contexts/requirements';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -205,6 +201,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ReqTable() {
   const { setActiveStep } = useContext(ProgressContext);
   const { selectedRequirements, selectRequirements } = useContext(MatchingContext);
+  const { requirements } = useContext(RequirementsContext);
 
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
@@ -212,7 +209,6 @@ export default function ReqTable() {
   const [page, setPage] = React.useState(0);
   const [dense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [requirements, setRequirements] = React.useState([]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -259,15 +255,15 @@ export default function ReqTable() {
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, requirements.length - page * rowsPerPage);
 
   useEffect(() => {
-    getRequirements();
     document.getElementsByClassName('table-container')[0].clientHeight > 800 ? setRowsPerPage(10) : setRowsPerPage(5)
     setActiveStep(0)
-  }, [])
+  }, [setActiveStep])
 
-  async function getRequirements() {
-    const res = await api.get('/requirements');
-    setRequirements(res.data)
-  }
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(5);
+    setPage(0);
+  };
+
   
   return (
         <div className={classes.root}>
@@ -328,12 +324,13 @@ export default function ReqTable() {
               </Table>
             </TableContainer>
             <TablePagination
+              rowsPerPageOptions={[5, 10]}
               component="div"
               count={requirements.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onChangePage={handleChangePage}
-              //onChangeRowsPerPage={handleChangeRowsPerPage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
             />
           </Paper>
         </div>

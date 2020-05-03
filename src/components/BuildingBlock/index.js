@@ -5,15 +5,10 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red, blue } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { red } from '@material-ui/core/colors';
 import Badge from '@material-ui/core/Badge';
 
 import MenuBookIcon from '@material-ui/icons/MenuBook';
@@ -21,7 +16,6 @@ import MergeTypeIcon from '@material-ui/icons/MergeType';
 import CallSplitIcon from '@material-ui/icons/CallSplit';
 import BuildIcon from '@material-ui/icons/Build';
 
-import TollIcon from '@material-ui/icons/Toll';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import MatchingContext from '../../contexts/matching';
@@ -132,6 +126,7 @@ export default function RecipeReviewCard(props) {
       case 3:
         setInfos(bb.DependentBlocks);
         setMenu(3);
+        break;
       default:
         break;
     }

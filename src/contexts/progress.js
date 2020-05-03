@@ -6,7 +6,6 @@ import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import TransformIcon from '@material-ui/icons/Transform';
 import SettingsIcon from '@material-ui/icons/Settings';
-import VideoLabelIcon from '@material-ui/icons/VideoLabel';
 import WeekendIcon from '@material-ui/icons/Weekend';
 
 //import some service

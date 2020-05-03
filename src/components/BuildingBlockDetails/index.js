@@ -1,8 +1,6 @@
 import React from 'react';
 
-import Paper from '@material-ui/core/Paper';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
 
 
 import Card from '@material-ui/core/Card';
@@ -12,9 +10,7 @@ import CardContent from '@material-ui/core/CardContent';
 
 
 import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import MenuBookIcon from '@material-ui/icons/MenuBook';
 import CloseIcon from '@material-ui/icons/Close';
 import BuildIcon from '@material-ui/icons/Build';
 import MergeTypeIcon from '@material-ui/icons/MergeType';

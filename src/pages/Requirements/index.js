@@ -12,7 +12,7 @@ export default function RequirementsPage() {
 
   useEffect(() => {
     setShowBar(true)
-  }, [])
+  })
 
   return (
     <div className="table-container">

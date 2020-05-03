@@ -8,7 +8,6 @@ import ProgressContext from '../../contexts/progress';
 import Typography from '@material-ui/core/Typography';
 
 
-import BuildIcon from '@material-ui/icons/Build';
 import { FiBox} from 'react-icons/fi';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ToysIcon from '@material-ui/icons/Toys';
@@ -17,13 +16,11 @@ import ToysIcon from '@material-ui/icons/Toys';
 import Paper from '@material-ui/core/Paper';
 
 export default function HomePage() {
-    const { setShowBar, steps } = useContext(ProgressContext);
-
-    console.log(steps)
+    const { setShowBar } = useContext(ProgressContext);
 
     useEffect(() => {
         setShowBar(false);
-    }, [])
+    })
 
     const items = [
         { name: 'Requirements', total: 32, icon: <SettingsIcon/> },
@@ -37,17 +34,17 @@ export default function HomePage() {
             <div className='dashboard'>
             {
                 items.map((item,i ) => 
-                <Paper className="item">
+                <Paper className="item" key={i}>
                     <div className='icon-container'>
                         <Paper className="item-icon">
                             {item.icon}
                         </Paper>
                     </div>
                     <div className="labels">
-                        <Typography variant="body" color="textSecondary" component="div" className='label'>
+                        <Typography variant="body1" color="textSecondary" className='label'>
                             {item.name}
                         </ Typography>
-                        <Typography variant="body" color="textPrimary" component="div" className='label total'>
+                        <Typography variant="body1" color="textPrimary" component="div" className='label total'>
                             {item.total}
                         </ Typography>
                     </div>
