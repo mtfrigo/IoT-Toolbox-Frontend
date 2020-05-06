@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import HomePage from './pages/Home';
 import RequirementsPage from './pages/Requirements';
 import BuildingBlocksPage from './pages/BBs';
+import BBIsPage from './pages/BBIs';
 
 import Sidebar from './components/Sidebar';
 import ProgressBar from './components/ProgressBar';
@@ -29,6 +30,7 @@ export default function Routes() {
                         <Route path="/" exact component={HomePage}/>
                         <Route path="/requirements" exact component={RequirementsPage}/>
                         <Route path="/bbs" exact component={BuildingBlocksPage}/>
+                        <Route path="/bbis/:id" exact component={BBIsPage}/>
                     </Switch>
                  </BlocksProvider>
                  </RequirementsProvider>

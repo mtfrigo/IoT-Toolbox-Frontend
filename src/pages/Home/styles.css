@@ -15,7 +15,7 @@
 }
 
 .home-page-container .dashboard .item {
-  width: 300px;
+  width: 400px;
   height: 100px;
 
   display: flex;
@@ -28,7 +28,6 @@
   position: relative;
   top: -40px;
   margin-left: 30px;
-  background-color: green;
   display: flex;
   align-items: center;
   justify-content: center;

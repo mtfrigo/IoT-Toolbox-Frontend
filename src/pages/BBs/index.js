@@ -2,8 +2,6 @@ import React, { useContext, useEffect } from 'react';
 
 import './styles.css';
 
-
-
 import ProgressContext from '../../contexts/progress';
 import MatchingContext from '../../contexts/matching';
 import BlocksContext from '../../contexts/blocks';
@@ -19,10 +17,8 @@ export default function BuildingBlocksPage() {
 
   useEffect(() => {
     setActiveStep(1);
-    setShowBar(true)
+    setShowBar(true);
   })
-
-
 
   return (
     <div className='bb-page'>

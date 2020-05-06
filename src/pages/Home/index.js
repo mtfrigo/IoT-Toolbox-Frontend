@@ -8,7 +8,7 @@ import ProgressContext from '../../contexts/progress';
 import Typography from '@material-ui/core/Typography';
 
 
-import { FiBox} from 'react-icons/fi';
+import { FiBox, FiCodesandbox} from 'react-icons/fi';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ToysIcon from '@material-ui/icons/Toys';
 
@@ -23,10 +23,10 @@ export default function HomePage() {
     })
 
     const items = [
-        { name: 'Requirements', total: 32, icon: <SettingsIcon/> },
-        { name: 'B. Blocks', total: 12, icon: <FiBox/> },
-        { name: 'B. Blocks Imp.', total: 7, icon: <FiBox/> },
-        { name: 'Projects', total: 2, icon: <ToysIcon/> },
+        { name: 'Requirements', total: 32, icon: <SettingsIcon/>, color: '#eb4d48' },
+        { name: 'Building Blocks', total: 12, icon: <FiBox/>, color: '#eb4d48' },
+        { name: 'Blocks Implementations', total: 7, icon: <FiCodesandbox/>, color: '#eb4d48' },
+        { name: 'Projects', total: 2, icon: <ToysIcon/>, color: '#eb4d48' },
     ]
 
     return (
@@ -36,7 +36,7 @@ export default function HomePage() {
                 items.map((item,i ) => 
                 <Paper className="item" key={i}>
                     <div className='icon-container'>
-                        <Paper className="item-icon">
+                        <Paper className="item-icon" style={{background: item.color}}>
                             {item.icon}
                         </Paper>
                     </div>

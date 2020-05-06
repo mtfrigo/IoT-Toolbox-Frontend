@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from "react-router-dom";
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -10,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import Badge from '@material-ui/core/Badge';
+import Button from '@material-ui/core/Button';
 
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import MergeTypeIcon from '@material-ui/icons/MergeType';
@@ -92,10 +94,13 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 2,
   },
   selected: {
-    background: '#f1f1f1'
+    border: '2px solid rgb(245, 16, 97)'
+  },
+  btnSelected: {
+    background: '#f1f1f1',
   },
   matched: {
-    background: 'rgba(0, 255, 78, 0.25)'
+    border: '2px solid rgb(63, 81, 181)'
   }
 }));
 
@@ -106,6 +111,8 @@ export default function RecipeReviewCard(props) {
   const [infos, setInfos ] = React.useState(props.bb.BlockCapabilities)
 
   const { selectBlock } = React.useContext(MatchingContext);
+
+  let history = useHistory();
 
   const handleCheckClick = () => {
     setSelected(!selected);
@@ -133,7 +140,7 @@ export default function RecipeReviewCard(props) {
   }
 
   return (
-    <Card className={classes.root}>
+    <Card className={clsx(classes.root, {[classes.selected]: selected})}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
@@ -155,23 +162,27 @@ export default function RecipeReviewCard(props) {
         className={classes.header}
       />
       <CardActions disableSpacing className={classes.actions}>
-        <IconButton aria-label="add to favorites" onClick={() => selectMenu(1)} className={clsx({[classes.selected]: menuId === 1})}>
+        <IconButton aria-label="add to favorites" onClick={() => selectMenu(1)} className={clsx({[classes.btnSelected]: menuId === 1})}>
           <StyledBadge badgeContent={bb.BlockCapabilities.length} color="primary" showZero anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}> 
             <BuildIcon />
           </StyledBadge>
         </IconButton>
 
-        <IconButton aria-label="add to favorites" onClick={() => selectMenu(2)} className={clsx({[classes.selected]: menuId === 2})}>
+        <IconButton aria-label="add to favorites" onClick={() => selectMenu(2)} className={clsx({[classes.btnSelected]: menuId === 2})}>
           <StyledBadge badgeContent={bb.BlockDependencies.length} color="primary" showZero  anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}>
             <MergeTypeIcon />
           </StyledBadge>
         </IconButton>
 
-        <IconButton aria-label="add to favorites" onClick={() => selectMenu(3)} className={clsx({[classes.selected]: menuId === 3})}> 
+        <IconButton aria-label="add to favorites" onClick={() => selectMenu(3)} className={clsx({[classes.btnSelected]: menuId === 3})}> 
           <StyledBadge badgeContent={bb.DependentBlocks.length} color="primary" showZero  anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}>
             <CallSplitIcon />
           </StyledBadge>
         </IconButton>
+
+        <Button size="small" color="secondary" style={{marginLeft: 'auto'}} onClick={() => history.push('/bbis/' + bb.id)}>
+          {bb.ImplementedBy.length} BBI
+        </Button>
 
         <IconButton aria-label="settings" style={{marginLeft: 'auto'}} onClick={() => selectBlock(bb)}>
           <MenuBookIcon  />
