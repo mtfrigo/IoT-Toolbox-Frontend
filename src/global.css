@@ -22,13 +22,14 @@ body {
 }
 
 
-.container .parent {
+.container > .parent {
   flex: 1;
 
   display: flex;
   flex-direction: column;
 }
 
-.container .parent .content {
+.container > .parent > .content {
   flex: 1;
+  overflow: hidden;
 }

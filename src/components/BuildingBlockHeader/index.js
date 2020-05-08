@@ -17,8 +17,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 40,
-    paddingRight: 40,
   },
   imageContainer: {
     width: 260,

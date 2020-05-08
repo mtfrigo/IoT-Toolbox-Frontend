@@ -1,7 +1,34 @@
-const dummy_code = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent condimentum non leo eu posuere. Etiam et ex a tortor convallis rhoncus eu in magna. Aliquam suscipit neque vel felis sodales, non mattis ex auctor. Nunc tincidunt nunc quis est pretium, vehicula semper lorem suscipit. Duis pretium quam mauris, cursus mattis purus facilisis ac. Curabitur vulputate luctus lorem feugiat consectetur. Integer iaculis semper odio, id facilisis lorem ornare efficitur. Nunc posuere, turpis non viverra dapibus, enim est congue odio, et cursus elit ante non sem.
+import React, { useEffect, useState } from "react";
 
-Curabitur accumsan mi in sodales cursus. Nullam feugiat venenatis purus, nec bibendum sapien lacinia ut. Etiam nec lacinia leo, vel convallis elit. Vivamus vitae quam venenatis, sodales risus non, sollicitudin quam. Vestibulum sit amet diam tristique, aliquet purus placerat, volutpat mi. Cras ac nisi ac enim mattis lacinia in vel turpis. Integer bibendum, odio a placerat scelerisque, neque velit tincidunt magna, non consequat tortor urna quis odio. Proin luctus venenatis tortor quis luctus. Integer fringilla luctus pellentesque. Integer nibh tellus, consequat vel nisi non, ultricies ullamcorper risus. Aenean ut placerat arcu. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce vitae bibendum ante. Aenean aliquam quam aliquam arcu porta ornare. Pellentesque at hendrerit eros.
 
-In vitae posuere quam. Pellentesque nisl ante, placerat non mi non, pulvinar finibus lectus. Pellentesque ut tellus sem. Quisque nec condimentum diam. Proin dictum egestas nibh, ac vehicula erat dictum ut. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras vestibulum augue sit amet tristique porttitor. Proin a aliquam odio, ac euismod erat. Sed nec volutpat eros. Aliquam cursus risus ac tellus imperdiet eleifend.`;
+export default function TextFileReader(props) {
+  const [ text, setText ] = useState('')
 
-export default dummy_code ;
+
+	useEffect(() => {
+		readTextFile(props.txt);
+  })
+
+	function readTextFile(file)  {
+		var rawFile = new XMLHttpRequest();
+		rawFile.open("GET", file, false);
+		rawFile.onreadystatechange = () => {
+			if (rawFile.readyState === 4) {
+				if (rawFile.status === 200 || rawFile.status == 0) {
+					var allText = rawFile.responseText;
+					setText(allText);
+				}
+			}
+		};
+		rawFile.send(null);
+	};
+
+  return (
+			<div>
+				{text.split("\n").map((item, key) => {
+					return <span key={key}>{item}<br /></span>;
+				})}
+			</div>
+		);
+
+}

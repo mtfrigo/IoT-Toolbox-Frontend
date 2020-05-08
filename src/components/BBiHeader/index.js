@@ -43,11 +43,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BBiGeader(props) {
+export default function BBiHeader(props) {
   const classes = useStyles();
 
   const bbi = props.bbi;
-  console.log(bbi)
 
   return (
     <div className={classes.root}>

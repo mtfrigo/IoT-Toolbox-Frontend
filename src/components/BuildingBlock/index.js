@@ -17,6 +17,7 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import MergeTypeIcon from '@material-ui/icons/MergeType';
 import CallSplitIcon from '@material-ui/icons/CallSplit';
 import BuildIcon from '@material-ui/icons/Build';
+import { FiCodesandbox } from 'react-icons/fi';
 
 
 import Checkbox from '@material-ui/core/Checkbox';
@@ -180,9 +181,12 @@ export default function RecipeReviewCard(props) {
           </StyledBadge>
         </IconButton>
 
-        <Button size="small" color="secondary" style={{marginLeft: 'auto'}} onClick={() => history.push('/bbis/' + bb.id)}>
-          {bb.ImplementedBy.length} BBI
-        </Button>
+        <IconButton aria-label="add to favorites" > 
+          <StyledBadge badgeContent={bb.ImplementedBy.length} onClick={() => history.push('/bbis/' + bb.id)} color="primary" showZero  anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}>
+            <FiCodesandbox />
+          </StyledBadge>
+        </IconButton>
+
 
         <IconButton aria-label="settings" style={{marginLeft: 'auto'}} onClick={() => selectBlock(bb)}>
           <MenuBookIcon  />
