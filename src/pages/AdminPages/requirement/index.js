@@ -5,6 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import ProgressContext from '../../../contexts/progress';
 import AdminContext from '../../../contexts/admin';
@@ -16,6 +18,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import SignUp from './form.js'
 
 import api from '../../../services/api';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,6 +71,14 @@ export default function AdminRequirementPage() {
   const { setShowBar } = useContext(ProgressContext);
   const { selectReq, selectedReq } = useContext(AdminContext);
 
+  const [snack, setSnack] = useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+    message: '',
+  });
+  const { vertical, horizontal, open, message } = snack;
+
   useEffect(() => {
     setShowBar(false);
     getRequirements();
@@ -75,9 +89,25 @@ export default function AdminRequirementPage() {
     setRequirements(res.data)
   }
 
-  function clickReq(req) {
+  function handleClick(req) {
     selectReq(req)
   }
+
+  async function handleDelete(req) {
+    const res = await api.delete('/requirements/' + req.id);
+    getRequirements();
+    setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'Requeriment deleted!' });
+  }
+
+  const handleOpenSnack = (newState) => () => {
+    setSnack({ open: true, ...newState });
+  };
+
+  const handleCloseSnack = () => {
+    setSnack({ ...snack, open: false });
+  };
+
+  
 
   return (
     <div className={classes.root}>
@@ -95,19 +125,29 @@ export default function AdminRequirementPage() {
               {req.description}
             </Typography>
 
-            <IconButton aria-label="add to favorites" className={classes.edit} onClick={() => clickReq(req)}>
+            <IconButton aria-label="add to favorites" className={classes.edit} onClick={() => handleClick(req)}>
               <EditIcon />
             </IconButton>
 
-            <IconButton aria-label="add to favorites" >
+            <IconButton aria-label="add to favorites" onClick={() => handleDelete(req)}>
               <DeleteIcon className={classes.trash} />
             </IconButton>
           </Paper>
         )
       }
+
+      
         
       
       </div>
+
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnack} anchorOrigin={{ vertical, horizontal }} key={`${vertical},${horizontal}`}>
+        <Alert onClose={handleCloseSnack} severity="success">
+          {message}
+        </Alert>
+      </Snackbar>
+
+      
 
     </div>
   )

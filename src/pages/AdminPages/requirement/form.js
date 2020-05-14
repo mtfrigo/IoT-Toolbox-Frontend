@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 
@@ -19,6 +21,10 @@ import AdminContext from '../../../contexts/admin';
 
 
 import api from '../../../services/api';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
+    margin: theme.spacing(1, 0, 0),
   },
   submit: {
     margin: theme.spacing(1, 0, 0),
@@ -44,10 +51,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp(props) {
   const classes = useStyles();
-  const [ req, setReq ] = useState('');
   const [ description, setDescription ] = useState('');
   const [ reference, setReference ] = useState('');
   const { selectedReq, selectReq } = useContext(AdminContext);
+
+  const [snack, setSnack] = useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+    message: '',
+  });
+
+  const { vertical, horizontal, open, message } = snack;
 
   useEffect(() => {
     if(!!selectedReq) {
@@ -67,18 +82,34 @@ export default function SignUp(props) {
 
     if(!!selectedReq) {
       const res = await api.put('requirements/' + req.id , req);
-      if(res.statusText === "OK") clear();
+      if(res.statusText === "OK") {
+        setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'Requeriment updated!' });
+        clear()
+      };
     } else {
       const res = await api.post('/requirements', req);
-      if(res.statusText === "OK") clear();
+      if(res.statusText === "OK") {
+        setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'Requeriment created!' });
+        clear();
+      }
     }
   }
+
+ 
 
   function clear() {
     selectReq('');
     setDescription('');
     setReference('');
   }
+
+  const handleOpenSnack = (newState) => () => {
+    setSnack({ open: true, ...newState });
+  };
+
+  const handleCloseSnack = () => {
+    setSnack({ ...snack, open: false });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -138,6 +169,12 @@ export default function SignUp(props) {
           </Button>
         </form>
       </div>
+
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnack} anchorOrigin={{ vertical, horizontal }} key={`${vertical},${horizontal}`}>
+      <Alert onClose={handleCloseSnack} severity="success">
+        {message}
+      </Alert>
+    </Snackbar>
     </Container>
   );
 }
