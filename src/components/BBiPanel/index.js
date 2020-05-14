@@ -127,14 +127,11 @@ const useStyles = makeStyles({
 
 export default function BBiPanel(props) {
   const classes = useStyles();
-  const { selectedBBI, selectBBI } = useContext(BBiPanelContext)
+  const { selectedBBI } = useContext(BBiPanelContext)
   const { selectedFile, selectFile } = useContext(BBiPanelContext)
-  const { tab, setTab } = useContext(BBiPanelContext)
+  const { tab } = useContext(BBiPanelContext)
   const [ artifacts, setArtifacts ] = useState([])
   const [ interfaces, setInterfaces ] = useState([])
-
-  const bbis = props.bbis;
-  let  fileToPreview;
 
   useEffect(() => {
     setArtifacts(Artifacts[selectedBBI.id])

@@ -11,7 +11,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import Badge from '@material-ui/core/Badge';
-import Button from '@material-ui/core/Button';
 
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import MergeTypeIcon from '@material-ui/icons/MergeType';
@@ -181,8 +180,8 @@ export default function RecipeReviewCard(props) {
           </StyledBadge>
         </IconButton>
 
-        <IconButton aria-label="add to favorites" > 
-          <StyledBadge badgeContent={bb.ImplementedBy.length} onClick={() => history.push('/bbis/' + bb.id)} color="primary" showZero  anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}>
+        <IconButton aria-label="add to favorites" onClick={() => history.push('/bbis/' + bb.id)} > 
+          <StyledBadge badgeContent={bb.ImplementedBy.length}  color="primary" showZero  anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}>
             <FiCodesandbox />
           </StyledBadge>
         </IconButton>

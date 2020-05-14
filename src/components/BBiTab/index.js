@@ -3,9 +3,6 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import PhoneIcon from '@material-ui/icons/Phone';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import PersonPinIcon from '@material-ui/icons/PersonPin';
 
 import BBiPanelContext from '../../contexts/bbi-panel';
 
@@ -17,7 +14,6 @@ const useStyles = makeStyles({
 
 export default function BBiTab() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
   const { tab, setTab } = useContext(BBiPanelContext)
 
   const handleChange = (event, newValue) => {

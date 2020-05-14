@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { FiBox} from 'react-icons/fi';
+import { FiBox, FiCodesandbox} from 'react-icons/fi';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
@@ -26,6 +26,18 @@ export default function Siderbar() {
           <Link to="/requirements"><SettingsIcon size={20} />Requirements</Link>
           <Link to="/bbs"><FiBox size={20} />Building Blocks</Link>
           <Link to="/"><AccountTreeIcon size={20} />Process</Link>
+        </li>
+      </ul>
+
+      <div className="header">
+        <div className="title">Admin</div>
+      </div>
+
+      <ul className="sidemenu-list">
+        <li className="sidemenu-item">
+          <Link to="/admin/requirement"><DashboardIcon size={20} />Requirements</Link>
+          <Link to="/admin/bb"><FiBox size={20} />BB</Link>
+          <Link to="/admin/bbi"><FiCodesandbox size={20} />BBI</Link>
         </li>
       </ul>
     </div>

@@ -3,11 +3,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import BuildIcon from '@material-ui/icons/Build';
-import MergeTypeIcon from '@material-ui/icons/MergeType';
-import CallSplitIcon from '@material-ui/icons/CallSplit';
 
 
 import { red } from '@material-ui/core/colors';

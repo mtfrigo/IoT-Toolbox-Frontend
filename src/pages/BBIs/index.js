@@ -6,7 +6,6 @@ import './styles.css';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
-import BlocksContext from '../../contexts/blocks';
 import ProgressContext from '../../contexts/progress';
 import BBiPanelContext from '../../contexts/bbi-panel';
 
@@ -16,12 +15,8 @@ import BBiHeader from '../../components/BBiHeader'
 import BBiTab from '../../components/BBiTab'
 import BBiPanel from '../../components/BBiPanel'
 
-
-import BuildIcon from '@material-ui/icons/Build';
-
 import api from '../../services/api'
 
-import { FiFile, FiCode, FiDownload} from 'react-icons/fi';
 
 export default function BBIsPage() {
   const { setActiveStep, setShowBar } = useContext(ProgressContext);
