@@ -6,9 +6,10 @@ const AdminContext = createContext();
 
 export const AdminProvider = ({children}) => {
   const [ selectedReq, selectReq ] = useState('');
+  const [ selectedBB, selectBB ] = useState('');
 
   return (
-    <AdminContext.Provider value={{ selectedReq, selectReq }}>
+    <AdminContext.Provider value={{ selectedReq, selectReq, selectedBB, selectBB }}>
       {children}
     </AdminContext.Provider>
   );
