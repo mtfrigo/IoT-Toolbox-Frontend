@@ -20,7 +20,6 @@ import NewBBContext from '../../../contexts/new-bb';
 
 import api from '../../../services/api';
 
-const emails = ['username@gmail.com', 'user02@gmail.com'];
 const useStyles = makeStyles({
   avatar: {
     backgroundColor: blue[100],
@@ -28,58 +27,57 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CapabilityDialog(props) {
+export default function DependencyDialog(props) {
   const classes = useStyles();
-  const [ capabilities, setCapabilities ] = useState([]);
-  const { selectedCaps, selectCaps } = useContext(NewBBContext);
-  const { openCapDialog, setOpenCapDialog } = useContext(NewBBContext);
+  const [ bbs, setBBs ] = useState([]);
+  const { selectedBBs, selectBBs } = useContext(NewBBContext);
+  const { openDepDialog, setOpenDepDialog } = useContext(NewBBContext);
 
   useEffect(() => {
-    getCapabilities()
+    getBBs()
   }, [])
 
-  async function getCapabilities() {
+  async function getBBs() {
 
-    const res = await api.get('/capability');
-    setCapabilities(res.data);
+    const res = await api.get('/building-blocks');
+    setBBs(res.data);
   }
 
   const handleClose = () => {
-    setOpenCapDialog(false)
+    setOpenDepDialog(false)
   };
 
   const handleCancel = () => {
-    setOpenCapDialog(false)
+    setOpenDepDialog(false)
   };
 
   const handleListItemClick = (value) => {
 
-    // let selectedIndex = selectedCapIds.indexOf(value.id);
-    let selectedIndex = selectedCaps.map(function(x) {return x.id;}).indexOf(value.id);
-    let newSelectedCaps = selectedCaps;
+    let selectedIndex = selectedBBs.map(function(x) {return x.id;}).indexOf(value.id);
+    let newSelectedBBs = selectedBBs;
 
     if(selectedIndex === -1) {
-      newSelectedCaps.push(value)
-    } else if(selectedCaps.length > 1){
-      newSelectedCaps.splice(selectedIndex, 1)
+      newSelectedBBs.push(value)
+    } else if(selectedBBs.length > 1){
+      newSelectedBBs.splice(selectedIndex, 1)
     } else {
-      newSelectedCaps = []
+      newSelectedBBs = []
     }
 
-    selectCaps(newSelectedCaps)
-    setOpenCapDialog(false)
+    selectBBs(newSelectedBBs)
+    setOpenDepDialog(false)
 
   };
 
   return (
-    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={openCapDialog}>
-      <DialogTitle id="simple-dialog-title">Select block capabilities</DialogTitle>
+    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={openDepDialog}>
+      <DialogTitle id="simple-dialog-title">Select block dependency</DialogTitle>
       <List>
         {
-        capabilities.map((capability) => {
+        bbs.map((bb) => {
           return (
-            <ListItem button onClick={() => handleListItemClick(capability)} key={capability.id}>
-              <ListItemText primary={capability.name} />
+            <ListItem button onClick={() => handleListItemClick(bb)} key={bb.id}>
+              <ListItemText primary={bb.name} />
             </ListItem>
           )
         })

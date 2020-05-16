@@ -18,7 +18,7 @@ import { MatchingProvider } from './contexts/matching'
 import { RequirementsProvider } from './contexts/requirements'
 import { BlocksProvider } from './contexts/blocks'
 import { AdminProvider } from './contexts/admin'
-import { CapDialogProvider } from './contexts/cap-dialog'
+import { NewBBProvider } from './contexts/new-bb'
 import { BBiPanelProvider } from './contexts/bbi-panel'
 
 
@@ -44,9 +44,9 @@ export default function Routes() {
                         <Route path="/bbis/:id" exact component={BBIsPage}/>
                         <Route path="/login" exact component={SignInPage}/>
                         <Route path="/admin/requirement" exact component={AdminRequirementPage}/>
-                        <CapDialogProvider>
+                        <NewBBProvider>
                           <Route path="/admin/bb" exact component={AdminBBPage}/>
-                        </CapDialogProvider>
+                        </NewBBProvider>
                         <Route path="/admin/bbu" exact component={AdminBBIPage}/>
                     </Switch>
                  </AdminProvider>

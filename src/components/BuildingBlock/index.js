@@ -11,13 +11,13 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import Badge from '@material-ui/core/Badge';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import MergeTypeIcon from '@material-ui/icons/MergeType';
 import CallSplitIcon from '@material-ui/icons/CallSplit';
 import BuildIcon from '@material-ui/icons/Build';
 import { FiCodesandbox } from 'react-icons/fi';
-
 
 import Checkbox from '@material-ui/core/Checkbox';
 import MatchingContext from '../../contexts/matching';
@@ -162,34 +162,46 @@ export default function RecipeReviewCard(props) {
         className={classes.header}
       />
       <CardActions disableSpacing className={classes.actions}>
-        <IconButton aria-label="add to favorites" onClick={() => selectMenu(1)} className={clsx({[classes.btnSelected]: menuId === 1})}>
-          <StyledBadge badgeContent={bb.BlockCapabilities.length} color="primary" showZero anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}> 
-            <BuildIcon />
-          </StyledBadge>
-        </IconButton>
+        <Tooltip title="Capabilities">
+          <IconButton aria-label="add to favorites" onClick={() => selectMenu(1)} className={clsx({[classes.btnSelected]: menuId === 1})}>
+            <StyledBadge badgeContent={bb.BlockCapabilities.length} color="primary" showZero anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}> 
+              <BuildIcon />
+            </StyledBadge>
+          </IconButton>
+        </Tooltip>
+        
 
-        <IconButton aria-label="add to favorites" onClick={() => selectMenu(2)} className={clsx({[classes.btnSelected]: menuId === 2})}>
-          <StyledBadge badgeContent={bb.BlockDependencies.length} color="primary" showZero  anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}>
-            <MergeTypeIcon />
-          </StyledBadge>
-        </IconButton>
+        
+        <Tooltip title="Dependencies">
+          <IconButton aria-label="add to favorites" onClick={() => selectMenu(2)} className={clsx({[classes.btnSelected]: menuId === 2})}>
+            <StyledBadge badgeContent={bb.BlockDependencies.length} color="primary" showZero  anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}>
+              <MergeTypeIcon />
+            </StyledBadge>
+          </IconButton>
+        </Tooltip>
 
-        <IconButton aria-label="add to favorites" onClick={() => selectMenu(3)} className={clsx({[classes.btnSelected]: menuId === 3})}> 
-          <StyledBadge badgeContent={bb.DependentBlocks.length} color="primary" showZero  anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}>
-            <CallSplitIcon />
-          </StyledBadge>
-        </IconButton>
+        <Tooltip title="Dependents">
+          <IconButton aria-label="add to favorites" onClick={() => selectMenu(3)} className={clsx({[classes.btnSelected]: menuId === 3})}> 
+            <StyledBadge badgeContent={bb.DependentBlocks.length} color="primary" showZero  anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}>
+              <CallSplitIcon />
+            </StyledBadge>
+          </IconButton>
+        </Tooltip>
 
-        <IconButton aria-label="add to favorites" onClick={() => history.push('/bbis/' + bb.id)} > 
-          <StyledBadge badgeContent={bb.ImplementedBy.length}  color="primary" showZero  anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}>
-            <FiCodesandbox />
-          </StyledBadge>
-        </IconButton>
+        <Tooltip title="BBI">
+          <IconButton aria-label="add to favorites" onClick={() => history.push('/bbis/' + bb.id)} > 
+            <StyledBadge badgeContent={bb.ImplementedBy.length}  color="primary" showZero  anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}>
+              <FiCodesandbox />
+            </StyledBadge>
+          </IconButton>
+        </Tooltip>
 
 
-        <IconButton aria-label="settings" style={{marginLeft: 'auto'}} onClick={() => selectBlock(bb)}>
-          <MenuBookIcon  />
-        </IconButton>
+        <Tooltip title="Details">
+          <IconButton aria-label="settings" style={{marginLeft: 'auto'}} onClick={() => selectBlock(bb)}>
+            <MenuBookIcon  />
+          </IconButton>
+        </Tooltip>
         
       </CardActions>
       <CardContent className={clsx(classes.content, {[classes.justified]: infos.length < 3})} >

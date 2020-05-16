@@ -28,11 +28,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 
 import AdminContext from '../../../contexts/admin';
-import CapDialogContext from '../../../contexts/cap-dialog';
+import NewBBContext from '../../../contexts/new-bb';
 
 import { TextareaAutosize } from '@material-ui/core';
 
 import CapabilityDialog from './cap-dialog'
+import DependencyDialog from './dep-dialog'
 
 import api from '../../../services/api';
 
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%', // Fix IE 11 issue.
     margin: theme.spacing(1, 0, 0),
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-evenly'
   },
@@ -125,12 +126,15 @@ export default function BBForm(props) {
   const [ type, setType ] = useState('');
   const [ name, setName ] = useState('');
   const [ capsCounter, setCapsCounter ] = useState(0);
+  const [ depsCounter, setDepsCounter ] = useState(0);
   const { selectedBB, selectBB } = useContext(AdminContext);
-  const { openDialog, setOpenDialog } = useContext(CapDialogContext);
-  const { selectedCaps, selectCaps } = useContext(CapDialogContext);
+
+  const { openCapDialog, setOpenCapDialog } = useContext(NewBBContext);
+  const { selectedCaps, selectCaps } = useContext(NewBBContext);
+  const { openDepDialog, setOpenDepDialog } = useContext(NewBBContext);
+  const { selectedBBs, selectBBs } = useContext(NewBBContext);
 
   const [personName, setPersonName] = useState([]);
-
 
   const [snack, setSnack] = useState({
     open: false,
@@ -152,26 +156,21 @@ export default function BBForm(props) {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    let req = {
-      id: !!selectedBB ? selectedBB.id : null,
+    let bb = {
+      id: null,
       name: name,
       description: description,
       type: type,
     }
 
-    if(!!selectedBB) {
-      // const res = await api.put('requirements/' + req.id , req);
-      // if(res.statusText === "OK") {
-      //   setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'Building  updated!' });
-      //   clear()
-      // };
-    } else {
-      // const res = await api.post('/requirements', req);
-      // if(res.statusText === "OK") {
-      //   setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'Requeriment created!' });
-      //   clear();
-      // }
-    }
+    //const res = await api.post('/building-blocks', bb);
+
+    // const res = await api.post('/bb-capability/11', {caps: [1,2]})
+    const res = await api.post('/bb-dependency/11', {deps: [1,2]})
+
+    console.log(res)
+
+   
   }
 
  
@@ -196,26 +195,44 @@ export default function BBForm(props) {
   };
 
   const handleNewCapability = () => {
-    setOpenDialog(true);
+    setOpenCapDialog(true);
   };
 
   const handleCloseCapDialog = () => {
-    setOpenDialog(false);
-    //setSelectedValue(value);
+    setOpenCapDialog(false);
   };
 
   function handleDeleteCapability(cap) {
-
     let selectedIndex = selectedCaps.map(function(c) {return c.id; }).indexOf(cap.id);
-
     let newSelectedCaps = selectedCaps;
 
-    if(selectedCaps.length > 0){
+    if(selectedCaps.length === 1) {
+      newSelectedCaps = [];
+    } else if(selectedCaps.length > 1) {
       newSelectedCaps.splice(selectedIndex, 1)
-    } 
+    }
 
     selectCaps(newSelectedCaps)
     setCapsCounter(newSelectedCaps.length)
+  }
+
+  const handleNewDependency = () => {
+    setOpenDepDialog(true);
+  };
+
+  function handleDeleteDependency(bb) {
+
+    let selectedIndex = selectedBBs.map(function(b) {return b.id; }).indexOf(bb.id);
+    let newSelectedBBs = selectedBBs;
+
+    if(selectedBBs.length === 1) {
+      newSelectedBBs = [];
+    } else if(selectedBBs.length > 1) {
+      newSelectedBBs.splice(selectedIndex, 1)
+    }
+
+    selectBBs(newSelectedBBs)
+    setDepsCounter(newSelectedBBs.length)
 
   }
 
@@ -231,79 +248,111 @@ export default function BBForm(props) {
           Building Block {selectedBB ? '#' + selectedBB.id : ''}
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
-          <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={2} className={classes.formGroup}>
-            <Grid  item xs={12} >
-              <Typography component="div" variant="subtitle2" color="textSecondary" >Block Details</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="name"
-                label="Name"
-                name="name"
-                autoComplete="name"
-                value={name} onChange={e => setName(e.target.value)}
-                className={classes.formField}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="type"
-                label="Type"
-                name="type"
-                autoComplete="type"
-                value={type} onChange={e => setType(e.target.value)}
-                className={classes.formField}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextareaAutosize
-                variant="outlined"
-                required
-                rowsMin={3}
-                rowsMax={3}
-                aria-label="maximum height"
-                placeholder="Description"
-                name="description"
-                id="description"
-                value={description} onChange={e => setDescription(e.target.value)}
-                className={classes.description}
-              />
-            </Grid>
-          </Grid>
-          <Grid container direction="column" justify="flex-start" alignItems="flex-start" spacing={2} className={classes.formGroup}>
-            <Grid  item  >
-              <Typography component="div" variant="subtitle2" color="textSecondary" >Block Capabilities</Typography>
-            </Grid>
-            <Grid   item className={classes.fullWidthItem}>
-              <Button  fullWidth variant="outlined" size="large" color="primary" onClick={handleNewCapability}>New Capability</Button>
+          <Grid container direction="row">
+            <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={2} className={classes.formGroup}>
+              <Grid  item xs={12} >
+                <Typography component="div" variant="subtitle2" color="textSecondary" >Block Details</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="name"
+                  label="Name"
+                  name="name"
+                  autoComplete="name"
+                  value={name} onChange={e => setName(e.target.value)}
+                  className={classes.formField}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="type"
+                  label="Type"
+                  name="type"
+                  autoComplete="type"
+                  value={type} onChange={e => setType(e.target.value)}
+                  className={classes.formField}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextareaAutosize
+                  variant="outlined"
+                  required
+                  rowsMin={3}
+                  rowsMax={3}
+                  aria-label="maximum height"
+                  placeholder="Description"
+                  name="description"
+                  id="description"
+                  value={description} onChange={e => setDescription(e.target.value)}
+                  className={classes.description}
+                />
+              </Grid>
             </Grid>
 
-            <Grid item className={classes.fullWidthItem}>
-            {
-              selectedCaps.map((cap) => 
-              
-                <Paper  elevation={3} className={classes.capability} key={cap.id}>
-                  <Typography variant="body1"  color="primary" className={classes.capName}>
-                    {cap.name}
-                  </Typography>
+            <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={2} className={classes.formGroup}>
+              <Grid  item  >
+                <Typography component="div" variant="subtitle2" color="textSecondary" >Block Capabilities</Typography>
+              </Grid>
+              <Grid   item className={classes.fullWidthItem}>
+                <Button  fullWidth variant="outlined" size="large" color="primary" onClick={handleNewCapability}>New Capability</Button>
+              </Grid>
 
-                  <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteCapability(cap)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Paper>
-              
-              )
-            }
+              <Grid item className={classes.fullWidthItem}>
+              {
+                selectedCaps.map((cap) => 
+                
+                  <Paper  elevation={3} className={classes.capability} key={cap.id}>
+                    <Typography variant="body1"  color="primary" className={classes.capName}>
+                      {cap.name}
+                    </Typography>
+
+                    <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteCapability(cap)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Paper>
+                
+                )
+              }
+              </Grid>
+            </Grid>
+
+            <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={2} className={classes.formGroup}>
+              <Grid  item  >
+                <Typography component="div" variant="subtitle2" color="textSecondary" >Block Dependencies</Typography>
+              </Grid>
+              <Grid   item className={classes.fullWidthItem}>
+                <Button  fullWidth variant="outlined" size="large" color="primary" onClick={handleNewDependency}>New Dependency</Button>
+              </Grid>
+
+              <Grid item className={classes.fullWidthItem}>
+              {
+                selectedBBs.map((bb) => 
+                
+                  <Paper  elevation={3} className={classes.capability} key={bb.id}>
+                    <Typography variant="body1"  color="primary" className={classes.capName}>
+                      {bb.name}
+                    </Typography>
+
+                    <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteDependency(bb)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Paper>
+                
+                )
+              }
+              </Grid>
+
               
             </Grid>
           </Grid>
-          {/* <Button
+
+          <Button
             type="submit"
             fullWidth
             variant="contained"
@@ -320,7 +369,9 @@ export default function BBForm(props) {
             onClick={() => clear()}
           >
             Clear
-          </Button> */}
+          </Button>
+
+          
         </form>
       </div>
 
@@ -331,6 +382,7 @@ export default function BBForm(props) {
     </Snackbar>
 
     <CapabilityDialog />
+    <DependencyDialog />
     
     </Container>
   );
