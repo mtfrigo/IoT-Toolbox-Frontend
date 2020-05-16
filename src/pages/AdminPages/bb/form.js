@@ -163,14 +163,24 @@ export default function BBForm(props) {
       type: type,
     }
 
-    //const res = await api.post('/building-blocks', bb);
+    const res = await api.post('/building-blocks', bb);
 
-    // const res = await api.post('/bb-capability/11', {caps: [1,2]})
-    const res = await api.post('/bb-dependency/11', {deps: [1,2]})
+    if(res.statusText === "OK") {
+      if(selectedCaps.length > 0) 
+      {
+        let caps = selectedCaps.map(function(c) {return c.id;})
+        await api.post('/bb-capability/' + res.data.id, {caps})
+      }
 
-    console.log(res)
+      if(selectedBBs.length > 0) 
+      {
+        let deps = selectedBBs.map(function(b) {return b.id;})
+        await api.post('/bb-dependency/' + res.data.id, {deps})
+      }
 
-   
+      clear();
+    }
+
   }
 
  
