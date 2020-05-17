@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: '50%'
   },
-  requirements: {
+  bbs: {
     borderTop: '2px solid rgba(0, 0, 0, 0.12)',
     flexGrow: 2,
     width: "100%",
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 20,
     overflow: 'auto',
   },
-  req: {
+  bb: {
     padding: 15,
     height: 60,
     display: 'flex',
@@ -69,9 +69,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AdminRequirementPage() {
   const classes = useStyles();
-  const [ requirements, setRequirements ] = useState([]);
   const { setShowBar } = useContext(ProgressContext);
-  const { selectReq, selectedReq } = useContext(AdminContext);
+  const { selectedBB, selectBB } = useContext(AdminContext);
+  const [ bbs, setBBs ] = useState([]);
 
   const [snack, setSnack] = useState({
     open: false,
@@ -83,22 +83,22 @@ export default function AdminRequirementPage() {
 
   useEffect(() => {
     setShowBar(false);
-    getRequirements();
-  }, [selectedReq])
+    getBBs();
+  }, [selectedBB])
 
-  async function getRequirements() {
-    const res = await api.get('/requirements');
-    setRequirements(res.data)
+  async function getBBs() {
+    const res = await api.get('/building-blocks');
+    setBBs(res.data)
   }
 
-  function handleClick(req) {
-    selectReq(req)
+  function handleClick(bb) {
+    selectBB(bb)
   }
 
   async function handleDelete(req) {
-    const res = await api.delete('/requirements/' + req.id);
-    getRequirements();
-    setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'Requeriment deleted!' });
+    const res = await api.delete('/building-blocks/' + req.id);
+    getBBs();
+    setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'Block deleted!' });
   }
 
   const handleOpenSnack = (newState) => () => {
@@ -115,6 +115,30 @@ export default function AdminRequirementPage() {
     <div className={classes.root}>
 
       <BBForm />
+
+      <div className={classes.bbs}>
+      {
+        bbs.map((bb, i) => 
+          <Paper className={classes.bb} key={i}>
+            <Typography component="div" variant="body1">
+              {bb.id}
+            </Typography>
+
+            <Typography component="div" variant="body2" className={classes.description}>
+              {bb.name}
+            </Typography>
+
+            <IconButton aria-label="add to favorites" className={classes.edit} onClick={() => handleClick(bb)}>
+              <EditIcon />
+            </IconButton>
+
+            <IconButton aria-label="add to favorites" onClick={() => handleDelete(bb)}>
+              <DeleteIcon className={classes.trash} />
+            </IconButton>
+          </Paper>
+        )
+      }
+      </div>
 
 
       <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnack} anchorOrigin={{ vertical, horizontal }} key={`${vertical},${horizontal}`}>

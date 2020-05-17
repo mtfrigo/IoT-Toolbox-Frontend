@@ -150,33 +150,40 @@ export default function BBForm(props) {
       setDescription(selectedBB.description)
       setName(selectedBB.name)
       setType(selectedBB.type)
+      selectCaps(selectedBB.BlockCapabilities)
+      selectBBs(selectedBB.BlockDependencies)
     }
-  }, [selectedBB, selectedCaps])
+  }, [selectedBB])
 
   async function handleSubmit(event) {
     event.preventDefault();
 
     let bb = {
-      id: null,
+      id: !!selectedBB ? selectedBB.id : null,
       name: name,
       description: description,
       type: type,
     }
 
-    const res = await api.post('/building-blocks', bb);
+    let res;
+
+    if(!!selectedBB) {
+      res = await api.put('/building-blocks/'  + bb.id , bb);
+      setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'BB Updated!' });
+
+    } else {
+      res = await api.post('/building-blocks', bb);
+      setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'BB created!' });
+    }
+
 
     if(res.statusText === "OK") {
-      if(selectedCaps.length > 0) 
-      {
-        let caps = selectedCaps.map(function(c) {return c.id;})
-        await api.post('/bb-capability/' + res.data.id, {caps})
-      }
+      let caps = selectedCaps.length > 0 ? selectedCaps.map(function(c) {return c.id;}) : [];
+      await api.post('/bb-capability/' + res.data.id, {caps})
 
-      if(selectedBBs.length > 0) 
-      {
-        let deps = selectedBBs.map(function(b) {return b.id;})
-        await api.post('/bb-dependency/' + res.data.id, {deps})
-      }
+
+      let deps = selectedBBs.length > 0 ? selectedBBs.map(function(b) {return b.id;}) : []
+      await api.post('/bb-dependency/' + res.data.id, {deps})
 
       clear();
     }
@@ -190,6 +197,8 @@ export default function BBForm(props) {
     setDescription('');
     setName('');
     setType('');
+    selectCaps([])
+    selectBBs([])
   }
 
   const handleOpenSnack = (newState) => () => {
@@ -216,11 +225,15 @@ export default function BBForm(props) {
     let selectedIndex = selectedCaps.map(function(c) {return c.id; }).indexOf(cap.id);
     let newSelectedCaps = selectedCaps;
 
+    console.log(selectedIndex)
+
     if(selectedCaps.length === 1) {
       newSelectedCaps = [];
     } else if(selectedCaps.length > 1) {
       newSelectedCaps.splice(selectedIndex, 1)
     }
+
+    console.log(newSelectedCaps)
 
     selectCaps(newSelectedCaps)
     setCapsCounter(newSelectedCaps.length)
