@@ -16,30 +16,35 @@ export default function Siderbar() {
   return (
     <div className="sidemenu">
 
-      <div className="header">
-        <div className="title">IoT Toolbox</div>
+      <div>
+        <div className="header">
+          <div className="title">IoT Toolbox</div>
+        </div>
+        
+        <ul className="sidemenu-list">
+          <li className="sidemenu-item">
+            <Link to="/"><DashboardIcon size={20}  />Dashboard</Link>
+            <Link to="/requirements"><SettingsIcon size={20}  />Requirements</Link>
+            <Link to="/bbs"><FiBox size={20}  />Building Blocks</Link>
+            <Link to="/"><AccountTreeIcon size={20}  />Process</Link>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <div className="subheader">
+          <div className="title">Admin</div>
+        </div>
+
+        <ul className="sidemenu-list secondary">
+          <li className="sidemenu-item">
+            <Link to="/admin/requirement"><DashboardIcon size={20} />Requirements</Link>
+            <Link to="/admin/building-block"><FiBox size={20}  />BB</Link>
+            <Link to="/admin/bbi"><FiCodesandbox size={20} />BBI</Link>
+          </li>
+        </ul>
       </div>
       
-      <ul className="sidemenu-list">
-        <li className="sidemenu-item">
-          <Link to="/"><DashboardIcon size={20} />Dashboard</Link>
-          <Link to="/requirements"><SettingsIcon size={20} />Requirements</Link>
-          <Link to="/bbs"><FiBox size={20} />Building Blocks</Link>
-          <Link to="/"><AccountTreeIcon size={20} />Process</Link>
-        </li>
-      </ul>
-
-      <div className="header">
-        <div className="title">Admin</div>
-      </div>
-
-      <ul className="sidemenu-list">
-        <li className="sidemenu-item">
-          <Link to="/admin/requirement"><DashboardIcon size={20} />Requirements</Link>
-          <Link to="/admin/bb"><FiBox size={20} />BB</Link>
-          <Link to="/admin/bbi"><FiCodesandbox size={20} />BBI</Link>
-        </li>
-      </ul>
     </div>
   )
 }

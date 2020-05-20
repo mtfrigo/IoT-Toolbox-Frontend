@@ -2,12 +2,14 @@
   width: 240px;
   background: #fff;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .sidemenu-list {
   padding: 10px;
   list-style-type: none;
-  padding: 50px 0;
 }
 
 .sidemenu-item {
@@ -45,4 +47,21 @@
 
   font-size: 20px;
   font-weight: 700;
+}
+
+.subheader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding-left: 20px;
+  height: 60px;
+
+  color: #000;
+
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.secondary {
+  margin-bottom: 80px;
 }

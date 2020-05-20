@@ -19,6 +19,7 @@ import { RequirementsProvider } from './contexts/requirements'
 import { BlocksProvider } from './contexts/blocks'
 import { AdminProvider } from './contexts/admin'
 import { NewBBProvider } from './contexts/new-bb'
+import { NewBBIProvider } from './contexts/new-bbi'
 import { BBiPanelProvider } from './contexts/bbi-panel'
 
 
@@ -37,18 +38,20 @@ export default function Routes() {
                  <BlocksProvider>
                  <BBiPanelProvider>
                  <AdminProvider>
-                    <Switch>
-                        <Route path="/" exact component={HomePage}/>
-                        <Route path="/requirements" exact component={RequirementsPage}/>
-                        <Route path="/bbs" exact component={BuildingBlocksPage}/>
-                        <Route path="/bbis/:id" exact component={BBIsPage}/>
-                        <Route path="/login" exact component={SignInPage}/>
-                        <Route path="/admin/requirement" exact component={AdminRequirementPage}/>
-                        <NewBBProvider>
-                          <Route path="/admin/bb" exact component={AdminBBPage}/>
-                        </NewBBProvider>
-                        <Route path="/admin/bbu" exact component={AdminBBIPage}/>
-                    </Switch>
+                 <NewBBProvider>
+                 <NewBBIProvider>
+                  <Switch>
+                    <Route path="/" exact component={HomePage}/>
+                    <Route path="/requirements" exact component={RequirementsPage}/>
+                    <Route path="/bbs" exact component={BuildingBlocksPage}/>
+                    <Route path="/bbis/:id" exact component={BBIsPage}/>
+                    <Route path="/login" exact component={SignInPage}/>
+                    <Route path="/admin/requirement" exact component={AdminRequirementPage}/>
+                    <Route path="/admin/bbi" exact component={AdminBBIPage}/>
+                    <Route path="/admin/building-block" exact component={AdminBBPage}/>
+                  </Switch>
+                 </NewBBIProvider>
+                 </NewBBProvider>
                  </AdminProvider>
                  </BBiPanelProvider>
                  </BlocksProvider>
