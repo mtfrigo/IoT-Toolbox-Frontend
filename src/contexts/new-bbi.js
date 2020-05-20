@@ -12,8 +12,10 @@ export const NewBBIProvider = ({children}) => {
   const [ openBBDialog, setOpenBBDialog ] = useState(false);
   const [ selectedBBs, selectBBs ] = useState([]);
 
+  const [ openBBIListDialog, setOpenBBIListDialog ] = useState(false);
+
   return (
-    < NewBBIContext.Provider value={{ openBBDialog, setOpenBBDialog, selectedBBs, selectBBs, openBBIDepDialog, setOpenBBIDepDialog, selectedBBIDeps, selectBBIDeps, openDepDialog, setOpenDepDialog, selectedDeps, selectDeps }}>
+    < NewBBIContext.Provider value={{ openBBIListDialog, setOpenBBIListDialog, openBBDialog, setOpenBBDialog, selectedBBs, selectBBs, openBBIDepDialog, setOpenBBIDepDialog, selectedBBIDeps, selectBBIDeps, openDepDialog, setOpenDepDialog, selectedDeps, selectDeps }}>
       {children}
     </NewBBIContext.Provider>
   );

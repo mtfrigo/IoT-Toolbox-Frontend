@@ -52,7 +52,6 @@ export default function BBIDepDialog(props) {
   };
 
   const handleListItemClick = (value) => {
-
     let selectedIndex = selectedBBIDeps.map(function(x) {return x.id;}).indexOf(value.id);
     let newSelectBBIDeps = selectedBBIDeps;
 

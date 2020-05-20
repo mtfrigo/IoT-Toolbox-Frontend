@@ -114,9 +114,6 @@ export default function AdminBBIPage() {
 
       <BBIForm />
 
-      <div>asdiuhaosiudhu</div>
-
-
       <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnack} anchorOrigin={{ vertical, horizontal }} key={`${vertical},${horizontal}`}>
         <Alert onClose={handleCloseSnack} severity="success">
           {message}

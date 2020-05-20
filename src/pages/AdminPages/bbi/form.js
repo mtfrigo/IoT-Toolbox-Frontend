@@ -36,6 +36,7 @@ import { TextareaAutosize } from '@material-ui/core';
 import BBIDepDialog from './bbi-dialog'
 import DepDialog from './dep-dialog'
 import BBImplementedDialog from './bb-dialog'
+import BBIListDialog from './list-dialog'
 
 import api from '../../../services/api';
 
@@ -119,6 +120,12 @@ const useStyles = makeStyles((theme) => ({
   trash: {
     color: 'red'
   },
+  formButtons: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '80%',
+    marginTop: 50
+  }
 
 }));
 
@@ -140,6 +147,8 @@ export default function BBIForm(props) {
   const { openBBDialog, setOpenBBDialog } = useContext(NewBBIContext);
   const { selectedBBs, selectBBs } = useContext(NewBBIContext);
   const [ BBsCounter, setBBsCounter ] = useState(0);
+
+  const { openBBIListDialog, setOpenBBIListDialog } = useContext(NewBBIContext);
 
   const [snack, setSnack] = useState({
     open: false,
@@ -202,6 +211,11 @@ export default function BBIForm(props) {
     selectDeps([])
     selectBBs([])
   }
+
+  function showList() {
+    setOpenBBIListDialog(true);
+
+  };
 
   const handleOpenSnack = (newState) => () => {
     setSnack({ open: true, ...newState });
@@ -308,7 +322,7 @@ export default function BBIForm(props) {
           BBI {selectedBBI ? '#' + selectedBBI.id : ''}
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
-          <Grid container direction="row">
+          <Grid container direction="row" justify="space-evenly">
             <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={2} className={classes.formGroup}>
               <Grid  item xs={12} >
                 <Typography component="div" variant="subtitle2" color="textSecondary" >Block Details</Typography>
@@ -455,27 +469,37 @@ export default function BBIForm(props) {
               </Grid>
 
             </Grid>
-
           </Grid>
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Save
-          </Button>
-          <Button
-            fullWidth
-            variant="contained"
-            color="secondary"
-            className={classes.submit}
-            onClick={() => clear()}
-          >
-            Clear
-          </Button>
+          <div className={classes.formButtons}>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Save
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="secondary"
+              className={classes.submit}
+              onClick={() => clear()}
+            >
+              Clear
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={() => showList()}
+            >
+              Show BBI List
+            </Button>
+          </div>
 
           
         </form>
@@ -484,6 +508,7 @@ export default function BBIForm(props) {
     <BBIDepDialog />
     <DepDialog />
     <BBImplementedDialog />
+    <BBIListDialog />
 
     <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnack} anchorOrigin={{ vertical, horizontal }} key={`${vertical},${horizontal}`}>
       <Alert onClose={handleCloseSnack} severity="success">
