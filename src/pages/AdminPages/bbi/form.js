@@ -3,25 +3,13 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Paper from '@material-ui/core/Paper';
-
-import FormControl from '@material-ui/core/FormControl';
-import ListItemText from '@material-ui/core/ListItemText';
-import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -39,19 +27,6 @@ import BBImplementedDialog from './bb-dialog'
 import BBIListDialog from './list-dialog'
 
 import api from '../../../services/api';
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -136,19 +111,19 @@ export default function BBIForm(props) {
 
   const { selectedBBI, selectBBI } = useContext(AdminContext);
 
-  const { openBBIDepDialog, setOpenBBIDepDialog } = useContext(NewBBIContext);
+  const { setOpenBBIDepDialog } = useContext(NewBBIContext);
   const { selectedBBIDeps, selectBBIDeps } = useContext(NewBBIContext);
-  const [ BBIsDepsCounter, setBBIsDepsCounter ] = useState(0);
+  const [ setBBIsDepsCounter ] = useState(0);
 
-  const { openDepDialog, setOpenDepDialog } = useContext(NewBBIContext);
+  const { setOpenDepDialog } = useContext(NewBBIContext);
   const { selectedDeps, selectDeps } = useContext(NewBBIContext);
-  const [ depsCounter, setDepsCounter ] = useState(0);
+  const [ setDepsCounter ] = useState(0);
 
-  const { openBBDialog, setOpenBBDialog } = useContext(NewBBIContext);
+  const {  setOpenBBDialog } = useContext(NewBBIContext);
   const { selectedBBs, selectBBs } = useContext(NewBBIContext);
-  const [ BBsCounter, setBBsCounter ] = useState(0);
+  const [ setBBsCounter ] = useState(0);
 
-  const { openBBIListDialog, setOpenBBIListDialog } = useContext(NewBBIContext);
+  const { setOpenBBIListDialog } = useContext(NewBBIContext);
 
   const [snack, setSnack] = useState({
     open: false,
@@ -217,10 +192,6 @@ export default function BBIForm(props) {
 
   };
 
-  const handleOpenSnack = (newState) => () => {
-    setSnack({ open: true, ...newState });
-  };
-
   const handleCloseSnack = () => {
     setSnack({ ...snack, open: false });
   };
@@ -228,10 +199,6 @@ export default function BBIForm(props) {
   //BBI Dependency
   const handleNewBBIDependency = () => {
     setOpenBBIDepDialog(true);
-  };
-
-  const handleCloseBBIDependency = () => {
-    setOpenBBIDepDialog(false);
   };
 
   function handleDeleteBBIDependency(dep) {
@@ -254,10 +221,6 @@ export default function BBIForm(props) {
     setOpenDepDialog(true);
   };
 
-  const handleCloseDependency = () => {
-    setOpenDepDialog(false);
-  };
-
   function handleDeleteDependency(dep) {
 
     let selectedIndex = selectedDeps.map(function(c) {return c.id; }).indexOf(dep.id);
@@ -278,10 +241,6 @@ export default function BBIForm(props) {
     setOpenBBDialog(true);
   };
 
-  const handleCloseBB = () => {
-    setOpenBBDialog(false);
-  };
-
   function handleDeleteBB(bb) {
 
     let selectedIndex = selectedBBs.map(function(c) {return c.id; }).indexOf(bb.id);
@@ -300,13 +259,13 @@ export default function BBIForm(props) {
 
   //Artifacts
   function handleNewArtifact({ target }) {
-    const fileReader = new FileReader();
-    const name = target.accept.includes('image') ? 'images' : 'videos';
+    // const fileReader = new FileReader();
+    // const name = target.accept.includes('image') ? 'images' : 'videos';
 
-    fileReader.readAsDataURL(target.files[0]);
-    fileReader.onload = (e) => {
-        console.log(e)
-    };
+    // fileReader.readAsDataURL(target.files[0]);
+    // fileReader.onload = (e) => {
+    //     console.log(e)
+    // };
   };
 
 

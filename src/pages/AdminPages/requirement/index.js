@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import clsx from 'clsx';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -11,7 +10,6 @@ import MuiAlert from '@material-ui/lab/Alert';
 import ProgressContext from '../../../contexts/progress';
 import AdminContext from '../../../contexts/admin';
 
-import SettingsIcon from '@material-ui/icons/Settings';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 

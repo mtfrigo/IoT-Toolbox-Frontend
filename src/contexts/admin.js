@@ -1,6 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
-
-import api from '../services/api';
+import React, { createContext, useState } from 'react';
 
 const AdminContext = createContext();
 

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import clsx from 'clsx';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -10,14 +9,12 @@ import MuiAlert from '@material-ui/lab/Alert';
 
 import ProgressContext from '../../../contexts/progress';
 import AdminContext from '../../../contexts/admin';
+import MatchingContext from '../../../contexts/matching';
 
-import SettingsIcon from '@material-ui/icons/Settings';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import BBForm from './form'
-
-
 
 import api from '../../../services/api';
 
@@ -71,6 +68,8 @@ export default function AdminRequirementPage() {
   const classes = useStyles();
   const { setShowBar } = useContext(ProgressContext);
   const { selectedBB, selectBB } = useContext(AdminContext);
+  const { selectedBlocks, selectBlocks } = useContext(MatchingContext);
+
   const [ bbs, setBBs ] = useState([]);
 
   const [snack, setSnack] = useState({
@@ -84,7 +83,8 @@ export default function AdminRequirementPage() {
   useEffect(() => {
     setShowBar(false);
     getBBs();
-  }, [selectedBB])
+    console.log("salve malak");
+  }, [selectedBB, selectedBlocks])
 
   async function getBBs() {
     const res = await api.get('/building-blocks');
@@ -96,7 +96,7 @@ export default function AdminRequirementPage() {
   }
 
   async function handleDelete(req) {
-    const res = await api.delete('/building-blocks/' + req.id);
+    await api.delete('/building-blocks/' + req.id);
     getBBs();
     setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'Block deleted!' });
   }

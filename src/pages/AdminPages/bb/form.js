@@ -3,25 +3,13 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Paper from '@material-ui/core/Paper';
-
-import FormControl from '@material-ui/core/FormControl';
-import ListItemText from '@material-ui/core/ListItemText';
-import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -36,19 +24,6 @@ import CapabilityDialog from './cap-dialog'
 import DependencyDialog from './dep-dialog'
 
 import api from '../../../services/api';
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -125,16 +100,14 @@ export default function BBForm(props) {
   const [ description, setDescription ] = useState('');
   const [ type, setType ] = useState('');
   const [ name, setName ] = useState('');
-  const [ capsCounter, setCapsCounter ] = useState(0);
-  const [ depsCounter, setDepsCounter ] = useState(0);
+  const [ setCapsCounter ] = useState(0);
+  const [ setDepsCounter ] = useState(0);
   const { selectedBB, selectBB } = useContext(AdminContext);
 
-  const { openCapDialog, setOpenCapDialog } = useContext(NewBBContext);
+  const { setOpenCapDialog } = useContext(NewBBContext);
   const { selectedCaps, selectCaps } = useContext(NewBBContext);
-  const { openDepDialog, setOpenDepDialog } = useContext(NewBBContext);
+  const { setOpenDepDialog } = useContext(NewBBContext);
   const { selectedBBs, selectBBs } = useContext(NewBBContext);
-
-  const [personName, setPersonName] = useState([]);
 
   const [snack, setSnack] = useState({
     open: false,
@@ -201,24 +174,16 @@ export default function BBForm(props) {
     selectBBs([])
   }
 
-  const handleOpenSnack = (newState) => () => {
-    setSnack({ open: true, ...newState });
-  };
-
   const handleCloseSnack = () => {
     setSnack({ ...snack, open: false });
   };
 
   const handleChangeCapability = (event) => {
-    setPersonName(event.target.value);
+    // setPersonName(event.target.value);
   };
 
   const handleNewCapability = () => {
     setOpenCapDialog(true);
-  };
-
-  const handleCloseCapDialog = () => {
-    setOpenCapDialog(false);
   };
 
   function handleDeleteCapability(cap) {

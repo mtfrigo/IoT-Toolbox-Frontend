@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 24,
     display: 'flex',
     flexDirection: 'column', 
+    // border: '2px solid rgba(0, 0, 0, 0) '
   },
   header: {
 
@@ -94,28 +95,70 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 2,
   },
   selected: {
-    border: '2px solid rgb(245, 16, 97)'
+    border: '2px solid rgb(245, 16, 97) !important'
+  },
+  recommended: {
+    border: '2px solid rgb(93, 26, 255)'
   },
   btnSelected: {
     background: '#f1f1f1',
   },
   matched: {
     border: '2px solid rgb(63, 81, 181)'
-  }
+  },
 }));
 
-export default function RecipeReviewCard(props) {
+export default function BuildingBlockCard(props) {
   const classes = useStyles();
   const [selected, setSelected] = React.useState(false);
   const [menuId, setMenu] = React.useState(1);
+
+  const [counter, setCounter] = React.useState(0);
+
   const [infos, setInfos ] = React.useState(props.bb.BlockCapabilities)
 
-  const { selectBlock } = React.useContext(MatchingContext);
+  const { selectBlock, recommendedBlocks } = React.useContext(MatchingContext);
+  const { selectedBlocks, selectBlocks } = React.useContext(MatchingContext);
 
   let history = useHistory();
 
+  useEffect(() =>  {
+    console.log('aosdhauisdhaiusd')
+  }, [selectedBlocks])
+
   const handleCheckClick = () => {
-    setSelected(!selected);
+    
+    let selectedIndex = selectedBlocks.indexOf(bb.id);
+    let newSelectBlocks = selectedBlocks;
+
+    if(selectedIndex === -1) {
+      newSelectBlocks.push(bb.id)
+    } else if(selectedBlocks.length > 0){
+      newSelectBlocks.splice(selectedIndex, 1)
+    } else {
+      newSelectBlocks = []
+    }
+
+    selectBlocks(newSelectBlocks)
+    setCounter(newSelectBlocks.length)
+  };
+
+  const handleListItemClick = (value) => {
+
+    // let selectedIndex = selectedBBs.map(function(x) {return x.id;}).indexOf(value.id);
+    // let newSelectBBs = selectedBBs;
+
+    // if(selectedIndex === -1) {
+    //   newSelectBBs.push(value)
+    // } else if(selectedBBs.length > 1){
+    //   newSelectBBs.splice(selectedIndex, 1)
+    // } else {
+    //   newSelectBBs = []
+    // }
+
+    // selectBBs(newSelectBBs)
+    // setOpenBBDialog(false)
+
   };
 
   const bb = props.bb;
@@ -140,7 +183,7 @@ export default function RecipeReviewCard(props) {
   }
 
   return (
-    <Card className={clsx(classes.root, {[classes.selected]: selected})}>
+    <Card className={clsx(classes.root, {[classes.selected]: (selectedBlocks.indexOf(bb.id) !== -1), [classes.recommended]: (recommendedBlocks.indexOf(bb.id) !== -1)})}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
@@ -154,7 +197,7 @@ export default function RecipeReviewCard(props) {
             onClick={handleCheckClick}
             aria-expanded={selected}
             aria-label="show more"
-            checked={selected}
+            checked={(selectedBlocks.indexOf(bb.id) !== -1)}
           />
         }
         title={bb.id + ': ' + bb.name}
@@ -169,8 +212,6 @@ export default function RecipeReviewCard(props) {
             </StyledBadge>
           </IconButton>
         </Tooltip>
-        
-
         
         <Tooltip title="Dependencies">
           <IconButton aria-label="add to favorites" onClick={() => selectMenu(2)} className={clsx({[classes.btnSelected]: menuId === 2})}>

@@ -1,15 +1,22 @@
 .sidemenu {
-  width: 240px;
+  width: 220px;
   background: #fff;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .sidemenu-list {
+  margin-top: 40px;
   padding: 10px;
   list-style-type: none;
+}
+
+.secondary-sidemenu-list {
+  list-style-type: none;
+}
+
+.secondary-sidemenu-list .title {
 }
 
 .sidemenu-item {
@@ -21,7 +28,7 @@
   text-decoration: none;
   font-weight: 500;
 
-  padding: 8px 16px;
+  padding: 8px 4px;
 
   font-size: 1rem;
   transition: opacity 0.2s;
@@ -43,10 +50,36 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 60px;
+  flex-direction: column;
+  padding-top: 35px;
 
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.header .title {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.header svg{
+  margin-top: 15px;
+  height: 48px;
+  width: 48px;
+
+}
+
+.header  .sign-out-icon {
+  width: 12px;
+  height: 20px;
+  margin: 0 5px;
+  color: red;
+}
+
+.header .account-name {
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .subheader {
@@ -62,6 +95,21 @@
   font-weight: 500;
 }
 
-.secondary {
-  margin-bottom: 80px;
+.subheader .title {
+  opacity: 0.55;
+
+}
+
+.account-name {
+  align-self: flex-end;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  font-size: 12px;
+
+  
 }

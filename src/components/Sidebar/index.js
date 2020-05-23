@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { FiBox, FiCodesandbox} from 'react-icons/fi';
+import { FiBox, FiCodesandbox, FiLogOut} from 'react-icons/fi';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 //import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
@@ -19,6 +20,11 @@ export default function Siderbar() {
       <div>
         <div className="header">
           <div className="title">IoT Toolbox</div>
+          <AccountCircleIcon color='secondary'   />
+          <p className="account-name">Admin </p>
+          <FiLogOut className="sign-out-icon" />
+
+
         </div>
         
         <ul className="sidemenu-list">
@@ -36,7 +42,7 @@ export default function Siderbar() {
           <div className="title">Admin</div>
         </div>
 
-        <ul className="sidemenu-list secondary">
+        <ul className="secondary-sidemenu-list ">
           <li className="sidemenu-item">
             <Link to="/admin/requirement"><DashboardIcon size={20} />Requirements</Link>
             <Link to="/admin/building-block"><FiBox size={20}  />BB</Link>
@@ -44,6 +50,8 @@ export default function Siderbar() {
           </li>
         </ul>
       </div>
+
+      
       
     </div>
   )
