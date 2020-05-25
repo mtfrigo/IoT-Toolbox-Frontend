@@ -8,6 +8,7 @@ import AccountTreeIcon from '@material-ui/icons/AccountTree';
 //import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 //import TransformIcon from '@material-ui/icons/Transform';
 import SettingsIcon from '@material-ui/icons/Settings';
+import ViewComfyIcon from '@material-ui/icons/ViewComfy';
 //import VideoLabelIcon from '@material-ui/icons/VideoLabel';
 //import WeekendIcon from '@material-ui/icons/Weekend';
 
@@ -47,11 +48,10 @@ export default function Siderbar() {
             <Link to="/admin/requirement"><DashboardIcon size={20} />Requirements</Link>
             <Link to="/admin/building-block"><FiBox size={20}  />BB</Link>
             <Link to="/admin/bbi"><FiCodesandbox size={20} />BBI</Link>
+            <Link to="/admin/matching"><ViewComfyIcon size={20} />Matching</Link>
           </li>
         </ul>
       </div>
-
-      
       
     </div>
   )

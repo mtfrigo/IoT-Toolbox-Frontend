@@ -10,6 +10,7 @@ import SignInPage from './pages/SignIn';
 import AdminRequirementPage from './pages/AdminPages/requirement';
 import AdminBBPage from './pages/AdminPages/bb';
 import AdminBBIPage from './pages/AdminPages/bbi';
+import MatchingPanel from './pages/AdminPages/matching';
 
 import Sidebar from './components/Sidebar';
 import ProgressBar from './components/ProgressBar';
@@ -20,6 +21,7 @@ import { BlocksProvider } from './contexts/blocks'
 import { AdminProvider } from './contexts/admin'
 import { NewBBProvider } from './contexts/new-bb'
 import { NewBBIProvider } from './contexts/new-bbi'
+import { NewMatchProvider } from './contexts/new-match'
 import { BBiPanelProvider } from './contexts/bbi-panel'
 
 
@@ -40,6 +42,7 @@ export default function Routes() {
                  <AdminProvider>
                  <NewBBProvider>
                  <NewBBIProvider>
+                 <NewMatchProvider>
                   <Switch>
                     <Route path="/" exact component={HomePage}/>
                     <Route path="/requirements" exact component={RequirementsPage}/>
@@ -49,7 +52,9 @@ export default function Routes() {
                     <Route path="/admin/requirement" exact component={AdminRequirementPage}/>
                     <Route path="/admin/bbi" exact component={AdminBBIPage}/>
                     <Route path="/admin/building-block" exact component={AdminBBPage}/>
+                    <Route path="/admin/matching" exact component={MatchingPanel}/>
                   </Switch>
+                 </NewMatchProvider>
                  </NewBBIProvider>
                  </NewBBProvider>
                  </AdminProvider>
