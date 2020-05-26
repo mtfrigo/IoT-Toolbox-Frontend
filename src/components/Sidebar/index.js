@@ -24,8 +24,6 @@ export default function Siderbar() {
           <AccountCircleIcon color='secondary'   />
           <p className="account-name">Admin </p>
           <FiLogOut className="sign-out-icon" />
-
-
         </div>
         
         <ul className="sidemenu-list">
@@ -33,12 +31,12 @@ export default function Siderbar() {
             <Link to="/"><DashboardIcon size={20}  />Dashboard</Link>
             <Link to="/requirements"><SettingsIcon size={20}  />Requirements</Link>
             <Link to="/bbs"><FiBox size={20}  />Building Blocks</Link>
-            <Link to="/"><AccountTreeIcon size={20}  />Process</Link>
+            <Link to="/"><AccountTreeIcon size={20}  />Processes</Link>
           </li>
         </ul>
       </div>
 
-      <div>
+      {/* <div>
         <div className="subheader">
           <div className="title">Admin</div>
         </div>
@@ -52,7 +50,7 @@ export default function Siderbar() {
           </li>
         </ul>
       </div>
-      
+       */}
     </div>
   )
 }

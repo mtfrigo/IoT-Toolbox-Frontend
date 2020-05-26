@@ -5,7 +5,6 @@ import HomePage from './pages/Home';
 import RequirementsPage from './pages/Requirements';
 import BuildingBlocksPage from './pages/BBs';
 import BBIsPage from './pages/BBIs';
-import SignInPage from './pages/SignIn';
 
 import AdminRequirementPage from './pages/AdminPages/requirement';
 import AdminBBPage from './pages/AdminPages/bb';
@@ -48,7 +47,6 @@ export default function Routes() {
                     <Route path="/requirements" exact component={RequirementsPage}/>
                     <Route path="/bbs" exact component={BuildingBlocksPage}/>
                     <Route path="/bbis/:id" exact component={BBIsPage}/>
-                    <Route path="/login" exact component={SignInPage}/>
                     <Route path="/admin/requirement" exact component={AdminRequirementPage}/>
                     <Route path="/admin/bbi" exact component={AdminBBIPage}/>
                     <Route path="/admin/building-block" exact component={AdminBBPage}/>
