@@ -100,7 +100,9 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'uppercase',
     fontWeight: 500
 
-  }
+  },
+
+  
 
 }));
 
@@ -199,7 +201,7 @@ export default function MatchingPanel() {
     selectReqs(newSelectedReqs)
     setReqsCounter(newSelectedReqs.length)
   }
-
+ 
   async function save() {
     let requirements = selectedReqs.map(function(x) {return x.id;})
     const res = await api.post('/capability/' + selectedCap.id, {requirements})

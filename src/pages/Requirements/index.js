@@ -6,7 +6,6 @@ import ReqTable from '../../components/ReqTable';
 
 import ProgressContext from '../../contexts/progress';
 
-
 export default function RequirementsPage() {
   const { setShowBar } = useContext(ProgressContext);
 

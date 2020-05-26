@@ -29,15 +29,12 @@ export default function BuildingBlocksPage() {
           <BuildingBlockCard key={bb.id} bb={bb}/>
         )})
       }
-
-        
-     </div>
+      </div>
      {
-       selectedBlock.id ? 
-        <div className="block-details" >
-          <BuildingBlockDetails bb={selectedBlock} />
-        </div> : null
-
+      selectedBlock.id ? 
+      <div className="block-details" >
+        <BuildingBlockDetails bb={selectedBlock} />
+      </div> : null
      }
   </div>
   )
