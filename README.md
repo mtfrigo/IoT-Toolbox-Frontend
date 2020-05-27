@@ -27,4 +27,4 @@ Go to the root folder after cloning this repository and use the command: `npm in
 After all libraries been installed you can start the react server by using the command: `npm start`.
 The default server port is 3030. It can be modified changing line 20 in the file package.json.
 
-To setup the backend go to installion section on the [IoT Toolbox BackEnd](https://github.com/mtfrigo/IoT-Toolbox-Backend) project.
+To setup the backend go to installation section on the [IoT Toolbox BackEnd](https://github.com/mtfrigo/IoT-Toolbox-Backend) project.
