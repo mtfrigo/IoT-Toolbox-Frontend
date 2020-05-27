@@ -18,7 +18,9 @@ How to install and use the Toolbox is explained in the following.
 
 ## Installation (for developers)
 
-The following software components are used in order to set up the toolbox: [NodeJS](https://nodejs.org/en/), [Docker](https://docs.docker.com/get-docker/), ReactJS and NPM.
+The following software components are used in order to set up the toolbox: 
+* Back-End: [NodeJS](https://nodejs.org/en/), [Docker](https://docs.docker.com/get-docker/) and NPM.
+* Front-End: ReactJS.
 
 ### 1.1 Installation (on Linux) 
 Go to the root folder after cloning this repository and use the command: `npm install`.
