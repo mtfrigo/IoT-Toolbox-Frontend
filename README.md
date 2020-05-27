@@ -3,7 +3,7 @@
 This project contains the **IoT Toolbox** Prototype, an IoT platform developed for easing the setup of IoT environments and their applications.
 
 
-This specific project deals with the Front-end side of the project. The back-end documentation is provided as the GitHub project [IoT Toolbox BackEnd](https://github.com/mtfrigo/IoT-Toolbox-Backend).
+This specific project deals with the Front-end side of the project. The back-end documentation is provided as the GitHub project [IoT Toolbox Back-End](https://github.com/mtfrigo/IoT-Toolbox-Backend).
 
 # Presentation 
 
