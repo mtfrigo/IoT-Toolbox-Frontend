@@ -22,7 +22,7 @@ export const ProgressProvider = ({children}) => {
       name: 'Requirements Specification', 
       icon: <SettingsIcon />, 
       content: 'Select suitable requirements for your application...',
-      description: 'The  domain experts,  and  their  stakeholders  need  to  define  a  set  of  requirements  for  their application. The toolbox provides a set of predefined requirements that can be select to later show the building blocks that matches the requirements.'
+      description: 'The toolbox provides a set of predefined requirements that can be select to later show the building blocks that matches the requirements.'
     },
     { 
       id: 2, 
@@ -49,14 +49,14 @@ export const ProgressProvider = ({children}) => {
       id: 5, name: 'IoT Environment Adaptation', 
       icon: <TransformIcon />, 
       content: 'Select suitable requirements for your application...',
-      description: 'If adaptations are necessary, the feedback loop in our method allows to return to the first step, redefining the requirements of the application, adding or removing requirements.'
+      description: 'If adaptations are necessary our method allows to return to the first step, redefining the requirements of the application, adding or removing requirements.'
     },
     { 
       id: 6, 
       name: 'IoT Environment Retirement', 
       icon: <WeekendIcon />, 
       content: 'Select suitable requirements for your application...',
-      description: 'The final step is the retirement of the IoT environment, which is executed oncean IoT application reaches its lifetime.'
+      description: 'The final step is the retirement of the IoT environment, which is executed once an IoT application reaches its lifetime.'
     },
   ];
 
