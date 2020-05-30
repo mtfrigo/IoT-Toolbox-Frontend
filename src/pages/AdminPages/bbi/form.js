@@ -164,13 +164,13 @@ export default function BBIForm(props) {
 
     if(res.statusText === "OK") {
       let bbiDeps = selectedBBIDeps.length > 0 ? selectedBBIDeps.map(function(c) {return c.id;}) : [];
-      await api.post('/bbi-dependents/' + res.data.id, {bbiDeps})
+      await api.post('/bbi/dependents/' + res.data.id, {bbiDeps})
 
       let deps = selectedDeps.length > 0 ? selectedDeps.map(function(b) {return b.id;}) : []
-      await api.post('/bbi-dependencies/' + res.data.id, {deps})
+      await api.post('/bbi/dependencies/' + res.data.id, {deps})
 
       let bbs = selectedBBs.length > 0 ? selectedBBs.map(function(b) {return b.id;}) : []
-      await api.post('/bbi-implements/' + res.data.id, {bbs})
+      await api.post('/bbi/implements/' + res.data.id, {bbs})
 
       clear();
     }

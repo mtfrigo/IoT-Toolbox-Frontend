@@ -36,7 +36,8 @@ const useBlockHeaderStyles = makeStyles((theme) => ({
   imageContainer: {
     width: 260,
     height: 150,
-    background: '#fafafa'
+    background: '#fff',
+    borderBottom: '1px solid rgba(0, 0, 0, 0.2)'
   },
   image: {
     width: 260,
@@ -348,52 +349,48 @@ export default function BBIsPage() {
 
   return (
     <div className='bbi-page'>
-
-      <div className='header'>
-      {
-        bb ? <BuildingBlockHeader bb={bb} /> : null
-      }
-      </div>
-
-      <div className='bbi-content'>
-        <div className='bbi-list'>
-          <div className="bbi-list-header">
-            <Typography variant="body1" color="textPrimary">
-              Implemented By:
-            </Typography>
-          </div>
-          <div className="bbi-list-content">
-          {
-            bbis.length > 0 ?
-            bbis.map((bbi) => <Paper key={bbi.id} className="bbi-list-item" onClick={() => selectBBI(bbi)}><div>{bbi.name}</div></Paper>) :
-            <Paper className="bbi-list-item" ><div>No BBis for this BB.</div></Paper>
-          }
-          </div>
+        <div className='header'>
+        {
+          bb ? <BuildingBlockHeader bb={bb} /> : null
+        }
         </div>
 
-        {
-          selectedBBI ? 
-          <div className='bbi-panel'>
-            <div className='bbi-panel-header'>
+        <div className='bbi-content'>
+          <div className='bbi-list'>
+            <div className="bbi-list-header">
+              <Typography variant="body1" color="textPrimary">
+                Implemented By:
+              </Typography>
+            </div>
+            <div className="bbi-list-content">
             {
-              bbis ? <BBiHeader bbi={bbis[0]} /> : null
+              bbis.length > 0 ?
+              bbis.map((bbi) => <Paper key={bbi.id} className="bbi-list-item" onClick={() => selectBBI(bbi)}><div>{bbi.name}</div></Paper>) :
+              <Paper className="bbi-list-item" ><div>No BBis for this BB.</div></Paper>
             }
             </div>
-            <BBiTab />
-            <BBiPanel bbis={bbis} />
-          </div> :
+          </div>
 
-          <div className='bbi-empty-panel'>
-            <Typography variant="body1" color="textPrimary">
-              Please select a BBI...
-            </Typography>
-          </div> 
-        }
-        
-      </div>
+          {
+            selectedBBI ? 
+            <div className='bbi-panel'>
+              <div className='bbi-panel-header'>
+              {
+                bbis ? <BBiHeader bbi={bbis[0]} /> : null
+              }
+              </div>
+              <BBiTab />
+              <BBiPanel bbis={bbis} />
+            </div> :
 
-
-
+            <div className='bbi-empty-panel'>
+              <Typography variant="body1" color="textPrimary">
+                Please select a BBI...
+              </Typography>
+            </div> 
+          }
+          
+        </div>
     </div>
   )
 }

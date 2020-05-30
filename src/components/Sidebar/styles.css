@@ -75,6 +75,7 @@
   height: 20px;
   margin: 0 5px;
   color: red;
+  cursor: pointer;
 }
 
 .header .account-name {

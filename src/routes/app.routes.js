@@ -1,30 +1,30 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import HomePage from './pages/Home';
-import RequirementsPage from './pages/Requirements';
-import BuildingBlocksPage from './pages/BBs';
-import BBIsPage from './pages/BBIs';
+import HomePage from '../pages/Home';
+import RequirementsPage from '../pages/Requirements';
+import BuildingBlocksPage from '../pages/BBs';
+import BBIsPage from '../pages/BBIs';
 
-import AdminRequirementPage from './pages/AdminPages/requirement';
-import AdminBBPage from './pages/AdminPages/bb';
-import AdminBBIPage from './pages/AdminPages/bbi';
-import MatchingPanel from './pages/AdminPages/matching';
+import AdminRequirementPage from '../pages/AdminPages/requirement';
+import AdminBBPage from '../pages/AdminPages/bb';
+import AdminBBIPage from '../pages/AdminPages/bbi';
+import MatchingPanel from '../pages/AdminPages/matching';
 
-import Sidebar from './components/Sidebar';
-import ProgressBar from './components/ProgressBar';
+import Sidebar from '../components/Sidebar';
+import ProgressBar from '../components/ProgressBar';
 
-import { MatchingProvider } from './contexts/matching'
-import { RequirementsProvider } from './contexts/requirements'
-import { BlocksProvider } from './contexts/blocks'
-import { AdminProvider } from './contexts/admin'
-import { NewBBProvider } from './contexts/new-bb'
-import { NewBBIProvider } from './contexts/new-bbi'
-import { NewMatchProvider } from './contexts/new-match'
-import { BBiPanelProvider } from './contexts/bbi-panel'
+import { MatchingProvider } from '../contexts/matching'
+import { RequirementsProvider } from '../contexts/requirements'
+import { BlocksProvider } from '../contexts/blocks'
+import { AdminProvider } from '../contexts/admin'
+import { NewBBProvider } from '../contexts/new-bb'
+import { NewBBIProvider } from '../contexts/new-bbi'
+import { NewMatchProvider } from '../contexts/new-match'
+import { BBiPanelProvider } from '../contexts/bbi-panel'
 
 
-export default function Routes() {
+export default function AppRoutes() {
     return (
         <BrowserRouter>
             <div className="container">

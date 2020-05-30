@@ -151,12 +151,12 @@ export default function BBForm(props) {
 
 
     if(res.statusText === "OK") {
-      let caps = selectedCaps.length > 0 ? selectedCaps.map(function(c) {return c.id;}) : [];
-      await api.post('/bb-capability/' + res.data.id, {caps})
+      let capabilities = selectedCaps.length > 0 ? selectedCaps.map(function(c) {return c.id;}) : [];
+      await api.post('/building-blocks/capability/' + res.data.id, {capabilities})
 
 
-      let deps = selectedBBs.length > 0 ? selectedBBs.map(function(b) {return b.id;}) : []
-      await api.post('/bb-dependency/' + res.data.id, {deps})
+      let dependencies = selectedBBs.length > 0 ? selectedBBs.map(function(b) {return b.id;}) : []
+      await api.post('/building-blocks/dependency/' + res.data.id, {dependencies})
 
       clear();
     }

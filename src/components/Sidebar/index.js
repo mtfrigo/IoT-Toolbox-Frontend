@@ -12,9 +12,17 @@ import ViewComfyIcon from '@material-ui/icons/ViewComfy';
 //import VideoLabelIcon from '@material-ui/icons/VideoLabel';
 //import WeekendIcon from '@material-ui/icons/Weekend';
 
+import { useAuth } from '../../contexts/auth';
+
 import './styles.css';
 
 export default function Siderbar() {
+  const { signOut, user } = useAuth();
+
+  function handleSignOut() {
+    signOut();
+  }
+
   return (
     <div className="sidemenu">
 
@@ -22,8 +30,8 @@ export default function Siderbar() {
         <div className="header">
           <div className="title">IoT Toolbox</div>
           <AccountCircleIcon color='secondary'   />
-          <p className="account-name">Admin </p>
-          <FiLogOut className="sign-out-icon" />
+          <p className="account-name">Role: {user.role} </p>
+          <FiLogOut className="sign-out-icon" onClick={() => handleSignOut()}/>
         </div>
         
         <ul className="sidemenu-list">
@@ -36,7 +44,8 @@ export default function Siderbar() {
         </ul>
       </div>
 
-      {/* <div>
+      {
+        user.role === 2 ? <div>
         <div className="subheader">
           <div className="title">Admin</div>
         </div>
@@ -49,8 +58,10 @@ export default function Siderbar() {
             <Link to="/admin/matching"><ViewComfyIcon size={20} />Matching</Link>
           </li>
         </ul>
-      </div>
-       */}
+      </div> : null
+
+      }
+      
     </div>
   )
 }
