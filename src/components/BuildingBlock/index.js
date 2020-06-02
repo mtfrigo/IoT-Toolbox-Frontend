@@ -123,7 +123,7 @@ export default function BuildingBlockCard(props) {
   let history = useHistory();
 
   useEffect(() =>  {
-    console.log('aosdhauisdhaiusd')
+
   }, [selectedBlocks])
 
   const handleCheckClick = () => {

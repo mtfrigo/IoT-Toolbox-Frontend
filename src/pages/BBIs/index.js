@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -12,6 +12,7 @@ import Tab from '@material-ui/core/Tab';
 import { red } from '@material-ui/core/colors';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 
 import ProgressContext from '../../contexts/progress';
@@ -32,12 +33,18 @@ const useBlockHeaderStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    borderTop: '2px solid rgba(0, 0, 0, 0.35)',
+    borderRight: '2px solid rgba(0, 0, 0, 0.35)',
+    borderLeft: '2px solid rgba(0, 0, 0, 0.35)',
+    borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
   },
   imageContainer: {
     width: 260,
     height: 150,
     background: '#fff',
-    borderBottom: '1px solid rgba(0, 0, 0, 0.2)'
+    borderTopLeftRadius: 5,
   },
   image: {
     width: 260,
@@ -46,14 +53,29 @@ const useBlockHeaderStyles = makeStyles((theme) => ({
   details: {
     flexGrow: 2,
     height: 150,
-    padding: 20
+    padding: 20,
+    
+  },
+  closeIconContainer: {
+    height: '100%'
+  },
+  closeIcon: {
+    position: 'relative',
+    top: 0,
+    right: 0,
   }
 }));
 
 const BuildingBlockHeader = (props) => {
   const classes = useBlockHeaderStyles();
 
+  let history = useHistory();
+
   const bb = props.bb;
+
+  function handleClickClose() {
+    console.log("oaushduiasd")
+  }
 
   return (
     <div className={classes.root}>
@@ -69,6 +91,12 @@ const BuildingBlockHeader = (props) => {
         <Typography variant="body1" color="textSecondary">
           Type: {bb.type}
         </Typography>
+      </div>
+
+      <div className={classes.closeIconContainer}>
+        <IconButton aria-label="add to favorites"  className={classes.closeIcon} onClick={() => history.push('/bbs/')}>
+          <CloseIcon />
+        </IconButton>
       </div>
 
     </div>
@@ -294,6 +322,8 @@ const BBiHeader = (props) => {
         <Typography variant="body2" color="textSecondary">
           {!!bbi ? bbi.description : 'xesq'}
         </Typography>
+        
+        
       </div>
 
     </div>
@@ -349,7 +379,7 @@ export default function BBIsPage() {
 
   return (
     <div className='bbi-page'>
-        <div className='header'>
+        <div className='bbi-page-header'>
         {
           bb ? <BuildingBlockHeader bb={bb} /> : null
         }
@@ -358,7 +388,7 @@ export default function BBIsPage() {
         <div className='bbi-content'>
           <div className='bbi-list'>
             <div className="bbi-list-header">
-              <Typography variant="body1" color="textPrimary">
+              <Typography variant="body1" color="textSecondary">
                 Implemented By:
               </Typography>
             </div>
