@@ -9,6 +9,8 @@ import BlocksContext from '../../contexts/blocks';
 import BuildingBlockCard from '../../components/BuildingBlock'
 import BuildingBlockDetails from '../../components/BuildingBlockDetails'
 
+
+
 export default function BuildingBlocksPage() {
 
   const { setActiveStep, setShowBar } = useContext(ProgressContext);

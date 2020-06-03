@@ -39,7 +39,7 @@ export default function Siderbar() {
             <Link to="/"><DashboardIcon size={20}  />Dashboard</Link>
             <Link to="/requirements"><SettingsIcon size={20}  />Requirements</Link>
             <Link to="/bbs"><FiBox size={20}  />Building Blocks</Link>
-            <Link to="/"><AccountTreeIcon size={20}  />Processes</Link>
+            <Link to="/process-creation"><AccountTreeIcon size={20}  />Processes</Link>
           </li>
         </ul>
       </div>

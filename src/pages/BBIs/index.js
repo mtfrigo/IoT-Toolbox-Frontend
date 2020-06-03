@@ -14,6 +14,7 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
+import BBICard from '../../components/BBI'
 
 import ProgressContext from '../../contexts/progress';
 import BBiPanelContext from '../../contexts/bbi-panel';
@@ -74,7 +75,7 @@ const BuildingBlockHeader = (props) => {
   const bb = props.bb;
 
   function handleClickClose() {
-    console.log("oaushduiasd")
+    // console.log("oaushduiasd")
   }
 
   return (
@@ -395,7 +396,7 @@ export default function BBIsPage() {
             <div className="bbi-list-content">
             {
               bbis.length > 0 ?
-              bbis.map((bbi) => <Paper key={bbi.id} className="bbi-list-item" onClick={() => selectBBI(bbi)}><div>{bbi.name}</div></Paper>) :
+              bbis.map((bbi) => <BBICard bbi={bbi} key={bbi.id} className="bbi-list-item"/>) :
               <Paper className="bbi-list-item" ><div>No BBis for this BB.</div></Paper>
             }
             </div>

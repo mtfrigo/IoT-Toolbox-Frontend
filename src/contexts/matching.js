@@ -9,6 +9,7 @@ export const MatchingProvider = ({children}) => {
   const [selectedRequirements, selectRequirements] = useState([]);
   const [selectedBlock, selectBlock] = useState({});
   const [selectedBlocks, selectBlocks] = useState([]);
+  const [selectedBBIs, selectBBIs] = useState([]);
   const [recommendedBlocks, recommendBlocks] = useState([]);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export const MatchingProvider = ({children}) => {
   }
 
   return (
-    <MatchingContext.Provider value={{selectedRequirements, selectRequirements, selectedBlock, selectBlock, selectedBlocks, selectBlocks, recommendedBlocks, recommendBlocks}}>
+    <MatchingContext.Provider value={{selectedBBIs, selectBBIs, selectedRequirements, selectRequirements, selectedBlock, selectBlock, selectedBlocks, selectBlocks, recommendedBlocks, recommendBlocks}}>
       {children}
     </MatchingContext.Provider>
   );

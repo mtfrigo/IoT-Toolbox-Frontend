@@ -6,9 +6,11 @@ const BlocksContext = createContext();
 
 export const BlocksProvider = ({children}) => {
   const [ buildingBlocks, setBuildingBlocks ] = useState([]);
+  const [ bbis, setBBIs ] = useState([]);
 
   useEffect(() => {
     getBBs();
+    getBBIs();
   }, [])
 
   async function getBBs() {
@@ -16,8 +18,13 @@ export const BlocksProvider = ({children}) => {
     setBuildingBlocks(res.data)
   }
 
+  async function getBBIs() {
+    const res = await api.get('/bbis');
+    setBBIs(res.data)
+  }
+
   return (
-    <BlocksContext.Provider value={{ buildingBlocks, setBuildingBlocks }}>
+    <BlocksContext.Provider value={{ bbis, setBBIs, buildingBlocks, setBuildingBlocks }}>
       {children}
     </BlocksContext.Provider>
   );

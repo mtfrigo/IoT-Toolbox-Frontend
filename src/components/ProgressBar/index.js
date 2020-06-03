@@ -183,6 +183,8 @@ export default function CustomizedSteppers() {
         history.push('/requirements'); break;
       case 1:
         history.push('/bbs'); break;
+      case 2:
+        history.push('/process-creation'); break;
       default:
         history.push('/');
     }

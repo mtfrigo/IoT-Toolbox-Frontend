@@ -162,7 +162,6 @@ export default function BBForm(props) {
     }
 
   }
-
  
 
   function clear() {
@@ -176,10 +175,6 @@ export default function BBForm(props) {
 
   const handleCloseSnack = () => {
     setSnack({ ...snack, open: false });
-  };
-
-  const handleChangeCapability = (event) => {
-    // setPersonName(event.target.value);
   };
 
   const handleNewCapability = () => {

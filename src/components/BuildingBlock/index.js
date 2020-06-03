@@ -22,6 +22,8 @@ import { FiCodesandbox } from 'react-icons/fi';
 import Checkbox from '@material-ui/core/Checkbox';
 import MatchingContext from '../../contexts/matching';
 
+import BBICard from '../../components/BBI'
+
 import './styles.css'
 
 const StyledBadge = withStyles((theme) => ({
@@ -143,23 +145,6 @@ export default function BuildingBlockCard(props) {
     setCounter(newSelectBlocks.length)
   };
 
-  const handleListItemClick = (value) => {
-
-    // let selectedIndex = selectedBBs.map(function(x) {return x.id;}).indexOf(value.id);
-    // let newSelectBBs = selectedBBs;
-
-    // if(selectedIndex === -1) {
-    //   newSelectBBs.push(value)
-    // } else if(selectedBBs.length > 1){
-    //   newSelectBBs.splice(selectedIndex, 1)
-    // } else {
-    //   newSelectBBs = []
-    // }
-
-    // selectBBs(newSelectBBs)
-    // setOpenBBDialog(false)
-
-  };
 
   const bb = props.bb;
 

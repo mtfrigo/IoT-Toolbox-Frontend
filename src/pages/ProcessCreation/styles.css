@@ -1,0 +1,98 @@
+.progress-creation-page {
+  height: 100%;
+  display: flex;
+
+  flex-direction: column;
+  padding: 20px;
+
+}
+
+.progress-creation-page > .title {
+  font-size: 24px;
+  margin: 5px;
+}
+
+.progress-creation-page > .description {
+  font-size: 16px;
+  margin: 10px 0;
+  opacity: 0.8;
+}
+
+.progress-creation-page > .counters {
+  display: flex;
+  flex-direction: row;
+
+  align-items: center;
+  justify-content: flex-end;
+
+}
+
+.progress-creation-page > .requirements-section {
+  display: flex;
+  flex-direction: column;
+
+  padding-top: 20px;
+}
+
+.progress-creation-page .section-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  margin-left: 5px;
+}
+
+.progress-creation-page .section-header > .subtitle{
+  font-size: 20px;
+  margin-left: 5px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.progress-creation-page .section-header > svg{
+  font-size: 20px;
+  color: #f50057;
+}
+
+
+.progress-creation-page > .requirements-section > .requirements-list {
+  margin: 0px 50px;
+}
+
+.progress-creation-page > .requirements-section > .requirements-list > .requirements-list-item {
+  margin: 10px 0 ;
+  font-size: 16px;
+}
+
+.progress-creation-page > .blocks-section {
+  padding-top: 20px;
+
+}
+
+.progress-creation-page > .blocks-section > .blocks-list {
+  margin: 0px 50px;
+}
+
+.progress-creation-page > .blocks-section > .blocks-list > .blocks-list-item {
+  margin: 10px 0 ;
+  font-size: 20px;
+}
+
+.progress-creation-page > .blocks-section > .blocks-list > .blocks-list-item > .bbis-list{
+  margin: 0px 20px ;
+}
+
+.progress-creation-page > .blocks-section > .blocks-list > .blocks-list-item > .bbis-list > .bbis-list-item {
+  margin: 20px 0 ;
+  font-size: 18px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.progress-creation-page > .blocks-section > .blocks-list > .blocks-list-item > .bbis-list > .bbis-list-item  > svg {
+  margin-right: 10px;
+  color: #f50057;
+
+}
