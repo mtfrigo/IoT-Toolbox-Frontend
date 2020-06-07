@@ -1,33 +1,27 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState } from 'react';
+
+// Material Components
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
+import { TextareaAutosize } from '@material-ui/core';
 
+//Material Styles
+import { makeStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
+// Material Icons
 import SettingsIcon from '@material-ui/icons/Settings';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 
-import AdminContext from '../../../contexts/admin';
-import NewBBContext from '../../../contexts/new-bb';
-
-import { TextareaAutosize } from '@material-ui/core';
-
-import CapabilityDialog from './cap-dialog'
-import DependencyDialog from './dep-dialog'
-
 import api from '../../../services/api';
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+import ItemListDialog from './dialog'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -97,122 +91,119 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BBForm(props) {
   const classes = useStyles();
-  const [ description, setDescription ] = useState('');
-  const [ type, setType ] = useState('');
-  const [ name, setName ] = useState('');
-  const [ setCapsCounter ] = useState(0);
-  const [ setDepsCounter ] = useState(0);
-  const { selectedBB, selectBB } = useContext(AdminContext);
+  const [ openDialog, setOpenDialog ] = useState(false);
+  const [ capabilities, setCapabilities ] = useState([]);
+  const [ dependencies, setDependencies ] = useState([]);
+  const [ itemList, setItemList ] = useState([]);
+  const [ selectedItems, selectItems ] = useState([]);
+  const [ selectedFeature, setFeature ] = useState('');
+  const { handleOpenSnack, getBBs, bb } = props;
 
-  const { setOpenCapDialog } = useContext(NewBBContext);
-  const { selectedCaps, selectCaps } = useContext(NewBBContext);
-  const { setOpenDepDialog } = useContext(NewBBContext);
-  const { selectedBBs, selectBBs } = useContext(NewBBContext);
-
-  const [snack, setSnack] = useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-    message: '',
+  const [ formData, setFormData ] = useState({
+    name: '',
+    type: '',
+    description: '',
+    id: 0,
+    caps: [],
+    deps: []
   });
 
-  const { vertical, horizontal, open, message } = snack;
+  
+  useEffect(() => {
+    getCapabilities(); 
+  }, [])
 
   useEffect(() => {
-    if(!!selectedBB) {
-      setDescription(selectedBB.description)
-      setName(selectedBB.name)
-      setType(selectedBB.type)
-      selectCaps(selectedBB.BlockCapabilities)
-      selectBBs(selectedBB.BlockDependencies)
-    }
-  }, [selectedBB])
+    getDependencies(); 
+  }, [])
+
+  useEffect(() => {
+    if(!!bb) 
+      setFormData({ 
+        name: bb.name,
+        type: bb.type,
+        description: bb.description,
+        id: bb.id,
+        caps: bb.BlockCapabilities.map(item => item.id), 
+        deps: bb.BlockDependencies.map(item => item.id)
+      }) 
+  }, [bb])
+
+  useEffect(() => {
+    setFormData({ ...formData, [selectedFeature]: selectedItems }) 
+  }, [selectedItems])
+
+  async function getCapabilities() {
+    const res = await api.get('/capability');
+    setCapabilities(res.data);
+  }
+
+  async function getDependencies() {
+    const res = await api.get('/building-blocks');
+    setDependencies(res.data);
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    let bb = {
-      id: !!selectedBB ? selectedBB.id : null,
-      name: name,
-      description: description,
-      type: type,
+    const data = {
+      name: formData['name'],
+      description: formData['description'],
+      type: formData['type'],
+      deps: formData['deps'],
+      caps: formData['caps'],
     }
 
-    let res;
-
-    if(!!selectedBB) {
-      res = await api.put('/building-blocks/'  + bb.id , bb);
-      setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'BB Updated!' });
-
+    if(!!formData['id']) {
+      //true = edit requirement
+      const response = await api.put(`building-blocks/${formData['id']}`, data);
+      if(response.status === 200) {
+        handleOpenSnack({ message: 'Building block updated!' });
+      }
     } else {
-      res = await api.post('/building-blocks', bb);
-      setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'BB created!' });
+      //true = create requirement
+      const response = await api.post('building-blocks', data);
+      if(response.status === 200) {
+        handleOpenSnack({message: 'Building block created!'})
+      }
     }
-
-
-    if(res.statusText === "OK") {
-      let capabilities = selectedCaps.length > 0 ? selectedCaps.map(function(c) {return c.id;}) : [];
-      await api.post('/building-blocks/capability/' + res.data.id, {capabilities})
-
-
-      let dependencies = selectedBBs.length > 0 ? selectedBBs.map(function(b) {return b.id;}) : []
-      await api.post('/building-blocks/dependency/' + res.data.id, {dependencies})
-
-      clear();
-    }
-
-  }
- 
-
-  function clear() {
-    selectBB('');
-    setDescription('');
-    setName('');
-    setType('');
-    selectCaps([])
-    selectBBs([])
+    
+    getBBs();
+    clearFormData();
   }
 
-  const handleCloseSnack = () => {
-    setSnack({ ...snack, open: false });
-  };
+  function clearFormData() {
+    setFormData({
+      name: '',
+      type: '',
+      description: '',
+      caps: [],
+      deps: [],
+      id: 0,
+    });
+    
+  }
 
   const handleNewCapability = () => {
-    setOpenCapDialog(true);
+    setFeature('caps');
+    setItemList(capabilities);
+    setOpenDialog(true);
   };
-
-  function handleDeleteCapability(cap) {
-    let selectedIndex = selectedCaps.map(function(c) {return c.id; }).indexOf(cap.id);
-    let newSelectedCaps = selectedCaps;
-
-    if(selectedCaps.length === 1) {
-      newSelectedCaps = [];
-    } else if(selectedCaps.length > 1) {
-      newSelectedCaps.splice(selectedIndex, 1)
-    }
-
-    selectCaps(newSelectedCaps)
-    setCapsCounter(newSelectedCaps.length)
-  }
 
   const handleNewDependency = () => {
-    setOpenDepDialog(true);
+    setFeature('deps');
+    setItemList(dependencies);
+    setOpenDialog(true);
   };
 
-  function handleDeleteDependency(bb) {
+  function handleDeleteItem(feature, item) {
+    const filteredItems = formData[feature].filter(i => i !== item.id);
+    setFormData({...formData, [feature]: filteredItems});
+  }
 
-    let selectedIndex = selectedBBs.map(function(b) {return b.id; }).indexOf(bb.id);
-    let newSelectedBBs = selectedBBs;
-
-    if(selectedBBs.length === 1) {
-      newSelectedBBs = [];
-    } else if(selectedBBs.length > 1) {
-      newSelectedBBs.splice(selectedIndex, 1)
-    }
-
-    selectBBs(newSelectedBBs)
-    setDepsCounter(newSelectedBBs.length)
-
+  function handleInputChange(event) {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value })
   }
 
   return (
@@ -224,8 +215,9 @@ export default function BBForm(props) {
           <SettingsIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Building Block {selectedBB ? '#' + selectedBB.id : ''}
+          Building Block {/* Building Block {selectedBB ? '#' + selectedBB.id : ''} */}
         </Typography>
+
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container direction="row">
             <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={2} className={classes.formGroup}>
@@ -242,7 +234,7 @@ export default function BBForm(props) {
                   label="Name"
                   name="name"
                   autoComplete="name"
-                  value={name} onChange={e => setName(e.target.value)}
+                  value={formData['name']} onChange={handleInputChange}
                   className={classes.formField}
                 />
               </Grid>
@@ -255,7 +247,7 @@ export default function BBForm(props) {
                   label="Type"
                   name="type"
                   autoComplete="type"
-                  value={type} onChange={e => setType(e.target.value)}
+                  value={formData['type']} onChange={handleInputChange}
                   className={classes.formField}
                 />
               </Grid>
@@ -269,7 +261,7 @@ export default function BBForm(props) {
                   placeholder="Description"
                   name="description"
                   id="description"
-                  value={description} onChange={e => setDescription(e.target.value)}
+                  value={formData['description']} onChange={handleInputChange}
                   className={classes.description}
                 />
               </Grid>
@@ -285,14 +277,13 @@ export default function BBForm(props) {
 
               <Grid item className={classes.fullWidthItem}>
               {
-                selectedCaps.map((cap) => 
-                
+                capabilities.filter(cap => formData['caps'].includes(cap.id)).map((cap) => 
                   <Paper  elevation={3} className={classes.capability} key={cap.id}>
                     <Typography variant="body1"  color="primary" className={classes.capName}>
                       {cap.name}
                     </Typography>
 
-                    <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteCapability(cap)}>
+                    <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteItem('caps', cap)}>
                       <DeleteIcon />
                     </IconButton>
                   </Paper>
@@ -312,14 +303,14 @@ export default function BBForm(props) {
 
               <Grid item className={classes.fullWidthItem}>
               {
-                selectedBBs.map((bb) => 
+                dependencies.filter(dep => formData['deps'].includes(dep.id)).map((bb) => 
                 
                   <Paper  elevation={3} className={classes.capability} key={bb.id}>
                     <Typography variant="body1"  color="primary" className={classes.capName}>
                       {bb.name}
                     </Typography>
 
-                    <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteDependency(bb)}>
+                    <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteItem('deps', bb)}>
                       <DeleteIcon />
                     </IconButton>
                   </Paper>
@@ -346,7 +337,7 @@ export default function BBForm(props) {
             variant="contained"
             color="secondary"
             className={classes.submit}
-            onClick={() => clear()}
+            onClick={() => clearFormData()}
           >
             Clear
           </Button>
@@ -355,14 +346,8 @@ export default function BBForm(props) {
         </form>
       </div>
 
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnack} anchorOrigin={{ vertical, horizontal }} key={`${vertical},${horizontal}`}>
-      <Alert onClose={handleCloseSnack} severity="success">
-        {message}
-      </Alert>
-    </Snackbar>
-
-    <CapabilityDialog />
-    <DependencyDialog />
+      
+      <ItemListDialog open={openDialog} setOpen={setOpenDialog} items={itemList} feature={selectedFeature} selectedItems={formData[selectedFeature]} setFormData={setFormData} formData={formData}/>
     
     </Container>
   );

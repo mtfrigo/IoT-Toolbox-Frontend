@@ -77,7 +77,6 @@ const RequirementForm = (props) => {
       if(response.status === 200) {
         handleOpenSnack({ message: 'Requeriment updated!' });
       }
-
     } else {
       //true = create requirement
       const response = await api.post('requirements', data);

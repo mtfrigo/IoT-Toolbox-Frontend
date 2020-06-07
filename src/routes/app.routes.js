@@ -19,7 +19,6 @@ import { MatchingProvider } from '../contexts/matching'
 import { RequirementsProvider } from '../contexts/requirements'
 import { BlocksProvider } from '../contexts/blocks'
 import { AdminProvider } from '../contexts/admin'
-import { NewBBProvider } from '../contexts/new-bb'
 import { NewBBIProvider } from '../contexts/new-bbi'
 import { NewMatchProvider } from '../contexts/new-match'
 import { BBiPanelProvider } from '../contexts/bbi-panel'
@@ -40,7 +39,6 @@ export default function AppRoutes() {
                  <BlocksProvider>
                  <BBiPanelProvider>
                  <AdminProvider>
-                 <NewBBProvider>
                  <NewBBIProvider>
                  <NewMatchProvider>
                   <Switch>
@@ -56,7 +54,6 @@ export default function AppRoutes() {
                   </Switch>
                  </NewMatchProvider>
                  </NewBBIProvider>
-                 </NewBBProvider>
                  </AdminProvider>
                  </BBiPanelProvider>
                  </BlocksProvider>

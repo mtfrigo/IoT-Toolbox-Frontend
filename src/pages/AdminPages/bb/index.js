@@ -67,8 +67,9 @@ const useStyles = makeStyles((theme) => ({
 export default function AdminRequirementPage() {
   const classes = useStyles();
   const { setShowBar } = useContext(ProgressContext);
-  const { selectedBB, selectBB } = useContext(AdminContext);
   const { selectedBlocks, selectBlocks } = useContext(MatchingContext);
+  const [ selectedBB, selectBB] = useState('');
+
 
   const [ bbs, setBBs ] = useState([]);
 
@@ -78,13 +79,15 @@ export default function AdminRequirementPage() {
     horizontal: 'center',
     message: '',
   });
+
   const { vertical, horizontal, open, message } = snack;
 
+  setShowBar(false);
+
+
   useEffect(() => {
-    setShowBar(false);
     getBBs();
-    console.log("salve malak");
-  }, [selectedBB, selectedBlocks])
+  }, [])
 
   async function getBBs() {
     const res = await api.get('/building-blocks');
@@ -92,6 +95,7 @@ export default function AdminRequirementPage() {
   }
 
   function handleClick(bb) {
+
     selectBB(bb)
   }
 
@@ -101,20 +105,22 @@ export default function AdminRequirementPage() {
     setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'Block deleted!' });
   }
 
-  const handleOpenSnack = (newState) => () => {
-    setSnack({ open: true, ...newState });
+  const handleOpenSnack = (message)  => {
+    setSnack({ open: true, vertical: 'bottom', horizontal: 'right', ...message });
   };
 
   const handleCloseSnack = () => {
     setSnack({ ...snack, open: false });
   };
 
-  
+  const handleSelectBB = (bb) => {
+    selectBB(bb);
+  }
 
   return (
     <div className={classes.root}>
 
-      <BBForm />
+      <BBForm bb={selectedBB} getBBs={getBBs} handleOpenSnack={handleOpenSnack} />
 
       <div className={classes.bbs}>
       {
@@ -128,7 +134,7 @@ export default function AdminRequirementPage() {
               {bb.name}
             </Typography>
 
-            <IconButton aria-label="add to favorites" className={classes.edit} onClick={() => handleClick(bb)}>
+            <IconButton aria-label="add to favorites" className={classes.edit} onClick={() => handleSelectBB(bb)}>
               <EditIcon />
             </IconButton>
 
