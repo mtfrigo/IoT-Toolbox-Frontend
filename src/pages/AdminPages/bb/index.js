@@ -1,22 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+// Material Components
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import ProgressContext from '../../../contexts/progress';
-import AdminContext from '../../../contexts/admin';
-import MatchingContext from '../../../contexts/matching';
+// Material Style
+import { makeStyles } from '@material-ui/core/styles';
 
+//Material Icons
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import BBForm from './form'
+// Contexts
+import ProgressContext from '../../../contexts/progress';
 
 import api from '../../../services/api';
+
+import BBForm from './form'
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -67,7 +70,6 @@ const useStyles = makeStyles((theme) => ({
 export default function AdminRequirementPage() {
   const classes = useStyles();
   const { setShowBar } = useContext(ProgressContext);
-  const { selectedBlocks, selectBlocks } = useContext(MatchingContext);
   const [ selectedBB, selectBB] = useState('');
 
 
@@ -84,7 +86,6 @@ export default function AdminRequirementPage() {
 
   setShowBar(false);
 
-
   useEffect(() => {
     getBBs();
   }, [])
@@ -92,11 +93,6 @@ export default function AdminRequirementPage() {
   async function getBBs() {
     const res = await api.get('/building-blocks');
     setBBs(res.data)
-  }
-
-  function handleClick(bb) {
-
-    selectBB(bb)
   }
 
   async function handleDelete(req) {

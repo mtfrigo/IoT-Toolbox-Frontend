@@ -39,7 +39,6 @@ export default function AppRoutes() {
                  <BlocksProvider>
                  <BBiPanelProvider>
                  <AdminProvider>
-                 <NewBBIProvider>
                  <NewMatchProvider>
                   <Switch>
                     <Route path="/" exact component={HomePage}/>
@@ -53,7 +52,6 @@ export default function AppRoutes() {
                     <Route path="/admin/matching" exact component={MatchingPanel}/>
                   </Switch>
                  </NewMatchProvider>
-                 </NewBBIProvider>
                  </AdminProvider>
                  </BBiPanelProvider>
                  </BlocksProvider>

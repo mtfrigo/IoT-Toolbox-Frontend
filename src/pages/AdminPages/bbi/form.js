@@ -1,36 +1,27 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState} from 'react';
+
+//Material Components
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 import Paper from '@material-ui/core/Paper';
+import { TextareaAutosize } from '@material-ui/core';
 
+// Material Style
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { makeStyles } from '@material-ui/core/styles';
+
+// Material Icons
 import SettingsIcon from '@material-ui/icons/Settings';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 
-import AdminContext from '../../../contexts/admin';
-import NewBBIContext from '../../../contexts/new-bbi';
-
-import { TextareaAutosize } from '@material-ui/core';
-
-// import CapabilityDialog from './cap-dialog'
-import BBIDepDialog from './bbi-dialog'
-import DepDialog from './dep-dialog'
-import BBImplementedDialog from './bb-dialog'
-import BBIListDialog from './list-dialog'
-
 import api from '../../../services/api';
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+import ItemListDialog from '../../../components/Dialog/dialog'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -106,168 +97,138 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BBIForm(props) {
   const classes = useStyles();
-  const [ description, setDescription ] = useState('');
-  const [ name, setName ] = useState('');
+  const { handleOpenSnack, bbi, bbis, getBBIs } = props;
 
-  const { selectedBBI, selectBBI } = useContext(AdminContext);
+  const [ openDialog, setOpenDialog ] = useState(false);
+  const [ selectedFeature, setFeature ] = useState('');
+  const [ itemList, setItemList ] = useState([]);
 
-  const { setOpenBBIDepDialog } = useContext(NewBBIContext);
-  const { selectedBBIDeps, selectBBIDeps } = useContext(NewBBIContext);
-  const [ setBBIsDepsCounter ] = useState(0);
-
-  const { setOpenDepDialog } = useContext(NewBBIContext);
-  const { selectedDeps, selectDeps } = useContext(NewBBIContext);
-  const [ setDepsCounter ] = useState(0);
-
-  const {  setOpenBBDialog } = useContext(NewBBIContext);
-  const { selectedBBs, selectBBs } = useContext(NewBBIContext);
-  const [ setBBsCounter ] = useState(0);
-
-  const { setOpenBBIListDialog } = useContext(NewBBIContext);
-
-  const [snack, setSnack] = useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-    message: '',
+  const [ bbs, setBBs ] = useState([]);
+  const [ dependencies, setDependencies ] = useState([]);
+  const [ formData, setFormData ] = useState({
+    name: '',
+    type: '',
+    description: '',
+    id: 0,
+    bbiDeps: [],
+    deps: [],
+    bbs: [],
+    artifacts: [],
+    interfaces: [],
   });
 
-  const { vertical, horizontal, open, message } = snack;
+  useEffect(() => {
+    getBBIs(); 
+  }, [])
 
   useEffect(() => {
-    if(!!selectedBBI) {
-      setDescription(selectedBBI.description)
-      setName(selectedBBI.name)
-    }
-  }, [selectedBBI])
+    getDependencies(); 
+  }, [])
+
+  useEffect(() => {
+    getBBs(); 
+  }, [])
+
+  useEffect(() => {
+    if(!!bbi) 
+      setFormData({ 
+        name: bbi.name,
+        type: bbi.type,
+        description: bbi.description,
+        id: bbi.id,
+        bbiDeps: bbi.BBIDependents.map(item => item.id), 
+        deps: bbi.BlockDependencies.map(item => item.id),
+        bbs: bbi.Implements.map(item => item.id), 
+        artifacts: bbi.Artifacts.map(item => item.id),
+        interfaces: bbi.Interfaces.map(item => item.id), 
+      }) 
+  }, [bbi])
+
+  async function getBBs() {
+    const res = await api.get('/building-blocks');
+    setBBs(res.data);
+  }
+
+  async function getDependencies() {
+    const res = await api.get('/bbis-dependencies');
+    setDependencies(res.data);
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    let bbi = {
-      id: !!selectedBBI ? selectedBBI.id : null,
-      name: name,
-      description: description,
+    const data = {
+      name: formData['name'],
+      type: formData['type'],
+      description: formData['description'],
+      bbiDeps: formData['bbiDeps'],
+      deps: formData['deps'],
+      bbs: formData['bbs'],
+      artifacts: formData['artifacts'],
+      interfaces: formData['interfaces'],
     }
 
-    let res;
+    console.log(data)
 
-    if(!!selectedBBI) {
-      res = await api.put('/bbis/'  + bbi.id , bbi);
-      setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'BBI Updated!' });
-
+    if(!!formData['id']) {
+      //true = edit BBI
+      const response = await api.put(`bbis/${formData['id']}`, data);
+      if(response.status === 200) {
+        handleOpenSnack({ message: 'BBI updated!' });
+      }
     } else {
-      res = await api.post('/bbis', bbi);
-      setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'BBI created!' });
+      //true = create BBI
+      const response = await api.post('bbis', data);
+      if(response.status === 200) {
+        handleOpenSnack({message: 'BBI created!'})
+      }
     }
-
-
-    if(res.statusText === "OK") {
-      let bbiDeps = selectedBBIDeps.length > 0 ? selectedBBIDeps.map(function(c) {return c.id;}) : [];
-      await api.post('/bbi/dependents/' + res.data.id, {bbiDeps})
-
-      let deps = selectedDeps.length > 0 ? selectedDeps.map(function(b) {return b.id;}) : []
-      await api.post('/bbi/dependencies/' + res.data.id, {deps})
-
-      let bbs = selectedBBs.length > 0 ? selectedBBs.map(function(b) {return b.id;}) : []
-      await api.post('/bbi/implements/' + res.data.id, {bbs})
-
-      clear();
-    }
-
-  }
-
-  function clear() {
-    selectBBI('');
-    setDescription('');
-    setName('');
     
-    selectBBIDeps([])
-    selectDeps([])
-    selectBBs([])
+    getBBIs();
+    clearFormData();
   }
 
-  function showList() {
-    setOpenBBIListDialog(true);
+  function clearFormData() {
+     setFormData({
+      name: '',
+      type: '',
+      description: '',
+      id: 0,
+      bbiDeps: [],
+      deps: [],
+      bbs: [],
+      artifacts: [],
+      interfaces: [],
+     })
+  }
 
-  };
+  function handleInputChange(event) {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value })
+  }
 
-  const handleCloseSnack = () => {
-    setSnack({ ...snack, open: false });
-  };
-
-  //BBI Dependency
   const handleNewBBIDependency = () => {
-    setOpenBBIDepDialog(true);
+    setFeature('bbiDeps');
+    setItemList(bbis);
+    setOpenDialog(true);
   };
 
-  function handleDeleteBBIDependency(dep) {
-
-    let selectedIndex = selectedBBIDeps.map(function(c) {return c.id; }).indexOf(dep.id);
-    let newSelectedBBIsDeps = selectedBBIDeps;
-
-    if(selectedBBIDeps.length === 1) {
-      newSelectedBBIsDeps = [];
-    } else if(selectedBBIDeps.length > 1) {
-      newSelectedBBIsDeps.splice(selectedIndex, 1)
-    }
-
-    selectBBIDeps(newSelectedBBIsDeps)
-    setBBIsDepsCounter(newSelectedBBIsDeps.length)
-  }
-
-  //Dependency
   const handleNewDependency = () => {
-    setOpenDepDialog(true);
+    setFeature('deps');
+    setItemList(dependencies);
+    setOpenDialog(true);
   };
 
-  function handleDeleteDependency(dep) {
-
-    let selectedIndex = selectedDeps.map(function(c) {return c.id; }).indexOf(dep.id);
-    let newSelectedsDeps = selectedDeps;
-
-    if(selectedDeps.length === 1) {
-      newSelectedsDeps = [];
-    } else if(selectedDeps.length > 1) {
-      newSelectedsDeps.splice(selectedIndex, 1)
-    }
-
-    selectDeps(newSelectedsDeps)
-    setDepsCounter(newSelectedsDeps.length)
-  }
-
-  //Implement
   const handleNewBB = () => {
-    setOpenBBDialog(true);
+    setFeature('bbs');
+    setItemList(bbs);
+    setOpenDialog(true);
   };
 
-  function handleDeleteBB(bb) {
-
-    let selectedIndex = selectedBBs.map(function(c) {return c.id; }).indexOf(bb.id);
-    let newSelectedBBs = selectedBBs;
-
-    if(selectedBBs.length === 1) {
-      newSelectedBBs = [];
-    } else if(selectedBBs.length > 1) {
-      newSelectedBBs.splice(selectedIndex, 1)
-    }
-
-    selectBBs(newSelectedBBs)
-    setBBsCounter(newSelectedBBs.length)
+  function handleDeleteItem(feature, item) {
+    const filteredItems = formData[feature].filter(i => i !== item.id);
+    setFormData({...formData, [feature]: filteredItems});
   }
-
-
-  //Artifacts
-  function handleNewArtifact({ target }) {
-    // const fileReader = new FileReader();
-    // const name = target.accept.includes('image') ? 'images' : 'videos';
-
-    // fileReader.readAsDataURL(target.files[0]);
-    // fileReader.onload = (e) => {
-    //     console.log(e)
-    // };
-  };
-
 
   return (
     <Container component="main" >
@@ -277,8 +238,9 @@ export default function BBIForm(props) {
         <Avatar className={classes.avatar}>
           <SettingsIcon />
         </Avatar>
+
         <Typography component="h1" variant="h5">
-          BBI {selectedBBI ? '#' + selectedBBI.id : ''}
+          BBI
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container direction="row" justify="space-evenly">
@@ -295,7 +257,7 @@ export default function BBIForm(props) {
                   label="Name"
                   name="name"
                   autoComplete="name"
-                  value={name} onChange={e => setName(e.target.value)}
+                  value={formData['name']} onChange={handleInputChange}
                   className={classes.formField}
                 />
               </Grid>
@@ -309,7 +271,7 @@ export default function BBIForm(props) {
                   placeholder="Description"
                   name="description"
                   id="description"
-                  value={description} onChange={e => setDescription(e.target.value)}
+                  value={formData['description']} onChange={handleInputChange}
                   className={classes.description}
                 />
               </Grid>
@@ -325,14 +287,14 @@ export default function BBIForm(props) {
 
               <Grid item className={classes.fullWidthItem}>
               {
-                selectedBBIDeps.map((dep) => 
+                bbis.filter(item => formData['bbiDeps'].includes(item.id)).map((dep) => 
                 
                   <Paper  elevation={3} className={classes.capability} key={dep.id}>
                     <Typography variant="body1"  color="primary" className={classes.capName}>
                       {dep.name}
                     </Typography>
 
-                    <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteBBIDependency(dep)}>
+                    <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteItem('bbiDeps', dep)}>
                       <DeleteIcon />
                     </IconButton>
                   </Paper>
@@ -352,18 +314,17 @@ export default function BBIForm(props) {
 
               <Grid item className={classes.fullWidthItem}>
               {
-                selectedDeps.map((dep) => 
+                dependencies.filter(item => formData['deps'].includes(item.id)).map((dep) => 
                 
                   <Paper  elevation={3} className={classes.capability} key={dep.id}>
                     <Typography variant="body1"  color="primary" className={classes.capName}>
                       {dep.name}
                     </Typography>
 
-                    <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteDependency(dep)}>
+                    <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteItem('deps', dep)}>
                       <DeleteIcon />
                     </IconButton>
                   </Paper>
-                
                 )
               }
               </Grid>
@@ -379,18 +340,17 @@ export default function BBIForm(props) {
 
               <Grid item className={classes.fullWidthItem}>
               {
-                selectedBBs.map((bb) => 
+                bbs.filter(item => formData['bbs'].includes(item.id)).map((bb) => 
                 
                   <Paper  elevation={3} className={classes.capability} key={bb.id}>
                     <Typography variant="body1"  color="primary" className={classes.capName}>
                       {bb.name}
                     </Typography>
 
-                    <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteBB(bb)}>
+                    <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteItem('bbs', bb)}>
                       <DeleteIcon />
                     </IconButton>
                   </Paper>
-                
                 )
               }
               </Grid>
@@ -412,7 +372,7 @@ export default function BBIForm(props) {
                   <input
                     type="file"
                     style={{ display: "none" }}
-                    onChange={(e) => handleNewArtifact(e)}
+                    // onChange={(e) => handleNewArtifact(e)}
                   />
                 </Button>
               </Grid>
@@ -445,36 +405,19 @@ export default function BBIForm(props) {
               variant="contained"
               color="secondary"
               className={classes.submit}
-              onClick={() => clear()}
+              onClick={() => clearFormData()}
             >
               Clear
             </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={() => showList()}
-            >
-              Show BBI List
-            </Button>
+            
           </div>
 
           
         </form>
       </div>
 
-    <BBIDepDialog />
-    <DepDialog />
-    <BBImplementedDialog />
-    <BBIListDialog />
+      <ItemListDialog open={openDialog} setOpen={setOpenDialog} items={itemList} feature={selectedFeature} selectedItems={formData[selectedFeature]} setFormData={setFormData} formData={formData}/>
 
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnack} anchorOrigin={{ vertical, horizontal }} key={`${vertical},${horizontal}`}>
-      <Alert onClose={handleCloseSnack} severity="success">
-        {message}
-      </Alert>
-    </Snackbar>
-    
     </Container>
   );
 }

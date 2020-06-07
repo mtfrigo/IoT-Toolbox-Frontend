@@ -21,7 +21,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import api from '../../../services/api';
 
-import ItemListDialog from './dialog'
+import ItemListDialog from '../../../components/Dialog/dialog'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -155,13 +155,13 @@ export default function BBForm(props) {
     }
 
     if(!!formData['id']) {
-      //true = edit requirement
+      //true = edit bb
       const response = await api.put(`building-blocks/${formData['id']}`, data);
       if(response.status === 200) {
         handleOpenSnack({ message: 'Building block updated!' });
       }
     } else {
-      //true = create requirement
+      //true = create bb
       const response = await api.post('building-blocks', data);
       if(response.status === 200) {
         handleOpenSnack({message: 'Building block created!'})
