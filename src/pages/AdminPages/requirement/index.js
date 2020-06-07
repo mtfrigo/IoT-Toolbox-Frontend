@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -7,14 +7,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import ProgressContext from '../../../contexts/progress';
-import AdminContext from '../../../contexts/admin';
-
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import SignUp from './form.js'
-
+import RequirementForm from './form.js'
 
 import api from '../../../services/api';
 
@@ -67,8 +63,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AdminRequirementPage() {
   const classes = useStyles();
   const [ requirements, setRequirements ] = useState([]);
-  const { setShowBar } = useContext(ProgressContext);
-  const { selectReq, selectedReq } = useContext(AdminContext);
+  const [ selectedRequirement, setRequirement] = useState({});
 
   const [snack, setSnack] = useState({
     open: false,
@@ -76,41 +71,39 @@ export default function AdminRequirementPage() {
     horizontal: 'center',
     message: '',
   });
+
   const { vertical, horizontal, open, message } = snack;
 
   useEffect(() => {
-    setShowBar(false);
     getRequirements();
-  }, [selectedReq])
+  }, [])
 
   async function getRequirements() {
     const res = await api.get('/requirements');
     setRequirements(res.data)
   }
 
-  function handleClick(req) {
-    selectReq(req)
-  }
-
   async function handleDelete(req) {
-    const res = await api.delete('/requirements/' + req.id);
+    await api.delete('/requirements/' + req.id);
     getRequirements();
     setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'Requeriment deleted!' });
   }
 
-  const handleOpenSnack = (newState) => () => {
-    setSnack({ open: true, ...newState });
+  const handleOpenSnack = ({message}) => {
+    setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message });
   };
 
   const handleCloseSnack = () => {
     setSnack({ ...snack, open: false });
   };
 
-  
+  const handleSelectRequirement = (requirement) => {
+    setRequirement(requirement);
+  }
 
   return (
     <div className={classes.root}>
-      <SignUp className={classes.form} />
+      <RequirementForm requirement={selectedRequirement} getRequirements={getRequirements} handleOpenSnack={handleOpenSnack} className={classes.form} />
 
       <div className={classes.requirements}>
       {
@@ -124,7 +117,7 @@ export default function AdminRequirementPage() {
               {req.description}
             </Typography>
 
-            <IconButton aria-label="add to favorites" className={classes.edit} onClick={() => handleClick(req)}>
+            <IconButton aria-label="add to favorites" className={classes.edit} onClick={() => handleSelectRequirement(req)}>
               <EditIcon />
             </IconButton>
 
@@ -134,9 +127,6 @@ export default function AdminRequirementPage() {
           </Paper>
         )
       }
-
-      
-        
       
       </div>
 

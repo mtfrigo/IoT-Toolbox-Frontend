@@ -1,25 +1,21 @@
-import React, {useEffect, useState, useContext} from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import React, { useState, useEffect } from 'react';
 
+// Material Components
+import Container from '@material-ui/core/Container';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+
+// Material Styles
+import { makeStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
+// Icons
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import AdminContext from '../../../contexts/admin';
-
-
 import api from '../../../services/api';
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,63 +40,63 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp(props) {
+const RequirementForm = (props) => {
   const classes = useStyles();
-  const [ description, setDescription ] = useState('');
-  const [ reference, setReference ] = useState('');
-  const { selectedReq, selectReq } = useContext(AdminContext);
-
-  const [snack, setSnack] = useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-    message: '',
+  const { requirement, getRequirements, handleOpenSnack } = props;
+  const [ formData, setFormData ] = useState({
+    reference: '',
+    description: '',
+    id: 0,
   });
 
-  const { vertical, horizontal, open, message } = snack;
-
   useEffect(() => {
-    if(!!selectedReq) {
-      setDescription(selectedReq.description)
-      setReference(selectedReq.reference)
-    }
-  }, [selectedReq])
+    setFormData({
+      reference: requirement.reference,
+      description: requirement.description,
+      id: requirement.id,
+    })
+  }, [requirement])
+
+
+  function handleInputChange(event) {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value })
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    let req = {
-      id: !!selectedReq ? selectedReq.id : null,
-      reference: reference,
-      description: description,
+    const data = {
+      reference: formData['reference'],
+      description: formData['description']
     }
 
-    if(!!selectedReq) {
-      const res = await api.put('requirements/' + req.id , req);
-      if(res.statusText === "OK") {
-        setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'Requeriment updated!' });
-        clear()
-      };
+    if(!!formData['id']) {
+      //true = edit requirement
+      const response = await api.put(`requirements/${formData['id']}`, data);
+      if(response.status === 200) {
+        handleOpenSnack({ message: 'Requeriment updated!' });
+      }
+
     } else {
-      const res = await api.post('/requirements', req);
-      if(res.statusText === "OK") {
-        setSnack({ open: true, vertical: 'bottom', horizontal: 'right', message: 'Requeriment created!' });
-        clear();
+      //true = create requirement
+      const response = await api.post('requirements', data);
+      if(response.status === 200) {
+        handleOpenSnack({ message: 'Requeriment created!' });
       }
     }
+
+    getRequirements();
+    clearFormData();
   }
 
- 
-
-  function clear() {
-    selectReq('');
-    setDescription('');
-    setReference('');
+  function clearFormData() {
+    setFormData({
+      reference: '',
+      description: '',
+      id: 0,
+    });
   }
-
-  const handleCloseSnack = () => {
-    setSnack({ ...snack, open: false });
-  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -111,20 +107,22 @@ export default function SignUp(props) {
           <SettingsIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Requirement {selectedReq ? '#' + selectedReq.id : ''}
+          Requirement
         </Typography>
+
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
+        <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
-                id="email"
+                id="reference"
                 label="Reference"
-                name="email"
-                autoComplete="email"
-                value={reference} onChange={e => setReference(e.target.value)}
+                name="reference"
+                autoComplete="reference"
+                value={formData['reference']}
+                onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -132,11 +130,10 @@ export default function SignUp(props) {
                 variant="outlined"
                 required
                 fullWidth
-                name="password"
+                name="description"
                 label="Description"
-                id="password"
-                autoComplete="current-password"
-                value={description} onChange={e => setDescription(e.target.value)}
+                id="description"
+                value={formData['description']} onChange={handleInputChange}
               />
             </Grid>
           </Grid>
@@ -154,18 +151,15 @@ export default function SignUp(props) {
             variant="contained"
             color="secondary"
             className={classes.submit}
-            onClick={() => clear()}
+            onClick={clearFormData}
           >
             Clear
           </Button>
         </form>
       </div>
-
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnack} anchorOrigin={{ vertical, horizontal }} key={`${vertical},${horizontal}`}>
-      <Alert onClose={handleCloseSnack} severity="success">
-        {message}
-      </Alert>
-    </Snackbar>
     </Container>
-  );
+  )
+
 }
+
+export default RequirementForm;
