@@ -1,0 +1,28 @@
+.dropzone {
+    height: 48px;
+    background: #E1FAEC;
+    border-radius: 10px;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: 0;
+
+    cursor: pointer;
+  }
+  
+  .dropzone p {
+  
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+  }
+  
+  .dropzone p svg {
+    color: #4ECB79;
+    width: 24px;
+    height: 24px;
+    margin: 0 8px;
+  }

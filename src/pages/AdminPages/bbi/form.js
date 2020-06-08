@@ -22,6 +22,7 @@ import IconButton from '@material-ui/core/IconButton';
 import api from '../../../services/api';
 
 import ItemListDialog from '../../../components/Dialog/dialog'
+import Dropzone from '../../../components/Dropzone';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -117,6 +118,8 @@ export default function BBIForm(props) {
     interfaces: [],
   });
 
+
+
   useEffect(() => {
     getBBIs(); 
   }, [])
@@ -130,10 +133,18 @@ export default function BBIForm(props) {
   }, [])
 
   useEffect(() => {
-    if(!!bbi) 
+    
+
+    if(!!bbi) {
+      bbi.Artifacts.map(artifact => {
+        // const file = new File(artifact.fileUrl);
+        // console.log(file)
+      })
+
+      console.log(bbi)
+      
       setFormData({ 
         name: bbi.name,
-        type: bbi.type,
         description: bbi.description,
         id: bbi.id,
         bbiDeps: bbi.BBIDependents.map(item => item.id), 
@@ -142,6 +153,8 @@ export default function BBIForm(props) {
         artifacts: bbi.Artifacts.map(item => item.id),
         interfaces: bbi.Interfaces.map(item => item.id), 
       }) 
+    }
+      
   }, [bbi])
 
   async function getBBs() {
@@ -157,27 +170,49 @@ export default function BBIForm(props) {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const data = {
-      name: formData['name'],
-      type: formData['type'],
-      description: formData['description'],
-      bbiDeps: formData['bbiDeps'],
-      deps: formData['deps'],
-      bbs: formData['bbs'],
-      artifacts: formData['artifacts'],
-      interfaces: formData['interfaces'],
-    }
+    const data = new FormData();
 
-    console.log(data)
+    
 
     if(!!formData['id']) {
       //true = edit BBI
+
+      const data = {
+        name: formData['name'],
+        type: formData['type'],
+        description: formData['description'],
+        bbiDeps: formData['bbiDeps'],
+        deps: formData['deps'],
+        bbs: formData['bbs'],
+        artifacts: formData['artifacts'],
+        interfaces: formData['interfaces'],
+      }
+      
+
       const response = await api.put(`bbis/${formData['id']}`, data);
       if(response.status === 200) {
         handleOpenSnack({ message: 'BBI updated!' });
       }
     } else {
       //true = create BBI
+
+      data.append('name', formData['name'])
+      data.append('type', formData['type'])
+      data.append('description', formData['description'])
+      data.append('bbiDeps', formData['bbiDeps'].join(','))
+      data.append('deps', formData['deps'].join(','))
+      data.append('bbs', formData['bbs'].join(','))
+      data.append('artifacts', formData['artifacts'].join(','))
+      data.append('interfaces', formData['interfaces'].join(','))
+
+      for(let artifact of formData['artifacts']) {
+        data.append('artifacts', artifact)
+      }
+  
+      for(let interfaceFile of formData['interfaces']) {
+        data.append('interfaces', interfaceFile)
+      }
+      
       const response = await api.post('bbis', data);
       if(response.status === 200) {
         handleOpenSnack({message: 'BBI created!'})
@@ -226,8 +261,30 @@ export default function BBIForm(props) {
   };
 
   function handleDeleteItem(feature, item) {
+    console.log(formData[feature])
     const filteredItems = formData[feature].filter(i => i !== item.id);
     setFormData({...formData, [feature]: filteredItems});
+  }
+
+  function handleDeleteFile(feature, item) {
+    const filteredItems = formData[feature].filter(i => i.name !== item.name);
+
+    setFormData({...formData, [feature]: filteredItems});
+  }
+
+  function handleSelectedArtifactFile(file) {
+    let artifacts = formData['artifacts'];
+    artifacts.push(file)
+
+    
+    setFormData({ ...formData,  ['artifacts']: artifacts})
+  }
+
+  function handleSelectedInterfaceFile(file) {
+    let interfaces = formData['interfaces'];
+    interfaces.push(file)
+    
+    setFormData({ ...formData,  ['interfaces']: interfaces})
   }
 
   return (
@@ -361,20 +418,34 @@ export default function BBIForm(props) {
                 <Typography component="div" variant="subtitle2" color="textSecondary" >Artifacts</Typography>
               </Grid>
               <Grid   item className={classes.fullWidthItem}>
-                <Button
-                  size="large"
-                  variant="outlined"
-                  component="label"
-                  fullWidth
-                  color="primary"
-                >
-                  New Artifact
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    // onChange={(e) => handleNewArtifact(e)}
-                  />
-                </Button>
+                <Dropzone onFileUploaded={handleSelectedArtifactFile} />
+              </Grid>
+
+              <Grid item className={classes.fullWidthItem}>
+              {
+                !!bbi ? bbi.Artifacts.filter(item => formData['artifacts'].includes(item.id)).map(artifact => 
+                  <Paper  elevation={3} className={classes.capability} key={artifact.name}>
+                      <Typography variant="body1"  color="primary" className={classes.capName}>
+                        {artifact.filename }
+                      </Typography>
+
+                      <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteItem('artifacts', artifact)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Paper>
+                  ) :
+                formData['artifacts'].map((artifact) => 
+                    <Paper  elevation={3} className={classes.capability} key={artifact.name}>
+                      <Typography variant="body1"  color="primary" className={classes.capName}>
+                        {artifact.name}
+                      </Typography>
+
+                      <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteFile('artifacts', artifact)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Paper>
+                )
+              }
               </Grid>
 
             </Grid>
@@ -384,7 +455,34 @@ export default function BBIForm(props) {
                 <Typography component="div" variant="subtitle2" color="textSecondary" >Interfaces</Typography>
               </Grid>
               <Grid   item className={classes.fullWidthItem}>
-                <Button  fullWidth variant="outlined" size="large" color="primary" >New Interface</Button>
+                <Dropzone onFileUploaded={handleSelectedInterfaceFile} />
+              </Grid>
+
+              <Grid item className={classes.fullWidthItem}>
+              {
+                !!bbi ? bbi.Interfaces.filter(item => formData['interfaces'].includes(item.id)).map(interfaceFile => 
+                  <Paper  elevation={3} className={classes.capability} key={interfaceFile.name}>
+                      <Typography variant="body1"  color="primary" className={classes.capName}>
+                        {interfaceFile.filename }
+                      </Typography>
+
+                      <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteItem('interfaces', interfaceFile)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Paper>
+                  ) :
+                formData['interfaces'].map((interfaceFile) => 
+                    <Paper  elevation={3} className={classes.capability} key={interfaceFile.name}>
+                      <Typography variant="body1"  color="primary" className={classes.capName}>
+                        {interfaceFile.name}
+                      </Typography>
+
+                      <IconButton aria-label="delete" size="small" className={classes.trash} onClick={() => handleDeleteFile('interfaces', interfaceFile)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Paper>
+                )
+              }
               </Grid>
 
             </Grid>
