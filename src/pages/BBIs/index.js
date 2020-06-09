@@ -15,16 +15,16 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
 import BBICard from '../../components/BBI'
+import TextFileReader from  '../../components/TextFilePreview'
 
 import ProgressContext from '../../contexts/progress';
 import BBiPanelContext from '../../contexts/bbi-panel';
 
 import { FiFile, FiCode, FiDownload} from 'react-icons/fi';
 
-import Artifacts from '../../assets/artifacts/artifacts.js';
-import TextFileReader from  '../../services/file'
 
 import api from '../../services/api'
+
 
 const useBlockHeaderStyles = makeStyles((theme) => ({
   root: {
@@ -201,6 +201,7 @@ const useStyles = makeStyles((theme) => ({
 
     flex: '1 1  auto',
     height: "100%",
+    width: '50vw',
 
     color: '#fff',
     backgroundColor: '#272c34',
@@ -305,8 +306,7 @@ const BBiPanel = (props) => {
         {
           !!selectedFile ? 
           <div className={classes.bbiFilePreviewContent}>
-            <TextFileReader
-              txt={selectedFile}
+            <TextFileReader txt={selectedFile}
             />
           </div> : 
           <div className={classes.bbiFilePreviewContentEmpty}>

@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+    line: {
+        whiteSpace: 'pre',
+    },
+}))
+
 
 export default function TextFileReader(props) {
   const [ text, setText ] = useState('')
+  const classes = useStyles();
 
 	useEffect(() => {
 		readTextFile(props.txt);
@@ -22,12 +31,12 @@ export default function TextFileReader(props) {
 	};
 
   return (
-    <div>
+    <>
       {
         text.split("\n").map((item, key) => {
-          return <span style={{'whiteSpace': 'pre'}} key={key}>{item}<br /></span>;
+          return <span className={classes.line} key={key}>{item}<br /></span>;
         })
       }
-    </div>);
+    </>);
 
 }

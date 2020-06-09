@@ -5,7 +5,7 @@ import { FiUpload } from 'react-icons/fi';
 import './styles.css';
 
 const  MyDropzone = ({onFileUploaded}) => {
-  const [ setSelectedFileURL ] = useState('');
+  const [ selectedFileURL, setSelectedFileURL ] = useState('');
 
   const onDrop = useCallback(acceptedFiles => {
     const file = acceptedFiles[0];
@@ -16,7 +16,7 @@ const  MyDropzone = ({onFileUploaded}) => {
     onFileUploaded(file);
   }, [onFileUploaded])
   
-  const {getRootProps, getInputProps} = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop
   })
 
