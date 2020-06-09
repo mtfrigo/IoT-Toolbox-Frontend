@@ -119,7 +119,9 @@ export default function BuildingBlockCard(props) {
 
   const [infos, setInfos ] = React.useState(props.bb.BlockCapabilities)
 
-  const { selectBlock, recommendedBlocks } = React.useContext(MatchingContext);
+  const { recommended } = props;
+
+  const { selectBlock } = React.useContext(MatchingContext);
   const { selectedBlocks, selectBlocks } = React.useContext(MatchingContext);
 
   let history = useHistory();
@@ -168,7 +170,7 @@ export default function BuildingBlockCard(props) {
   }
 
   return (
-    <Card className={clsx(classes.root, {[classes.selected]: (selectedBlocks.indexOf(bb.id) !== -1), [classes.recommended]: (recommendedBlocks.indexOf(bb.id) !== -1)})}>
+    <Card className={clsx(classes.root, {[classes.selected]: (selectedBlocks.indexOf(bb.id) !== -1), [classes.recommended]: recommended})}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>

@@ -12,19 +12,18 @@ export const MatchingProvider = ({children}) => {
   const [selectedBBIs, selectBBIs] = useState([]);
   const [recommendedBlocks, recommendBlocks] = useState([]);
 
-  useEffect(() => {
-    getRecommendedBlocks();
-  }, [selectedRequirements])
-
-
   async function getRecommendedBlocks() {
 
-    const res = await api.post('/matching', { requirements: selectedRequirements });
+    const res = await api.get('/matching', {
+      params: {
+        requirements: selectedRequirements
+      }
+    });
     recommendBlocks(res.data.map(function(x) { return x.id; }))
   }
 
   return (
-    <MatchingContext.Provider value={{selectedBBIs, selectBBIs, selectedRequirements, selectRequirements, selectedBlock, selectBlock, selectedBlocks, selectBlocks, recommendedBlocks, recommendBlocks}}>
+    <MatchingContext.Provider value={{ getRecommendedBlocks, selectedBBIs, selectBBIs, selectedRequirements, selectRequirements, selectedBlock, selectBlock, selectedBlocks, selectBlocks, recommendedBlocks, recommendBlocks}}>
       {children}
     </MatchingContext.Provider>
   );

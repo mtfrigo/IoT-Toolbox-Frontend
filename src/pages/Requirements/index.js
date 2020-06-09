@@ -1,21 +1,18 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 
 import './styles.css';
 
 import ReqTable from '../../components/ReqTable';
+import ProgressBar from '../../components/ProgressBar';
 
-import ProgressContext from '../../contexts/progress';
 
 export default function RequirementsPage() {
-  const { setShowBar } = useContext(ProgressContext);
-
-  useEffect(() => {
-    setShowBar(true)
-  })
+  // const [ showProgressBar, setProgressBar ] = useState(true);
 
   return (
-    <div className="table-container">
-      <div className="table">
+    <div className="requirements-page">
+      <ProgressBar />
+      <div className="table-container">
         <ReqTable  />
       </div>
     </div>

@@ -20,8 +20,7 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-//import FormControlLabel from '@material-ui/core/FormControlLabel';
-//import Switch from '@material-ui/core/Switch';
+
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
   
@@ -56,7 +55,7 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'referece', numeric: false, disablePadding: true, label: 'All' },
+  { id: 'referece', numeric: false, disablePadding: true, label: 'Reference' },
   { id: 'description', numeric: false, disablePadding: false, label: 'Description' },
 ];
 
@@ -74,7 +73,7 @@ function EnhancedTableHead(props) {
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
+            inputProps={{ 'aria-label': 'select all requirements' }}
           />
         </TableCell>
         {headCells.map((headCell) => (
@@ -152,7 +151,6 @@ const EnhancedTableToolbar = (props) => {
           Requeriments
         </Typography>
       )}
-
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton aria-label="delete">
@@ -248,7 +246,6 @@ export default function ReqTable() {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
 
   const isSelected = (id) => selectedRequirements.indexOf(id) !== -1;
 

@@ -95,7 +95,7 @@ export default function BBForm(props) {
   const [ capabilities, setCapabilities ] = useState([]);
   const [ dependencies, setDependencies ] = useState([]);
   const [ itemList, setItemList ] = useState([]);
-  const [ selectedItems, selectItems ] = useState([]);
+  const [ selectedItems ] = useState([]);
   const [ selectedFeature, setFeature ] = useState('');
   const { handleOpenSnack, getBBs, bb } = props;
 

@@ -13,13 +13,11 @@ import AdminBBIPage from '../pages/AdminPages/bbi';
 import MatchingPanel from '../pages/AdminPages/matching';
 
 import Sidebar from '../components/Sidebar';
-import ProgressBar from '../components/ProgressBar';
 
 import { MatchingProvider } from '../contexts/matching'
 import { RequirementsProvider } from '../contexts/requirements'
 import { BlocksProvider } from '../contexts/blocks'
 import { AdminProvider } from '../contexts/admin'
-import { NewBBIProvider } from '../contexts/new-bbi'
 import { NewMatchProvider } from '../contexts/new-match'
 import { BBiPanelProvider } from '../contexts/bbi-panel'
 
@@ -29,10 +27,7 @@ export default function AppRoutes() {
         <BrowserRouter>
             <div className="container">
               <Sidebar />
-
               <div className="parent">
-                <ProgressBar />
-
                 <div className="content">
                  <MatchingProvider>
                  <RequirementsProvider>
@@ -58,7 +53,6 @@ export default function AppRoutes() {
                  </RequirementsProvider>
                  </MatchingProvider>
                 </div>
-
               </div>
             </div>
         </BrowserRouter>

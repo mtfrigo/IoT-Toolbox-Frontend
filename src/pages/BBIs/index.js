@@ -248,9 +248,34 @@ const BBiPanel = (props) => {
   const [ interfaces, setInterfaces ] = useState([])
 
   useEffect(() => {
-    setArtifacts(Artifacts[selectedBBI.id])
-  })
+    getBBI();
+  }, [selectedBBI]);
 
+
+  async function getBBI() {
+    const res = await api.get(`/bbis/${selectedBBI.id}`);
+
+    res.data.Artifacts.map(async artifact  => {
+      await api.get(artifact.fileUrl, {
+        responseType: 'blob'
+      }).then((response) => {
+        const file = new Blob([response.data], { type: "text/plain" });
+        artifact.blob = URL.createObjectURL(file);
+      })
+    })
+
+    res.data.Interfaces.map(async i  => {
+      await api.get(i.fileUrl, {
+        responseType: 'blob'
+      }).then((response) => {
+        const file = new Blob([response.data], { type: "text/plain" });
+        i.blob = URL.createObjectURL(file);
+      })
+    })
+
+    setArtifacts(res.data.Artifacts);
+    setInterfaces(res.data.Interfaces);
+  }
 
   return (
     <div className={classes.bbiPanelContent}>
@@ -258,18 +283,19 @@ const BBiPanel = (props) => {
       {
         tab == 0 ?
         artifacts.map((artifact, i) => 
-          <Paper key={i} elevation={3} className={classes.bbiPanelFile} onClick={() => selectFile(artifact)}> 
+          <Paper key={i} elevation={3} className={classes.bbiPanelFile} onClick={() => selectFile(artifact.blob)}> 
             <FiFile size={36}/>
             <Typography className={classes.filename} variant="body2" color="textPrimary">
-              {artifact.name}
+              {artifact.filename.split('-')[1]}
             </Typography>
           </Paper> ) :
-        <Paper elevation={3} className={classes.bbiPanelFile} > 
+        interfaces.map((interfaceFile, i) => 
+        <Paper key={i} elevation={3} className={classes.bbiPanelFile} onClick={() => selectFile(interfaceFile.blob)}> 
           <FiFile size={36}/>
           <Typography className={classes.filename} variant="body2" color="textPrimary">
-            interface.wsld
+            {interfaceFile.filename.split('-')[1]}
           </Typography>
-        </Paper>
+        </Paper> )
         
       }
       </div>
@@ -277,14 +303,14 @@ const BBiPanel = (props) => {
       <div className={classes.bbiFilePreview}>
         <div className={classes.bbiFilePreviewBox}>
         {
-          !!selectedFile ?
+          !!selectedFile ? 
           <div className={classes.bbiFilePreviewContent}>
             <TextFileReader
-              txt={selectedFile.file}
+              txt={selectedFile}
             />
-          </div> :
+          </div> : 
           <div className={classes.bbiFilePreviewContentEmpty}>
-            No file selected...
+            'No file selected...'
           </div>
         }
         </div>

@@ -212,7 +212,7 @@ export default function CustomizedSteppers() {
 
     <div>
     {
-      show ? (
+      true ? (
         <div className={classes.root}>
           <Stepper className={classes.bar} alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
             {steps.map((step) => (

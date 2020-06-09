@@ -23,12 +23,14 @@ export default function TextFileReader(props) {
 		rawFile.send(null);
 	};
 
+	console.log(text.split("\n"))
   return (
-			<div>
-				{text.split("\n").map((item, key) => {
-					return <span key={key}>{item}<br /></span>;
-				})}
-			</div>
+		<div>
+			{text.split("\n").map((item, key) => {
+				console.log(item)
+				return <span style={{'white-space': 'pre'}} key={key}>{item}<br /></span>;
+			})}
+		</div>
 		);
 
 }
