@@ -25,6 +25,9 @@ import ItemListDialog from '../../../components/Dialog/dialog'
 import Dropzone from '../../../components/Dropzone';
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    overflow: 'auto',
+  },
   paper: {
     marginTop: theme.spacing(8),
     marginBottom: theme.spacing(8),
@@ -62,10 +65,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 400,
     height: '100%',
 
-  },
-  xesq: {
-    margin: theme.spacing(1, 0, 0),
-    maxWidth: 400,
   },
   formGroupLabel: {
     maxHeight: 18,
@@ -294,7 +293,7 @@ export default function BBIForm(props) {
   }
 
   return (
-    <Container component="main" >
+    <Container component="main" className={classes.container}>
       <CssBaseline />
 
       <div className={classes.paper}>

@@ -23,8 +23,6 @@ export const AuthProvider = ({children}) => {
 
         setUser(JSON.parse(storagedUser));
         setLoading(false);
-
-
       }
     }
 
