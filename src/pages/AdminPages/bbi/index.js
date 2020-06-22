@@ -6,6 +6,10 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import Avatar from '@material-ui/core/Avatar';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardActions from '@material-ui/core/CardActions';
 
 //Material Icons
 import EditIcon from '@material-ui/icons/Edit';
@@ -13,6 +17,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 //Material Style
 import { makeStyles } from '@material-ui/core/styles';
+import { red } from '@material-ui/core/colors';
 
 // Contexts
 import ProgressContext from '../../../contexts/progress';
@@ -25,10 +30,55 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+const useCardStyles = makeStyles((theme) => ({
+  root: {
+    wdith: 300,
+    maxWidth: 300,
+    margin: '10px 0'
+  },
+  avatar: {
+    backgroundColor: red[500],
+  },
+  edit: {
+    color: 'green'
+  },
+  trash: {
+    color: 'red'
+  },
+  header: {
+    padding: '10px 20px',
+    fontSize: 14
+  }
+}));
+
+const BBCard = (props) => {
+  const { bbi, handleDelete, handleSelectBBI } = props;
+  const classes = useCardStyles();
+  
+  return (
+    <Card className={classes.root}>
+      <Typography variant="caption" component="h2" gutterBottom className={classes.header}>
+      {bbi.id + ': ' +bbi.name}
+      </Typography>
+      
+      <CardActions >
+        <IconButton aria-label="add to favorites" className={classes.edit} onClick={() => handleSelectBBI(bbi)}>
+          <EditIcon />
+        </IconButton>
+        <IconButton aria-label="share" className={classes.trash} style={{marginLeft: 'auto'}} onClick={() => handleDelete(bbi)}>
+          <DeleteIcon />
+        </IconButton>
+      </CardActions>
+    </Card>
+  );
+}
+
+
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyConten: 'center',
     height: '100vh',
@@ -38,10 +88,9 @@ const useStyles = makeStyles((theme) => ({
     height: '50%'
   },
   bbis: {
-    borderTop: '2px solid rgba(0, 0, 0, 0.12)',
     flexGrow: 2,
-    width: "100%",
-    height: '50%',
+    width: 330,
+    height: '100%',
     background: '#f1f1f1',
     padding: 20,
     overflow: 'auto',
@@ -63,6 +112,11 @@ const useStyles = makeStyles((theme) => ({
   },
   trash: {
     color: 'red'
+  },
+  formContainer: {
+    height: '100vh',
+    overflow: 'auto',
+    width: '100%',
   }
 
 }));
@@ -115,29 +169,15 @@ export default function AdminBBIPage() {
   return (
     <div className={classes.root}>
 
-      <BBIForm bbi={selectedBBI} bbis={bbis} getBBIs={getBBIs} handleOpenSnack={handleOpenSnack} />
+      <div className={classes.formContainer}>
+        <BBIForm bbi={selectedBBI} bbis={bbis} getBBIs={getBBIs} handleOpenSnack={handleOpenSnack} />
+      </div>
 
 
       <div className={classes.bbis}>
       {
         bbis.map((bbi, i) => 
-          <Paper className={classes.bbi} key={i}>
-            <Typography component="div" variant="body1">
-              {bbi.id}
-            </Typography>
-
-            <Typography component="div" variant="body2" className={classes.description}>
-              {bbi.name}
-            </Typography>
-
-            <IconButton aria-label="add to favorites" className={classes.edit} onClick={() => handleSelectBBI(bbi)}>
-              <EditIcon />
-            </IconButton>
-
-            <IconButton aria-label="add to favorites" onClick={() => handleDelete(bbi)}>
-              <DeleteIcon className={classes.trash} />
-            </IconButton>
-          </Paper>
+          <BBCard bbi={bbi} handleSelectBBI={handleSelectBBI} handleDelete={handleDelete}/>
         )
       }
       </div>

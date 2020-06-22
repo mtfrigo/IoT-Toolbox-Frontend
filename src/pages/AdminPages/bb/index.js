@@ -1,14 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 // Material Components
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import Avatar from '@material-ui/core/Avatar';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardActions from '@material-ui/core/CardActions';
 
 // Material Style
 import { makeStyles } from '@material-ui/core/styles';
+import { red } from '@material-ui/core/colors';
 
 //Material Icons
 import EditIcon from '@material-ui/icons/Edit';
@@ -25,26 +28,69 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+const useCardStyles = makeStyles((theme) => ({
+  root: {
+    wdith: 300,
+    maxWidth: 300,
+    margin: '10px 0'
+  },
+  avatar: {
+    backgroundColor: red[500],
+  },
+  edit: {
+    color: 'green'
+  },
+  trash: {
+    color: 'red'
+  }
+}));
+
+const BBCard = (props) => {
+  const { bb, handleDelete, handleSelectBB } = props;
+  const classes = useCardStyles();
+  
+  return (
+    <Card className={classes.root}>
+      <CardHeader
+        avatar={
+          <Avatar aria-label="recipe" className={classes.avatar}>
+            {bb.name.charAt(0)}
+          </Avatar>
+        }
+        title={bb.id + ': ' +bb.name}
+        subheader={bb.type}
+      />
+      <CardActions >
+        <IconButton aria-label="add to favorites" className={classes.edit} onClick={() => handleSelectBB(bb)}>
+          <EditIcon />
+        </IconButton>
+        <IconButton aria-label="share" className={classes.trash} style={{marginLeft: 'auto'}} onClick={() => handleDelete(bb)}>
+          <DeleteIcon />
+        </IconButton>
+      </CardActions>
+    </Card>
+  );
+}
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyConten: 'center',
     height: '100vh',
   },
   form: {
     width: "100%",
-    height: '50%'
   },
   bbs: {
-    borderTop: '2px solid rgba(0, 0, 0, 0.12)',
     flexGrow: 2,
-    width: "100%",
-    height: '50%',
+    width: 330,
+    height: '100%',
     background: '#f1f1f1',
     padding: 20,
     overflow: 'auto',
+    minWidth: 330,
   },
   bb: {
     padding: 15,
@@ -67,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function AdminRequirementPage() {
+export default function AdminBBPage() {
   const classes = useStyles();
   const { setShowBar } = useContext(ProgressContext);
   const [ selectedBB, selectBB] = useState('');
@@ -121,23 +167,7 @@ export default function AdminRequirementPage() {
       <div className={classes.bbs}>
       {
         bbs.map((bb, i) => 
-          <Paper className={classes.bb} key={i}>
-            <Typography component="div" variant="body1">
-              {bb.id}
-            </Typography>
-
-            <Typography component="div" variant="body2" className={classes.description}>
-              {bb.name}
-            </Typography>
-
-            <IconButton aria-label="add to favorites" className={classes.edit} onClick={() => handleSelectBB(bb)}>
-              <EditIcon />
-            </IconButton>
-
-            <IconButton aria-label="add to favorites" onClick={() => handleDelete(bb)}>
-              <DeleteIcon className={classes.trash} />
-            </IconButton>
-          </Paper>
+          <BBCard bb={bb} handleSelectBB={handleSelectBB} handleDelete={handleDelete}/>
         )
       }
       </div>

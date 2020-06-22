@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FiBox, FiCodesandbox, FiLogOut} from 'react-icons/fi';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -19,8 +19,11 @@ import './styles.css';
 export default function Siderbar() {
   const { signOut, user } = useAuth();
 
+  let history = useHistory();
+
   function handleSignOut() {
     signOut();
+    history.push('/');
   }
 
   return (

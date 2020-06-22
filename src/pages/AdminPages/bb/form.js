@@ -58,13 +58,9 @@ const useStyles = makeStyles((theme) => ({
   },
   formGroup: {
     margin: theme.spacing(1, 0, 0),
-    maxWidth: 400,
     height: '100%',
-
-  },
-  xesq: {
-    margin: theme.spacing(1, 0, 0),
-    maxWidth: 400,
+    width: '33%',
+    minWidth: '330px',
   },
   formGroupLabel: {
     maxHeight: 18,
@@ -224,7 +220,6 @@ export default function BBForm(props) {
               <Grid  item xs={12} >
                 <Typography component="div" variant="subtitle2" color="textSecondary" >Block Details</Typography>
               </Grid>
-              
               <Grid item xs={12}>
                 <TextField
                   variant="outlined"
