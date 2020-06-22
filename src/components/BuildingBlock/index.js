@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -21,8 +21,6 @@ import { FiCodesandbox } from 'react-icons/fi';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import MatchingContext from '../../contexts/matching';
-
-import BBICard from '../../components/BBI'
 
 import './styles.css'
 
@@ -112,17 +110,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BuildingBlockCard(props) {
   const classes = useStyles();
-  const [selected, setSelected] = React.useState(false);
-  const [menuId, setMenu] = React.useState(1);
+  const [selected, setSelected] = useState(false);
+  const [menuId, setMenu] = useState(1);
 
-  const [counter, setCounter] = React.useState(0);
+  const [counter, setCounter] = useState(0);
 
-  const [infos, setInfos ] = React.useState(props.bb.BlockCapabilities)
+  const [infos, setInfos ] = useState(props.bb.BlockCapabilities)
 
   const { recommended } = props;
 
-  const { selectBlock } = React.useContext(MatchingContext);
-  const { selectedBlocks, selectBlocks } = React.useContext(MatchingContext);
+  const { selectBlockDetails, selectBlock } = useContext(MatchingContext);
+  const { selectedBlocks, selectBlocks } = useContext(MatchingContext);
 
   let history = useHistory();
 
@@ -131,20 +129,21 @@ export default function BuildingBlockCard(props) {
   }, [selectedBlocks])
 
   const handleCheckClick = () => {
-    
-    let selectedIndex = selectedBlocks.indexOf(bb.id);
-    let newSelectBlocks = selectedBlocks;
+    selectBlock(bb);
 
-    if(selectedIndex === -1) {
-      newSelectBlocks.push(bb.id)
-    } else if(selectedBlocks.length > 0){
-      newSelectBlocks.splice(selectedIndex, 1)
-    } else {
-      newSelectBlocks = []
-    }
+    // let selectedIndex = selectedBlocks.indexOf(bb.id);
+    // let newSelectBlocks = selectedBlocks;
 
-    selectBlocks(newSelectBlocks)
-    setCounter(newSelectBlocks.length)
+    // if(selectedIndex === -1) {
+    //   newSelectBlocks.push(bb.id)
+    // } else if(selectedBlocks.length > 0){
+    //   newSelectBlocks.splice(selectedIndex, 1)
+    // } else {
+    //   newSelectBlocks = []
+    // }
+
+    // selectBlocks(newSelectBlocks)
+    // setCounter(newSelectBlocks.length)
   };
 
 
@@ -170,7 +169,7 @@ export default function BuildingBlockCard(props) {
   }
 
   return (
-    <Card className={clsx(classes.root, {[classes.selected]: (selectedBlocks.indexOf(bb.id) !== -1), [classes.recommended]: recommended})}>
+    <Card className={clsx(classes.root, {[classes.selected]: (selectedBlocks.map(item => item.id).indexOf(bb.id) !== -1), [classes.recommended]: recommended})}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
@@ -184,7 +183,7 @@ export default function BuildingBlockCard(props) {
             onClick={handleCheckClick}
             aria-expanded={selected}
             aria-label="show more"
-            checked={(selectedBlocks.indexOf(bb.id) !== -1)}
+            checked={(selectedBlocks.map(item => item.id).indexOf(bb.id) !== -1)}
           />
         }
         title={bb.id + ': ' + bb.name}
@@ -226,7 +225,7 @@ export default function BuildingBlockCard(props) {
 
 
         <Tooltip title="Details">
-          <IconButton aria-label="settings" style={{marginLeft: 'auto'}} onClick={() => selectBlock(bb)}>
+          <IconButton aria-label="settings" style={{marginLeft: 'auto'}} onClick={() => selectBlockDetails(bb)}>
             <MenuBookIcon  />
           </IconButton>
         </Tooltip>

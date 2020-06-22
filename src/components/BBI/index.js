@@ -111,30 +111,25 @@ export default function BBICard(props) {
   const [selected] = useState(false);
   const [counter, setCounter] = useState(0);
 
-  const { selectedBBIs, selectBBIs } = useContext(MatchingContext);
-  const { selectBBI } = useContext(BBiPanelContext);
+  const { selectedBBIs, selectBBIs, selectedBlocks, selectBBI, trigger } = useContext(MatchingContext);
+  const { setBBI } = useContext(BBiPanelContext);
 
-  const bbi = props.bbi;
+  const { bbi, bb } = props;
 
   const handleCheckClick = () => {
-    
-    let selectedIndex = selectedBBIs.indexOf(bbi.id);
-    let newSelectBlocks = selectedBBIs;
-
-    if(selectedIndex === -1) {
-      newSelectBlocks.push(bbi.id)
-    } else if(selectedBBIs.length > 0){
-      newSelectBlocks.splice(selectedIndex, 1)
-    } else {
-      newSelectBlocks = []
-    }
-
-    selectBBIs(newSelectBlocks)
-    setCounter(newSelectBlocks.length)
+    selectBBI(bb, bbi);
   };
 
+  
+  const isSelected =  selectedBlocks.filter(item => item.id === bb.id).length ?  //selectedBlocks.filter(item => item.id === bb.id)[0].selectedBBIs.findIndex(item => item.id === bbi.id) >= 0
+                        selectedBlocks.filter(item => item.id === bb.id)[0].selectedBBIs.length ? 
+                          selectedBlocks.filter(item => item.id === bb.id)[0].selectedBBIs.findIndex(item => item.id === bbi.id) >= 0  :  
+                          false :
+                      false
+
+
   return (
-    <Card className={clsx(classes.root, {[classes.selected]: (selectedBBIs.indexOf(bbi.id) !== -1)})}>
+    <Card className={clsx(classes.root, {[classes.selected]: isSelected})}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
@@ -147,7 +142,7 @@ export default function BBICard(props) {
             onClick={handleCheckClick}
             aria-expanded={selected}
             aria-label="show more"
-            checked={(selectedBBIs.indexOf(bbi.id) !== -1)}
+            checked={isSelected}
           />
         }
         className={classes.header}
@@ -156,7 +151,7 @@ export default function BBICard(props) {
         <div className={classes.bbiName}>{bbi.name}</div>
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary" className={classes.details} onClick={() => selectBBI(bbi)}>
+        <Button size="small" color="primary" className={classes.details} onClick={() => setBBI(bbi)}>
           Details
         </Button>
       </CardActions>

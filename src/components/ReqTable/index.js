@@ -198,7 +198,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ReqTable() {
   const { setActiveStep } = useContext(ProgressContext);
-  const { selectedRequirements, selectRequirements } = useContext(MatchingContext);
+  const { selectedRequirements, selectRequirements, selectRequirement } = useContext(MatchingContext);
   const { requirements } = useContext(RequirementsContext);
 
   const classes = useStyles();
@@ -216,38 +216,21 @@ export default function ReqTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = requirements.map((n) => n.id);
-      selectRequirements(newSelecteds);
+      selectRequirements(requirements);
       return;
     }
     selectRequirements([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selectedRequirements.indexOf(name);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selectedRequirements, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selectedRequirements.slice(1));
-    } else if (selectedIndex === selectedRequirements.length - 1) {
-      newSelected = newSelected.concat(selectedRequirements.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selectedRequirements.slice(0, selectedIndex),
-        selectedRequirements.slice(selectedIndex + 1),
-      );
-    }
-
-    selectRequirements(newSelected)
+  const handleClick = (event, requirement) => {
+    selectRequirement(requirement);
   };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const isSelected = (id) => selectedRequirements.indexOf(id) !== -1;
+  const isSelected = (id) => selectedRequirements.map(item => item.id).indexOf(id) !== -1;
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, requirements.length - page * rowsPerPage);
 
@@ -292,7 +275,7 @@ export default function ReqTable() {
                       return (
                         <TableRow
                           hover
-                          onClick={(event) => handleClick(event, row.id)}
+                          onClick={(event) => handleClick(event, row)}
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}

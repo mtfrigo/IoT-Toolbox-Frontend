@@ -21,7 +21,6 @@ import BBiPanelContext from '../../contexts/bbi-panel';
 
 import { FiFile, FiCode, FiDownload} from 'react-icons/fi';
 
-import Artifacts from '../../assets/artifacts/artifacts.js';
 import TextFileReader from  '../../services/file'
 
 import api from '../../services/api'
@@ -73,10 +72,6 @@ const BuildingBlockHeader = (props) => {
   let history = useHistory();
 
   const bb = props.bb;
-
-  function handleClickClose() {
-    // console.log("oaushduiasd")
-  }
 
   return (
     <div className={classes.root}>
@@ -195,7 +190,6 @@ const useStyles = makeStyles((theme) => ({
 
   bbiFilePreviewContent: {
     margin: '10px 5px',
-    backgroundColor: 'antiquewhite',
     overflow: 'auto',
     borderRadius: 5,
 
@@ -210,7 +204,6 @@ const useStyles = makeStyles((theme) => ({
 
   bbiFilePreviewContentEmpty: {
     margin: '10px 5px',
-    backgroundColor: 'antiquewhite',
     overflow: 'auto',
     borderRadius: 5,
 
@@ -241,7 +234,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BBiPanel = (props) => {
   const classes = useStyles();
-  const { selectedBBI } = useContext(BBiPanelContext)
+  const { bbi } = useContext(BBiPanelContext)
   const { selectedFile, selectFile } = useContext(BBiPanelContext)
   const { tab } = useContext(BBiPanelContext)
   const [ artifacts, setArtifacts ] = useState([])
@@ -249,11 +242,11 @@ const BBiPanel = (props) => {
 
   useEffect(() => {
     getBBI();
-  }, [selectedBBI]);
+  }, [bbi]);
 
 
   async function getBBI() {
-    const res = await api.get(`/bbis/${selectedBBI.id}`);
+    const res = await api.get(`/bbis/${bbi.id}`);
 
     res.data.Artifacts.map(async artifact  => {
       await api.get(artifact.fileUrl, {
@@ -281,7 +274,7 @@ const BBiPanel = (props) => {
     <div className={classes.bbiPanelContent}>
       <div className={classes.bbiPanelFiles}>
       {
-        tab == 0 ?
+        tab === 0 ?
         artifacts.map((artifact, i) => 
           <Paper key={i} elevation={3} className={classes.bbiPanelFile} onClick={() => selectFile(artifact.blob)}> 
             <FiFile size={36}/>
@@ -385,10 +378,12 @@ const BBiTab = (props) => {
 export default function BBIsPage() {
   const { setActiveStep, setShowBar } = useContext(ProgressContext);
   const { bb, setBB } = useContext(BBiPanelContext)
-  const { selectedBBI, selectBBI } = useContext(BBiPanelContext)
+  const { bbi, setBBI } = useContext(BBiPanelContext)
   const [ bbis, setBBIs ] = useState([])
 
   let { id } = useParams();
+
+  
 
   useEffect(() => {
     setActiveStep(1);
@@ -422,14 +417,14 @@ export default function BBIsPage() {
             <div className="bbi-list-content">
             {
               bbis.length > 0 ?
-              bbis.map((bbi) => <BBICard bbi={bbi} key={bbi.id} className="bbi-list-item"/>) :
+              bbis.map((bbi) => <BBICard bbi={bbi} bb={bb} key={bbi.id} className="bbi-list-item"/>) :
               <Paper className="bbi-list-item" ><div>No BBis for this BB.</div></Paper>
             }
             </div>
           </div>
 
           {
-            selectedBBI ? 
+            bbi ? 
             <div className='bbi-panel'>
               <div className='bbi-panel-header'>
               {

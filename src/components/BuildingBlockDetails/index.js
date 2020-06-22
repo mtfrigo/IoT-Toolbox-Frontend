@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 export default function BuildingBlockDetails(props) {
   const classes = useStyles();
 
-  const { selectBlock } = React.useContext(MatchingContext);
+  const { selectBlockDetails } = React.useContext(MatchingContext);
 
   const bb = props.bb;
 
@@ -85,7 +85,7 @@ export default function BuildingBlockDetails(props) {
   ]
 
   function handleClose() {
-    selectBlock({})
+    selectBlockDetails({})
   }
 
   return (

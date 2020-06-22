@@ -4,12 +4,12 @@ const BBiPanelContext = createContext();
 
 export const BBiPanelProvider = ({children}) => {
   const [ bb, setBB ] = useState('');
-  const [ selectedBBI, selectBBI ] = useState('');
+  const [ bbi, setBBI ] = useState('');
   const [ tab, setTab ] = useState(0);
   const [ selectedFile, selectFile ] = useState('');
 
   return (
-    <BBiPanelContext.Provider value={{ bb, setBB, selectedBBI, selectBBI, tab, setTab, selectedFile, selectFile }}>
+    <BBiPanelContext.Provider value={{ bb, setBB, bbi, setBBI, tab, setTab, selectedFile, selectFile }}>
       {children}
     </BBiPanelContext.Provider>
   );

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import './styles.css';
 
@@ -13,18 +13,28 @@ import ToysIcon from '@material-ui/icons/Toys';
 
 import Paper from '@material-ui/core/Paper';
 
+import api from '../../services/api';
+
 export default function HomePage() {
     const { setShowBar } = useContext(ProgressContext);
+    const [ counters, setCounters ] = useState('');
 
     useEffect(() => {
+
+      async function getCounters() {
+        const res = await api.get('panel');
+        setCounters(res.data)
+      }
+
       setShowBar(false);
-    })
+      getCounters();
+    }, [])
 
     const items = [
-        { name: 'Requirements', total: 32, icon: <SettingsIcon/>, color: '#eb4d48' },
-        { name: 'Building Blocks', total: 12, icon: <FiBox/>, color: '#eb4d48' },
-        { name: 'Blocks Implementations', total: 7, icon: <FiCodesandbox/>, color: '#eb4d48' },
-        { name: 'Projects', total: 2, icon: <ToysIcon/>, color: '#eb4d48' },
+        { name: 'Requirements', total: counters.Requirements, icon: <SettingsIcon/>, color: '#eb4d48' },
+        { name: 'Building Blocks', total: counters.BBs, icon: <FiBox/>, color: '#eb4d48' },
+        { name: 'Blocks Implementations', total: counters.BBIs, icon: <FiCodesandbox/>, color: '#eb4d48' },
+        { name: 'Projects', total: 0, icon: <ToysIcon/>, color: '#eb4d48' },
     ]
 
     return (

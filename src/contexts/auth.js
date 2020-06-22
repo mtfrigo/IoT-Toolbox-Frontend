@@ -2,8 +2,6 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 
 import api from '../services/api';
 
-import * as auth from '../services/auth';
-
 
 const AuthContext = createContext();
 
@@ -40,7 +38,7 @@ export const AuthProvider = ({children}) => {
     }).then(res =>  {
       
       
-      if(res.status == 200) {
+      if(res.status === 200) {
 
         api.defaults.headers['Authorization'] = `Bearer ${res.data.token}`
 
@@ -64,7 +62,7 @@ export const AuthProvider = ({children}) => {
       email: user.email,
       role: user.role,
     }).then(res =>  {
-      if(res.status == 200) {
+      if(res.status === 200) {
 
         api.defaults.headers['Authorization'] = `Bearer ${res.data.token}`
 

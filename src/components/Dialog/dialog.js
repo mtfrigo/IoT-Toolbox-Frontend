@@ -16,7 +16,7 @@ export default function ItemListDialog(props) {
   };
 
   const handleListItemClick = (value) => {
-    const alreadySelected = selectedItems.findIndex(item => item == value.id);
+    const alreadySelected = selectedItems.findIndex(item => item === value.id);
 
     if(alreadySelected >= 0) {
       const filteredItems = selectedItems.filter(item => item !== value.id);

@@ -4,7 +4,6 @@ import './styles.css';
 
 import ProgressContext from '../../contexts/progress';
 import MatchingContext from '../../contexts/matching';
-import BlocksContext from '../../contexts/blocks';
 
 import BuildingBlockCard from '../../components/BuildingBlock'
 import BuildingBlockDetails from '../../components/BuildingBlockDetails'
@@ -15,7 +14,7 @@ import api from '../../services/api';
 export default function BuildingBlocksPage() {
 
   const { setActiveStep } = useContext(ProgressContext);
-  const { getRecommendedBlocks, recommendedBlocks, selectedBlock } = useContext(MatchingContext);
+  const { getRecommendedBlocks, recommendedBlocks, selectedBlockDetails } = useContext(MatchingContext);
   // const { buildingBlocks } = useContext(BlocksContext);
   const [ buildingBlocks, setBBs ] = useState([]);
 
@@ -49,9 +48,9 @@ export default function BuildingBlocksPage() {
         }
         </div>
         {
-          selectedBlock.id ? 
+          selectedBlockDetails.id ? 
           <div className="block-details" >
-            <BuildingBlockDetails bb={selectedBlock} />
+            <BuildingBlockDetails bb={selectedBlockDetails} />
           </div> : null
        }
     </div>
