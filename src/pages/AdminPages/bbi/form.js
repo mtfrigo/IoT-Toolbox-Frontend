@@ -274,7 +274,6 @@ export default function BBIForm(props) {
     setFormData({...formData, [feature]: filteredItems});
   }
 
-
   function handleDeleteFile(feature, item) {
     const filteredItems = formData[feature].filter(i => i.name !== item.name);
     setFormData({...formData, [feature]: filteredItems});
