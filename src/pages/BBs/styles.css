@@ -19,7 +19,7 @@
   padding: 24px;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   flex-wrap: wrap;
   flex-grow: 2;
   overflow-y: auto;

@@ -39,6 +39,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 24,
     display: 'flex',
     flexDirection: 'column', 
+    marginLeft: 10,
+    marginRight: 10,
     // border: '2px solid rgba(0, 0, 0, 0) '
   },
   header: {
