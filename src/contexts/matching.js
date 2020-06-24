@@ -37,20 +37,25 @@ export const MatchingProvider = ({children}) => {
   async function getBlockTree(bbs, bb, history) {
 
     if(!bb.BlockDependencies) {
+      let selectionType = bb.selectionType;
       const res = await api.get(`/building-blocks/${bb.id}`)
       bb = res.data;
+      bb.selectionType = selectionType;
     }
 
     const alreadySelected = bbs.findIndex(item => item.id === bb.id);
 
-    if(!(alreadySelected >= 0)) {
+    if((alreadySelected === -1 && bb.selectionType === 'manual') ||  bb.selectionType === 'dependency') {
       bbs = [...bbs, bb];
     } 
 
     for(const dep of bb.BlockDependencies) {
       history.push(bb.id)
-      if(!history.includes(dep.id))
+      const depAlreadySelected = selectedBlocks.findIndex(item => item.id === dep.id);
+      if(!history.includes(dep.id) && !(depAlreadySelected >= 0 && selectedBlocks[depAlreadySelected].selectionType === 'manual')) {
+        dep.selectionType = 'dependency';
         bbs = await getBlockTree(bbs, dep, history);
+      }
     }
 
     return bbs;
@@ -59,13 +64,15 @@ export const MatchingProvider = ({children}) => {
   async function selectBlock(block) {
     const alreadySelected = selectedBlocks.findIndex(item => item.id === block.id);
 
-    let bbs = [];
-
     if(alreadySelected >= 0) {
-      bbs = [block];
+      block = selectedBlocks[alreadySelected];
     } else {
-      bbs = await getBlockTree([], block, []);
+      block.selectionType = "manual";
     }
+
+    if(block.selectionType === 'dependency') return;
+
+    let bbs = await getBlockTree([], block, []);
 
     let newSelectedBlocks = selectedBlocks;
 
@@ -86,20 +93,18 @@ export const MatchingProvider = ({children}) => {
     selectBlocks(newSelectedBlocks);
   }
 
- 
-
   async function selectBBI(block, bbi) {
     const alreadySelected = selectedBlocks.findIndex(item => item.id === block.id);
 
-    let bbs = [block]; 
-
     if(alreadySelected >= 0) {
-      bbs = [block];
+      block = selectedBlocks[alreadySelected];
     } else {
-      bbs = await getBlockTree([], block, []);
+      block.selectionType = "manual";
     }
 
-    console.log(bbs)
+    if(block.selectionType === 'dependency') return;
+
+    let bbs = await getBlockTree([], block, []);
 
     let newSelectedBlocks = [];
 
@@ -130,8 +135,6 @@ export const MatchingProvider = ({children}) => {
         newSelectedBlocks = bbs;
       }
     }
-
-    console.log(newSelectedBlocks)
 
     selectBlocks(newSelectedBlocks);
     
