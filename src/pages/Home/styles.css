@@ -14,15 +14,28 @@
   overflow-y: auto;
 }
 
-.home-page-container .dashboard .item {
-  width: 400px;
+.home-page-container .dashboard .statistics { 
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-grow: 2;
+  padding: 5%;
+}
+
+.home-page-container .dashboard .statistics .item {
+  width: 300px;
   height: 100px;
+
+  min-width: 40%;
 
   display: flex;
   flex-direction: row;
 }
 
-.home-page-container .dashboard .item .item-icon {
+.home-page-container .dashboard .statistics .item .item-icon {
   width: 100px;
   height: 100px;
   position: relative;
@@ -31,11 +44,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-  
 }
 
-.home-page-container .dashboard .item .labels {
+.home-page-container .dashboard .statistics .item .labels {
   font-size: 20px;
   text-align: end;
   width: 100%;
@@ -43,14 +54,14 @@
 
 }
 
-.home-page-container .dashboard .item .labels .label {
+.home-page-container .dashboard .statistics .item .labels .label {
   font-size: 20px;
 }
 
-.home-page-container .dashboard .item .labels .total {
+.home-page-container .dashboard .statistics .item .labels .total {
   font-size: 24px;;
 }
-.home-page-container .dashboard .item .item-icon svg {
+.home-page-container .dashboard .statistics .item .item-icon svg {
   width: 60px;
   height: 60px;
   color: #fff;

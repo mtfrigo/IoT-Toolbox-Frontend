@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import './styles.css';
 
+
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -19,6 +20,8 @@ import TextFileReader from  '../../components/TextFilePreview'
 
 import ProgressContext from '../../contexts/progress';
 import BBiPanelContext from '../../contexts/bbi-panel';
+import { useAuth } from '../../contexts/auth';
+
 
 import { FiFile, FiCode, FiDownload} from 'react-icons/fi';
 
@@ -395,7 +398,6 @@ export default function BBIsPage() {
     api.get('/building-blocks/' + id).then(data => {
       setBB(data.data)
       setBBIs(data.data.ImplementedBy)
-
     })
   }
 

@@ -7,6 +7,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
   const [ user, setUser ] = useState(null);
+  const [ project, setProject ] = useState(null);
   const [ loading, setLoading ] = useState(true);
 
 
@@ -14,10 +15,14 @@ export const AuthProvider = ({children}) => {
     async function loadStoragedData() {
       const storagedUser = await localStorage.getItem('@RAuth:user');
       const storagedToken = await localStorage.getItem('@RAuth:token');
-
+      const storagedProject = await localStorage.getItem('@RAuth:project');
 
       if(storagedUser && storagedToken) {
         api.defaults.headers['Authorization'] = `Bearer ${storagedToken}`
+
+        if(storagedProject) {
+          setProject(JSON.parse(storagedProject))
+        }
 
         setUser(JSON.parse(storagedUser));
         setLoading(false);
@@ -28,8 +33,6 @@ export const AuthProvider = ({children}) => {
   }, [])
 
   async function signIn(user) {
-
-
     api.post('/user/login', {
       username: user.username,
       password: user.password
@@ -37,7 +40,6 @@ export const AuthProvider = ({children}) => {
       
       
       if(res.status === 200) {
-
         api.defaults.headers['Authorization'] = `Bearer ${res.data.token}`
 
         localStorage.setItem('@RAuth:user', JSON.stringify(res.data.user));
@@ -90,7 +92,7 @@ export const AuthProvider = ({children}) => {
   } 
 
   return (
-    <AuthContext.Provider value={{signed: !!user, user, signIn, signUp, signOut}}>
+    <AuthContext.Provider value={{signed: !!user, activeProject: !!project, user, project, setProject, signIn, signUp, signOut}}>
       {children}
     </AuthContext.Provider>
   );

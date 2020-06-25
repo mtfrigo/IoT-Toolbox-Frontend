@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 //import some service
 import api from '../services/api';
@@ -37,10 +38,12 @@ export const MatchingProvider = ({children}) => {
   async function getBlockTree(bbs, bb, history) {
 
     if(!bb.BlockDependencies) {
-      let selectionType = bb.selectionType;
+      let {selectionType, parentBlockId} = bb
       const res = await api.get(`/building-blocks/${bb.id}`)
       bb = res.data;
       bb.selectionType = selectionType;
+      bb.parentBlockId = parentBlockId;
+      bb.instanceId = uuidv4();
     }
 
     const alreadySelected = bbs.findIndex(item => item.id === bb.id);
@@ -54,6 +57,7 @@ export const MatchingProvider = ({children}) => {
       const depAlreadySelected = selectedBlocks.findIndex(item => item.id === dep.id);
       if(!history.includes(dep.id) && !(depAlreadySelected >= 0 && selectedBlocks[depAlreadySelected].selectionType === 'manual')) {
         dep.selectionType = 'dependency';
+        dep.parentBlockId = bb.instanceId;
         bbs = await getBlockTree(bbs, dep, history);
       }
     }
@@ -68,6 +72,7 @@ export const MatchingProvider = ({children}) => {
       block = selectedBlocks[alreadySelected];
     } else {
       block.selectionType = "manual";
+      block.instanceId = uuidv4();
     }
 
     if(block.selectionType === 'dependency') return;
@@ -98,15 +103,29 @@ export const MatchingProvider = ({children}) => {
 
     if(alreadySelected >= 0) {
       block = selectedBlocks[alreadySelected];
+
+      const bbiAlreadySelected = block.selectedBBIs.findIndex(item => item.id === bbi.id);
+        if(bbiAlreadySelected >= 0) {
+          bbi = block.selectedBBIs[bbiAlreadySelected];
+        } else {
+          bbi.selectionType = "manual";
+          bbi.instanceId = uuidv4();
+        }
+
     } else {
       block.selectionType = "manual";
+      block.instanceId = uuidv4();
+
+      bbi.selectionType = "manual";
+      bbi.instanceId = uuidv4();
     }
 
-    if(block.selectionType === 'dependency') return;
+    
+    
 
     let bbs = await getBlockTree([], block, []);
 
-    let newSelectedBlocks = [];
+    let newSelectedBlocks = selectedBlocks;
 
     for(const bb of bbs) {
       const bbIndex = newSelectedBlocks.findIndex(item => item.id === bb.id);
@@ -137,6 +156,7 @@ export const MatchingProvider = ({children}) => {
     }
 
     selectBlocks(newSelectedBlocks);
+    setTrigger(!trigger)
     
   }
 

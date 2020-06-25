@@ -32,9 +32,8 @@ export default function ProcessCreationPage() {
   const { setActiveStep, setShowBar } = useContext(ProgressContext);
 
   const { requirements } = useContext(RequirementsContext);
-  const { buildingBlocks, bbis } = useContext(BlocksContext);
 
-  const { selectedBlocks, selectedBBIs, selectedRequirements } = useContext(MatchingContext);
+  const { selectedBlocks, selectedRequirements } = useContext(MatchingContext);
     
   setActiveStep(2);
   setShowBar(true);
@@ -43,6 +42,10 @@ export default function ProcessCreationPage() {
     const res = await api.get('/requirements/' + id)
     return res.data;
   }
+
+  useEffect(() => {
+    console.log(selectedBlocks)
+  }, [selectedBlocks])
 
   return (
     <div className="progress-creation-page">
@@ -65,15 +68,6 @@ export default function ProcessCreationPage() {
           </IconButton>
         </Tooltip>
 
-
-        <Tooltip title="BBI">
-          <IconButton aria-label="building blocks implementation" >
-            <StyledBadge badgeContent={selectedBBIs.length} color="primary" showZero anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}> 
-              <FiCodesandbox />
-            </StyledBadge>
-          </IconButton>
-        </Tooltip>
-
       </div>
 
       <div className="description">Before request the process creation, please review carefully your components selection.</div>
@@ -89,46 +83,12 @@ export default function ProcessCreationPage() {
           {
             selectedRequirements.length > 0 ? 
             selectedRequirements.map((req) => {
-              let requirement = requirements.filter(function(x) {return x.id == req})[0];
-              return (<div className="requirements-list-item">{requirement.description}</div>);
+              return (<div key={req.id} className="requirements-list-item">{req.description}</div>);
             }) : <div className="requirements-list-item">No requirements selected.</div>
           }
         </div>
       </div>
-
-      <div className="blocks-section">
-        <div className="section-header">  
-          <FiBox />
-          <div className="subtitle">Building Blocks</div>
-        </div>
-
-        <div className="blocks-list">
-          {
-            selectedBlocks.length > 0 ? 
-            selectedBlocks.map((block) => {
-              let bb = buildingBlocks.filter(function(x) {return x.id == block})[0];
-
-              let bbi = {};
-
-              selectedBBIs.map((selectedBBI) => {
-                if(bb.ImplementedBy.map(function(x) {return x.id}).includes(selectedBBI))
-                  bbi = bb.ImplementedBy.filter(function(x) {return x.id == selectedBBI})[0]
-              })
-
-              
-              return (
-                <div key={bb.id} className="blocks-list-item">
-                  <div>{bb.name}</div>
-                  <div className="bbis-list">
-                    <div className="bbis-list-item"><FiCodesandbox /> {!!bbi.name ? bbi.name : 'No BBI for this BB selected.'}</div>
-                  </div>
-                </div>
-              );
-            }) : <div className="blocks-list-item">No BBs selected.</div>
-          }
-        </div>
-      </div>
-
+     
     </div>
   )
 }
