@@ -16,7 +16,6 @@ import Sidebar from '../components/Sidebar';
 
 import { MatchingProvider } from '../contexts/matching'
 import { RequirementsProvider } from '../contexts/requirements'
-import { BlocksProvider } from '../contexts/blocks'
 import { AdminProvider } from '../contexts/admin'
 import { NewMatchProvider } from '../contexts/new-match'
 import { BBiPanelProvider } from '../contexts/bbi-panel'
@@ -31,7 +30,6 @@ export default function AppRoutes() {
                 <div className="content">
                  <MatchingProvider>
                  <RequirementsProvider>
-                 <BlocksProvider>
                  <BBiPanelProvider>
                  <AdminProvider>
                  <NewMatchProvider>
@@ -49,7 +47,6 @@ export default function AppRoutes() {
                  </NewMatchProvider>
                  </AdminProvider>
                  </BBiPanelProvider>
-                 </BlocksProvider>
                  </RequirementsProvider>
                  </MatchingProvider>
                 </div>

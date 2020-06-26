@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 //import some service
 import api from '../services/api';
 
+import { useAuth } from './auth';
+
 const MatchingContext = createContext();
 
 export const MatchingProvider = ({children}) => {
@@ -13,6 +15,48 @@ export const MatchingProvider = ({children}) => {
   const [selectedBBIs, selectBBIs] = useState([]);
   const [ trigger, setTrigger ] = useState(false);
   const [recommendedBlocks, recommendBlocks] = useState([]);
+  const { updateProjectRequirements, project } = useAuth();
+
+  async function projectRequirements() {
+    const res = await api.get(`projects/${project.id}`);
+    return res.data.Requirements
+  }
+
+  async function projectBlocks() {
+    const res = await api.get(`projects/${project.id}`);
+    return res.data.bbs
+  }
+
+  async function updateProjectBlocks() {
+
+    
+    let serializedBlocks = selectedBlocks.map(item => {
+
+
+      let serializedBBI = item.selectedBBIs?.map(bbi => {
+        return {
+          id: bbi.id,
+          instanceId: bbi.instanceId,
+          selectionType: bbi.selectionType
+        }
+      }) || [];
+
+      return {
+        id: item.id,
+        instanceId: item.instanceId,
+        selectionType: item.selectionType,
+        bbis: serializedBBI
+      }
+    })
+
+
+    const res = await api.post('projects/blocks', {
+      blocks: serializedBlocks,
+      id_project: project.id
+    })
+
+  }
+
 
   async function getRecommendedBlocks() {
     const res = await api.get('/matching', {
@@ -29,9 +73,11 @@ export const MatchingProvider = ({children}) => {
     if(alreadySelected >= 0) {
       const filteredItems = selectedRequirements.filter(item => item.id !== requirement.id);
       selectRequirements(filteredItems);
+      updateProjectRequirements(filteredItems);
     } else {
       const requirements = [...selectedRequirements, requirement];
       selectRequirements(requirements);
+      updateProjectRequirements(requirements);
     }
   }
 
@@ -120,9 +166,6 @@ export const MatchingProvider = ({children}) => {
       bbi.instanceId = uuidv4();
     }
 
-    
-    
-
     let bbs = await getBlockTree([], block, []);
 
     let newSelectedBlocks = selectedBlocks;
@@ -161,7 +204,7 @@ export const MatchingProvider = ({children}) => {
   }
 
   return (
-    <MatchingContext.Provider value={{ getRecommendedBlocks, selectedBBIs, selectBBIs, selectedRequirements, selectRequirements, trigger, selectBlock, selectRequirement, selectBBI, selectedBlockDetails, selectBlockDetails, selectedBlocks, selectBlocks, recommendedBlocks, recommendBlocks}}>
+    <MatchingContext.Provider value={{ updateProjectBlocks, projectBlocks, projectRequirements, getRecommendedBlocks, selectedBBIs, selectBBIs, selectedRequirements, selectRequirements, trigger, selectBlock, selectRequirement, selectBBI, selectedBlockDetails, selectBlockDetails, selectedBlocks, selectBlocks, recommendedBlocks, recommendBlocks}}>
       {children}
     </MatchingContext.Provider>
   );

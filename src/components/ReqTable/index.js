@@ -27,6 +27,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import ProgressContext from '../../contexts/progress';
 import MatchingContext from '../../contexts/matching';
 import RequirementsContext from '../../contexts/requirements';
+import { useAuth } from '../../contexts/auth';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -198,7 +199,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ReqTable() {
   const { setActiveStep } = useContext(ProgressContext);
-  const { selectedRequirements, selectRequirements, selectRequirement } = useContext(MatchingContext);
+  const { selectedRequirements, selectRequirements, selectRequirement, projectRequirements } = useContext(MatchingContext);
   const { requirements } = useContext(RequirementsContext);
 
   const classes = useStyles();
@@ -207,6 +208,10 @@ export default function ReqTable() {
   const [page, setPage] = React.useState(0);
   const [dense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  useEffect(() => {
+    projectRequirements().then(data => selectRequirements(data))
+  }, [])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

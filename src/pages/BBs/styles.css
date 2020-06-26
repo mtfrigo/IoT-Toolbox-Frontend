@@ -8,6 +8,14 @@
   overflow: hidden;
 }
 
+.bb-page-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 5px 0;
+}
+
 .bb-page {
   display: flex;
   flex-direction: row;

@@ -32,6 +32,17 @@ export const AuthProvider = ({children}) => {
     loadStoragedData();
   }, [])
 
+  async function updateProjectRequirements(requirements) {
+    const res = await api.post('projects/requirements', {
+      requirements,
+      id_project: project.id
+    })
+
+    setProject(res.data);
+  }
+
+  
+
   async function signIn(user) {
     api.post('/user/login', {
       username: user.username,
@@ -92,7 +103,7 @@ export const AuthProvider = ({children}) => {
   } 
 
   return (
-    <AuthContext.Provider value={{signed: !!user, activeProject: !!project, user, project, setProject, signIn, signUp, signOut}}>
+    <AuthContext.Provider value={{signed: !!user, activeProject: !!project, updateProjectRequirements, user, project, setProject, signIn, signUp, signOut}}>
       {children}
     </AuthContext.Provider>
   );

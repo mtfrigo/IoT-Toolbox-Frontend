@@ -11,7 +11,7 @@ import { useAuth } from '../../contexts/auth';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import { FiBox, FiCodesandbox} from 'react-icons/fi';
+import { FiBox, FiCodesandbox, FiLoader} from 'react-icons/fi';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ToysIcon from '@material-ui/icons/Toys';
 
@@ -310,18 +310,12 @@ const EmptyProject = (props) => {
 const CurrentProject = (props) => {
   const classes = useStyles();
   const [ project, setProject ] = useState('');
-
+  const { steps } = useContext(ProgressContext);
 
   useEffect(() => {
     async function loadProject() {
       const res = await api.get(`projects/${props.project.id}`);
       setProject(res.data);
-      let bbis = res.data.bbs ? 
-      res.data.bbs.reduce((r, v) => {
-        return v.bbis.length;
-      }, 0) : 0
-
-      console.log(bbis)
     }
     loadProject()
   }, [props])
@@ -347,7 +341,7 @@ const CurrentProject = (props) => {
       </div>
 
       <Typography variant="body1" color="textPrimary" component="div" className={classes.name}>
-        {project.name}
+        {project?.name}
       </ Typography>
       
       <div className={classes.selections}>
@@ -358,7 +352,7 @@ const CurrentProject = (props) => {
             </Paper>
           </div>
           <Typography variant="body1" color="textPrimary" component="div" className={classes.itemCounter}>
-            { project.requirements ? project.requirements.length : 0 }
+            { project?.Requirements ? project.Requirements.length : 0 }
           </ Typography>
         </Paper>
         <Paper className={classes.item}>
@@ -368,7 +362,7 @@ const CurrentProject = (props) => {
             </Paper>
           </div>
           <Typography variant="body1" color="textPrimary" component="div" className={classes.itemCounter}>
-            { project.bbs ? project.bbs.length : 0 }
+            { project?.bbs ? project.bbs.length : 0 }
           </ Typography>
         </Paper>
         <Paper className={classes.item}>
@@ -380,7 +374,7 @@ const CurrentProject = (props) => {
           <Typography variant="body1" color="textPrimary" component="div" className={classes.itemCounter}>
             { project.bbs ? 
               project.bbs.reduce((r, v) => {
-                return v.bbis.length;
+                return r + v.bbis.length;
               }, 0) : 0 }
           </ Typography>
         </Paper>
@@ -393,10 +387,10 @@ const CurrentProject = (props) => {
       <div className={classes.footer}>
         
         <div className={classes.stepIconContainer}>
-          <FiBox/>
+          { project.step ? steps[project.step - 1].icon : <FiLoader />}
         </div>
         <Typography variant="body1" color="textPrimary" className={classes.title}>
-          Building Blocks Selection
+        { project.step ? steps[project.step - 1].name : 'Project not started'}
         </ Typography>
       </div>
     </Paper>

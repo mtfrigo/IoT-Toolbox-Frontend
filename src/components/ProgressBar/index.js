@@ -175,6 +175,7 @@ export default function CustomizedSteppers() {
   const classes = useStyles();
   const { activeStep, setActiveStep, steps, show } = useContext(ProgressContext);
   
+  
   let history = useHistory();
 
   function redirect(step) {

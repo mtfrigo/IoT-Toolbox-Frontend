@@ -8,7 +8,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ProgressContext from '../../contexts/progress';
 import MatchingContext from '../../contexts/matching';
 import RequirementsContext from '../../contexts/requirements';
-import BlocksContext from '../../contexts/blocks';
 
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';

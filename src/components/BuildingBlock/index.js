@@ -126,26 +126,8 @@ export default function BuildingBlockCard(props) {
 
   let history = useHistory();
 
-  useEffect(() =>  {
-
-  }, [selectedBlocks])
-
   const handleCheckClick = () => {
     selectBlock(bb);
-
-    // let selectedIndex = selectedBlocks.indexOf(bb.id);
-    // let newSelectBlocks = selectedBlocks;
-
-    // if(selectedIndex === -1) {
-    //   newSelectBlocks.push(bb.id)
-    // } else if(selectedBlocks.length > 0){
-    //   newSelectBlocks.splice(selectedIndex, 1)
-    // } else {
-    //   newSelectBlocks = []
-    // }
-
-    // selectBlocks(newSelectBlocks)
-    // setCounter(newSelectBlocks.length)
   };
 
 
