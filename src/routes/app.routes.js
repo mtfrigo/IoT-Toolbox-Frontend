@@ -19,6 +19,7 @@ import { RequirementsProvider } from '../contexts/requirements'
 import { AdminProvider } from '../contexts/admin'
 import { NewMatchProvider } from '../contexts/new-match'
 import { BBiPanelProvider } from '../contexts/bbi-panel'
+import { ProcessProvider } from '../contexts/process'
 
 
 export default function AppRoutes() {
@@ -33,6 +34,7 @@ export default function AppRoutes() {
                  <BBiPanelProvider>
                  <AdminProvider>
                  <NewMatchProvider>
+                 <ProcessProvider>
                   <Switch>
                     <Route path="/" exact component={HomePage}/>
                     <Route path="/requirements" exact component={RequirementsPage}/>
@@ -44,6 +46,7 @@ export default function AppRoutes() {
                     <Route path="/admin/building-block" exact component={AdminBBPage}/>
                     <Route path="/admin/matching" exact component={MatchingPanel}/>
                   </Switch>
+                 </ProcessProvider>
                  </NewMatchProvider>
                  </AdminProvider>
                  </BBiPanelProvider>

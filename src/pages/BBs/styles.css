@@ -11,9 +11,10 @@
 .bb-page-buttons {
   width: 100%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   padding: 5px 0;
+  background: white;
 }
 
 .bb-page {

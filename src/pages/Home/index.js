@@ -166,7 +166,8 @@ const NewProject = (props) => {
   const { setProject } = useAuth();
 
   const [ formData, setFormData ] = useState({
-    name: ''
+    name: '',
+    step: 1,
   });
 
   async function createProject() {

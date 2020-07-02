@@ -7,6 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import ProgressContext from '../../contexts/progress';
 import MatchingContext from '../../contexts/matching';
+import ProcessContext from '../../contexts/process';
 import RequirementsContext from '../../contexts/requirements';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -14,79 +15,73 @@ import CloseIcon from '@material-ui/icons/Close';
 import BuildIcon from '@material-ui/icons/Build';
 import { FiBox, FiCodesandbox } from 'react-icons/fi';
 
+
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
+import ProgressBar from '../../components/ProgressBar'
+import { useAuth } from '../../contexts/auth'
+
 import './styles.css';
 
 import api from '../../services/api';
 
-const StyledBadge = withStyles((theme) => ({
-  badge: {
-    right: -6,
-    top: 7,
-    padding: '0 5px',
+import {ProjectProcess, AdminProjectProcess} from './process';
+
+
+const pageStyles = makeStyles((theme) => ({
+  container: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'auto'
   },
-}))(Badge);
+}))
 
 export default function ProcessCreationPage() {
+  const { setActiveStep} = useContext(ProgressContext);
+  const { projects, selectedProject, getProjects, getProject } = useContext(ProcessContext);
+  const [ tab, setTab ] = useState(0); 
+  const { user, project } = useAuth();
 
-  const { setActiveStep, setShowBar } = useContext(ProgressContext);
-
-  const { requirements } = useContext(RequirementsContext);
-
-  const { selectedBlocks, selectedRequirements } = useContext(MatchingContext);
-    
-  setActiveStep(2);
-  setShowBar(true);
-
-  async function getRequirementById(id) {
-    const res = await api.get('/requirements/' + id)
-    return res.data;
-  }
+  const classes = pageStyles();
 
   useEffect(() => {
-    console.log(selectedBlocks)
-  }, [selectedBlocks])
+    getProjects()
+    getProject(project.id)
+    setActiveStep(2)
+  }, [])
+    
+  const handleChangeTab = (event, newValue) => {
+    getProject(project.id)
+    setTab(newValue);
+  };
+
 
   return (
-    <div className="progress-creation-page">
+    <div className={classes.container}>
 
-      <div className="counters">
-        <Tooltip title="Requirements">
-          <IconButton aria-label="requirements" >
-            <StyledBadge badgeContent={selectedRequirements.length} color="primary" showZero anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}> 
-              <BuildIcon />
-            </StyledBadge>
-          </IconButton>
-        </Tooltip>
+    <ProgressBar />
+
+    <Tabs
+      value={tab}
+      onChange={handleChangeTab}
+      variant="fullWidth"
+      indicatorColor="secondary"
+      textColor="secondary"
+      aria-label="icon label tabs example"
+    >
+      <Tab label="YOUR REQUESTS" />
+      <Tab label="OTHERS REQUESTS" />
+    </Tabs>
+
+    {
+      tab === 0 ? <ProjectProcess key={project.id} project={selectedProject}/>
+      : projects.map(project => <AdminProjectProcess key={project.id} project={project}/>)
+    }
 
 
-        <Tooltip title="BB">
-          <IconButton aria-label="building blocks" >
-            <StyledBadge badgeContent={selectedBlocks.length} color="primary" showZero anchorOrigin={{vertical: 'bottom', horizontal: 'right' }}> 
-              <FiBox />
-            </StyledBadge>
-          </IconButton>
-        </Tooltip>
-
-      </div>
-
-      <div className="description">Before request the process creation, please review carefully your components selection.</div>
-      <div className="title">Selection checkout:</div>
       
-      <div className="requirements-section">
-        <div className="section-header">  
-          <BuildIcon />
-          <div className="subtitle">Requirements</div>
-        </div>
-
-        <div className="requirements-list">
-          {
-            selectedRequirements.length > 0 ? 
-            selectedRequirements.map((req) => {
-              return (<div key={req.id} className="requirements-list-item">{req.description}</div>);
-            }) : <div className="requirements-list-item">No requirements selected.</div>
-          }
-        </div>
-      </div>
      
     </div>
   )

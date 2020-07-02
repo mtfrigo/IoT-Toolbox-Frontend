@@ -77,11 +77,11 @@ export default function BuildingBlocksPage() {
     <div className="bb-page-parent">
       <ProgressBar />
       <div className="bb-page-buttons">
-        <Button variant="contained" color="primary"  onClick={handleLoad}>
+        <Button variant="contained" color="primary"  style={{marginRight: 5}} onClick={handleLoad}>
           Load project selection
         </Button> 
         
-        <Button variant="contained" color="secondary"  onClick={handleSave}>
+        <Button variant="contained" color="secondary"  style={{marginLeft: 5}} onClick={handleSave}>
           Save current selection
         </Button> 
       </div>
