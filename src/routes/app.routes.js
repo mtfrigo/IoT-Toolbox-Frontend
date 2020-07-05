@@ -6,6 +6,7 @@ import RequirementsPage from '../pages/Requirements';
 import BuildingBlocksPage from '../pages/BBs';
 import BBIsPage from '../pages/BBIs';
 import ProcessCreationPage from '../pages/ProcessCreation';
+import ProcessExecutionPage from '../pages/ProcessExecution';
 
 import AdminRequirementPage from '../pages/AdminPages/requirement';
 import AdminBBPage from '../pages/AdminPages/bb';
@@ -41,6 +42,7 @@ export default function AppRoutes() {
                     <Route path="/bbs" exact component={BuildingBlocksPage}/>
                     <Route path="/bbis/:id" exact component={BBIsPage}/>
                     <Route path="/process-creation" exact component={ProcessCreationPage}/>
+                    <Route path="/process-execution" exact component={ProcessExecutionPage}/>
                     <Route path="/admin/requirement" exact component={AdminRequirementPage}/>
                     <Route path="/admin/bbi" exact component={AdminBBIPage}/>
                     <Route path="/admin/building-block" exact component={AdminBBPage}/>

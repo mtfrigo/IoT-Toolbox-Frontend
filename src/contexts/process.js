@@ -7,6 +7,7 @@ const ProcessContext = createContext();
 export const ProcessProvider = ({children}) => {
   const [ selectedProject, setSelectedProject ] = useState([]);
   const [ projects, setProjects ] = useState([]);
+  const [ process, setProcess ] = useState();
 
   function getProjects() {
       api.get('/projects/admin').then(res => { setProjects(res.data) })
@@ -17,11 +18,16 @@ export const ProcessProvider = ({children}) => {
   }
 
   async function updateProject(project) {
-    api.put(`projects/${project.id}`, { step: project.step}).then(res => { getProjects(2); getProjects(1);})
+    api.put(`projects/${project.id}`, { step: project.step}).then(res => { getProjects(); })
+  }
+
+  async function updateProcess(process) {
+    const res = await api.put(`process/${process.id}`, process)
+    return res.data;
   }
 
   return (
-    <ProcessContext.Provider value={{ projects,  selectedProject, getProject, updateProject, getProjects}}>
+    <ProcessContext.Provider value={{ projects,  selectedProject, process, setProcess, getProject, updateProject, getProjects}}>
       {children}
     </ProcessContext.Provider>
   );

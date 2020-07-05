@@ -2,19 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
-import Badge from '@material-ui/core/Badge';
-import Tooltip from '@material-ui/core/Tooltip';
-
 import ProgressContext from '../../contexts/progress';
-import MatchingContext from '../../contexts/matching';
 import ProcessContext from '../../contexts/process';
-import RequirementsContext from '../../contexts/requirements';
-
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import BuildIcon from '@material-ui/icons/Build';
-import { FiBox, FiCodesandbox } from 'react-icons/fi';
-
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -24,9 +13,7 @@ import { useAuth } from '../../contexts/auth'
 
 import './styles.css';
 
-import api from '../../services/api';
-
-import {ProjectProcess, AdminProjectProcess} from './process';
+import { ProjectProcess, AdminProjectProcess } from './process';
 
 
 const pageStyles = makeStyles((theme) => ({
@@ -35,6 +22,13 @@ const pageStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'auto'
+  },
+
+  cards: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
 }))
 
@@ -75,13 +69,12 @@ export default function ProcessCreationPage() {
       <Tab label="OTHERS REQUESTS" />
     </Tabs>
 
+    <div className={classes.cards}>
     {
       tab === 0 ? <ProjectProcess key={project.id} project={selectedProject}/>
       : projects.map(project => <AdminProjectProcess key={project.id} project={project}/>)
     }
-
-
-      
+    </div>
      
     </div>
   )

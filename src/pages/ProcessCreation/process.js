@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
 
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -9,6 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import { FiFile } from 'react-icons/fi';
+
+import AccountTreeIcon from '@material-ui/icons/AccountTree';
 
 import api from '../../services/api';
 
@@ -21,11 +24,13 @@ const useStyle = makeStyles((theme) => ({
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
+      alignItems: 'center'
     },
 
     card: {
         margin: '20px 10px',
-        padding: 15
+        padding: 15,
+        width: 700,
     },
 
     header: {
@@ -63,7 +68,6 @@ const useStyle = makeStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'space-between',
         margin: 'auto',
-        maxWidth: 300,
     
     },
 
@@ -72,7 +76,7 @@ const useStyle = makeStyles((theme) => ({
     },
 
     trash: {
-      color: 'red'
+      color: 'red',
     },
   }))
 
@@ -81,7 +85,11 @@ const CardContent = (props) => {
     const classes = useStyle();
     const { updateProject } = useContext(ProcessContext);
 
+    let history = useHistory();
+
     const { project } = props;
+
+    console.log(project)
 
     const handleCreationRequest = () => {
         project.step = 1;
@@ -132,7 +140,7 @@ const CardContent = (props) => {
                     </div>
 
                     <div className={classes.buttons}>
-                        <Button variant="contained" color="primary" className={classes.btn} >
+                        <Button variant="contained" color="primary" className={classes.btn} onClick={() => history.push('/process-execution')}>
                             Go for process execution
                         </Button> 
                     </div>
@@ -166,7 +174,6 @@ const AdminCardContent = (props) => {
     }
 
     function handleUploadProcess(file) {
-        console.log(file)
         setFormData({file})
     }
 
@@ -220,13 +227,14 @@ const AdminCardContent = (props) => {
                 : project.step === 2 ?
                 <div>
                     <div className={classes.description}>
-                        <Typography variant="body2" color="secondary">Process created. </Typography>
-                        <Paper  elevation={3} className={classes.file} key={project.Process.name}>
+                        <Paper  elevation={3} className={classes.file} key={project.Process?.name}>
                             <FiFile size={36}/>
 
                             <Typography variant="body1"  color="primary" className={classes.fileName}>
-                                {project.Process.name }
+                                {project.Process?.name }
                             </Typography>
+
+                            <AccountTreeIcon size={36}/>
                         </Paper>
                     </div>
 
@@ -249,8 +257,6 @@ export const AdminProjectProcess = (props) => {
     const classes = useStyle();
 
     const { project } = props;
-
-    const status = 2;
 
     const stepMap = {
         0: 'Not created',
@@ -281,13 +287,13 @@ export const ProjectProcess = (props) => {
 
     const { project } = props;
 
-    const status = 2;
-
     const stepMap = {
         0: 'Not created',
         1: 'In Progress',
         2: 'Ready'
     }
+
+    console.log(project)
 
     return (
         <Paper elevation={3} className={classes.card}>
