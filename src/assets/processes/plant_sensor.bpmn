@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0bgx1fr" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.0.0">
+  <bpmn:process id="Plant_sensor" name="Plant Sensor" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1gzsye8</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1gzsye8" sourceRef="StartEvent_1" targetRef="Gateway_0qbal0e" />
+    <bpmn:sequenceFlow id="Flow_026dw4k" sourceRef="Gateway_0qbal0e" targetRef="Activity_0bmpsji" />
+    <bpmn:sequenceFlow id="Flow_0fz5n0j" sourceRef="Gateway_0qbal0e" targetRef="Activity_0wah5dm" />
+    <bpmn:parallelGateway id="Gateway_0qbal0e">
+      <bpmn:incoming>Flow_1gzsye8</bpmn:incoming>
+      <bpmn:outgoing>Flow_026dw4k</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0fz5n0j</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1conf10</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_0kggg8y" sourceRef="Activity_1951yfy" targetRef="Activity_11frc65" />
+    <bpmn:userTask id="Activity_0wah5dm" name="Setup IoT platform">
+      <bpmn:incoming>Flow_0fz5n0j</bpmn:incoming>
+      <bpmn:outgoing>Flow_0w90dh6</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1wjdy9o" sourceRef="Activity_0bmpsji" targetRef="Activity_1951yfy" />
+    <bpmn:userTask id="Activity_0bmpsji" name="Configure Raspberry Pi">
+      <bpmn:incoming>Flow_026dw4k</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wjdy9o</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_1lyt2hu" name="Turn on MiFlora sensor">
+      <bpmn:incoming>Flow_1conf10</bpmn:incoming>
+      <bpmn:outgoing>Flow_05o7bap</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:manualTask id="Activity_15fqs0r" name="Attach sensor to soil">
+      <bpmn:incoming>Flow_05o7bap</bpmn:incoming>
+      <bpmn:outgoing>Flow_1m5a31j</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:sequenceFlow id="Flow_1conf10" sourceRef="Gateway_0qbal0e" targetRef="Activity_1lyt2hu" />
+    <bpmn:sequenceFlow id="Flow_05o7bap" sourceRef="Activity_1lyt2hu" targetRef="Activity_15fqs0r" />
+    <bpmn:sequenceFlow id="Flow_1m5a31j" sourceRef="Activity_15fqs0r" targetRef="Gateway_02y4wov" />
+    <bpmn:parallelGateway id="Gateway_02y4wov">
+      <bpmn:incoming>Flow_1m5a31j</bpmn:incoming>
+      <bpmn:incoming>Flow_00ewvsk</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xq5xt9</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_00ewvsk" sourceRef="Activity_11frc65" targetRef="Gateway_02y4wov" />
+    <bpmn:sequenceFlow id="Flow_0xq5xt9" sourceRef="Gateway_02y4wov" targetRef="Activity_0qw3nrx" />
+    <bpmn:sequenceFlow id="Flow_0jx4k7x" sourceRef="Activity_0qw3nrx" targetRef="Gateway_0r12q78" />
+    <bpmn:parallelGateway id="Gateway_0r12q78">
+      <bpmn:incoming>Flow_0jx4k7x</bpmn:incoming>
+      <bpmn:incoming>Flow_0w90dh6</bpmn:incoming>
+      <bpmn:outgoing>Flow_1yp691x</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_0w90dh6" sourceRef="Activity_0wah5dm" targetRef="Gateway_0r12q78" />
+    <bpmn:endEvent id="Event_1utd80g">
+      <bpmn:incoming>Flow_09haxpo</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1yp691x" sourceRef="Gateway_0r12q78" targetRef="Activity_0pechvo" />
+    <bpmn:sequenceFlow id="Flow_09haxpo" sourceRef="Activity_0pechvo" targetRef="Event_1utd80g" />
+    <bpmn:userTask id="Activity_1951yfy" name="Set up WiFi router">
+      <bpmn:incoming>Flow_1wjdy9o</bpmn:incoming>
+      <bpmn:outgoing>Flow_0kggg8y</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_11frc65" name="Connect Raspberry Pi">
+      <bpmn:incoming>Flow_0kggg8y</bpmn:incoming>
+      <bpmn:outgoing>Flow_00ewvsk</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_0qw3nrx" name="Configure sensor adapter on Raspberry Pi">
+      <bpmn:incoming>Flow_0xq5xt9</bpmn:incoming>
+      <bpmn:outgoing>Flow_0jx4k7x</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_0pechvo" name="Add sensor to IoT platform">
+      <bpmn:incoming>Flow_1yp691x</bpmn:incoming>
+      <bpmn:outgoing>Flow_09haxpo</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Plant_sensor">
+      <bpmndi:BPMNEdge id="Flow_09haxpo_di" bpmnElement="Flow_09haxpo">
+        <di:waypoint x="1060" y="380" />
+        <di:waypoint x="1132" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yp691x_di" bpmnElement="Flow_1yp691x">
+        <di:waypoint x="915" y="380" />
+        <di:waypoint x="960" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0w90dh6_di" bpmnElement="Flow_0w90dh6">
+        <di:waypoint x="630" y="380" />
+        <di:waypoint x="865" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jx4k7x_di" bpmnElement="Flow_0jx4k7x">
+        <di:waypoint x="890" y="280" />
+        <di:waypoint x="890" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xq5xt9_di" bpmnElement="Flow_0xq5xt9">
+        <di:waypoint x="765" y="240" />
+        <di:waypoint x="840" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00ewvsk_di" bpmnElement="Flow_00ewvsk">
+        <di:waypoint x="740" y="157" />
+        <di:waypoint x="740" y="215" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1m5a31j_di" bpmnElement="Flow_1m5a31j">
+        <di:waypoint x="630" y="240" />
+        <di:waypoint x="715" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05o7bap_di" bpmnElement="Flow_05o7bap">
+        <di:waypoint x="470" y="240" />
+        <di:waypoint x="530" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1conf10_di" bpmnElement="Flow_1conf10">
+        <di:waypoint x="290" y="142" />
+        <di:waypoint x="290" y="240" />
+        <di:waypoint x="370" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wjdy9o_di" bpmnElement="Flow_1wjdy9o">
+        <di:waypoint x="470" y="117" />
+        <di:waypoint x="530" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kggg8y_di" bpmnElement="Flow_0kggg8y">
+        <di:waypoint x="630" y="117" />
+        <di:waypoint x="690" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fz5n0j_di" bpmnElement="Flow_0fz5n0j">
+        <di:waypoint x="290" y="142" />
+        <di:waypoint x="290" y="380" />
+        <di:waypoint x="530" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_026dw4k_di" bpmnElement="Flow_026dw4k">
+        <di:waypoint x="315" y="117" />
+        <di:waypoint x="370" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gzsye8_di" bpmnElement="Flow_1gzsye8">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="265" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0awob5n_di" bpmnElement="Gateway_0qbal0e">
+        <dc:Bounds x="265" y="92" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1m698hi_di" bpmnElement="Activity_0wah5dm">
+        <dc:Bounds x="530" y="340" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1kkm8vl_di" bpmnElement="Activity_0bmpsji">
+        <dc:Bounds x="370" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_10i7mrc_di" bpmnElement="Activity_1lyt2hu">
+        <dc:Bounds x="370" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0q4991i_di" bpmnElement="Activity_15fqs0r">
+        <dc:Bounds x="530" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0conmz5_di" bpmnElement="Gateway_02y4wov">
+        <dc:Bounds x="715" y="215" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1rs19cq_di" bpmnElement="Gateway_0r12q78">
+        <dc:Bounds x="865" y="355" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1utd80g_di" bpmnElement="Event_1utd80g">
+        <dc:Bounds x="1132" y="362" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_153gxgw_di" bpmnElement="Activity_1951yfy">
+        <dc:Bounds x="530" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1tmyp8g_di" bpmnElement="Activity_11frc65">
+        <dc:Bounds x="690" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0itq2go_di" bpmnElement="Activity_0qw3nrx">
+        <dc:Bounds x="840" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0bt9lhz_di" bpmnElement="Activity_0pechvo">
+        <dc:Bounds x="960" y="340" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
