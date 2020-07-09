@@ -19,12 +19,20 @@ How to install and use the Toolbox is explained in the following.
 ## Installation (for developers)
 
 The following software components are used in order to set up the toolbox: 
-* Back-End: [NodeJS](https://nodejs.org/en/), [Docker](https://docs.docker.com/get-docker/) and NPM.
+* Back-End: [NodeJS 12.18.0](https://nodejs.org/en/), [Docker](https://docs.docker.com/get-docker/) and NPM 6.14.4.
 * Front-End: ReactJS.
 
-### 1.1 Installation (on Linux) 
-Go to the root folder after cloning this repository and use the command: `npm install`.
-After all libraries been installed you can start the react server by using the command: `npm start`.
-The default server port is 3030. It can be modified changing line 20 in the file package.json.
+### 1.1 Installation
+
+### 1.2 Dependencies
+```
+npm install
+```
+
+
+## Running the application
+```
+npm start
+```
 
 To setup the backend go to installation section on the [IoT Toolbox BackEnd](https://github.com/mtfrigo/IoT-Toolbox-Backend) project.
