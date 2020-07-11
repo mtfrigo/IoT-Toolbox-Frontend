@@ -6,28 +6,30 @@
 }
 
 .home-page-container .dashboard {
-  width: 65%;
+  width: 80%;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   overflow-y: auto;
+  flex-grow: 2;
 }
 
 .home-page-container .dashboard .statistics { 
-  width: 90%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-evenly;
-  flex-grow: 2;
-  padding: 5%;
+  justify-content: space-between;
 }
 
 .home-page-container .dashboard .statistics .item {
   width: 300px;
   height: 100px;
+
+  margin-top: 100px;
 
   min-width: 40%;
 

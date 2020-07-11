@@ -18,7 +18,7 @@ export const ProcessProvider = ({children}) => {
   }
 
   async function updateProject(project) {
-    api.put(`projects/${project.id}`, { step: project.step}).then(res => { getProjects(); })
+    api.put(`projects/${project.id}`, { step_process: project.step_process}).then(res => { getProjects(); })
   }
 
   async function updateProcess(process) {

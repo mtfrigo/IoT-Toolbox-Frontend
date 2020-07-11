@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useContext } from 'react';
 
 import './styles.css';
@@ -211,7 +212,8 @@ export default function ReqTable() {
 
   useEffect(() => {
     projectRequirements().then(data => selectRequirements(data))
-  }, [])
+
+  }, [selectRequirements])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -239,10 +241,11 @@ export default function ReqTable() {
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, requirements.length - page * rowsPerPage);
 
+
   useEffect(() => {
-    document.getElementsByClassName('table-container')[0].clientHeight > 800 ? setRowsPerPage(10) : setRowsPerPage(5)
+    setRowsPerPage(Math.floor((document.getElementsByClassName('table-container')[0].clientHeight - (56 + 64 + 52)) / 53))
     setActiveStep(0)
-  }, [setActiveStep])
+  }, [])
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(5);

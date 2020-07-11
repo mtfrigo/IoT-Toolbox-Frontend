@@ -89,22 +89,20 @@ const CardContent = (props) => {
 
     const { project } = props;
 
-    console.log(project)
-
     const handleCreationRequest = () => {
-        project.step = 1;
+        project.step_process = 1;
         updateProject(project)
     }
 
     const handleDeleteRequest = () => {
-        project.step = 0;
+        project.step_process = 0;
         updateProject(project)
     }
 
     return (
         <div>
             {
-                project.step === 0 ? 
+                project.step_process === 0 ? 
                 <div>
                     <div className={classes.description}>
                         <Typography variant="body2" color="secondary">You need to request the proccess creation for your project. </Typography>
@@ -118,7 +116,7 @@ const CardContent = (props) => {
                         </Button> 
                     </div>
                 </div>
-                : project.step === 1 ?
+                : project.step_process === 1 ?
                 <div>
                     <div className={classes.description}>
                         <Typography variant="body2" color="secondary">Request already created. </Typography>
@@ -149,7 +147,6 @@ const CardContent = (props) => {
             
             
         </div> 
-        
     )
 }
 
@@ -168,7 +165,7 @@ const AdminCardContent = (props) => {
 
         if(response.status === 204) {
             project.id_process = null;
-            project.step = 1;
+            project.step_process = 1;
             updateProject(project)
         }
     }
@@ -189,7 +186,7 @@ const AdminCardContent = (props) => {
 
         if(response.status === 200) {
             const project = response.data
-            project.step = 2;
+            project.step_process = 2;
             updateProject(project)
         }
     }
@@ -197,7 +194,7 @@ const AdminCardContent = (props) => {
     return (
         <div>
             {
-                project.step === 1 ? 
+                project.step_process === 1 ? 
                 <div>
                     <div className={classes.description}>
                         {
@@ -224,7 +221,7 @@ const AdminCardContent = (props) => {
                         </Button> 
                     </div>
                 </div>
-                : project.step === 2 ?
+                : project.step_process === 2 ?
                 <div>
                     <div className={classes.description}>
                         <Paper  elevation={3} className={classes.file} key={project.Process?.name}>
@@ -249,7 +246,6 @@ const AdminCardContent = (props) => {
             
             
         </div> 
-        
     )
 }
 
@@ -259,10 +255,12 @@ export const AdminProjectProcess = (props) => {
     const { project } = props;
 
     const stepMap = {
-        0: 'Not created',
-        1: 'In Progress',
+        0: 'Not requested',
+        1: 'Requested',
         2: 'Ready'
     }
+
+
 
     return (
         <Paper elevation={3} className={classes.card}>
@@ -273,7 +271,7 @@ export const AdminProjectProcess = (props) => {
             
             <div className={classes.content}>
                 <Typography variant="body1" color="textSecondary">Process Creation Status</Typography>
-                <Typography variant="body2" color="textPrimary" className={classes.label}>{stepMap[project.step]}</Typography>
+                <Typography variant="body2" color="textPrimary" className={classes.label}>{stepMap[project.step_process]}</Typography>
             </div>
 
            <AdminCardContent project={project} />
@@ -288,12 +286,10 @@ export const ProjectProcess = (props) => {
     const { project } = props;
 
     const stepMap = {
-        0: 'Not created',
-        1: 'In Progress',
-        2: 'Ready'
+        0: 'Not requested',
+        1: 'Requested',
+        2: 'Ready',
     }
-
-    console.log(project)
 
     return (
         <Paper elevation={3} className={classes.card}>
@@ -304,7 +300,7 @@ export const ProjectProcess = (props) => {
             
             <div className={classes.content}>
                 <Typography variant="body1" color="textSecondary">Process Creation Status</Typography>
-                <Typography variant="body2" color="textPrimary" className={classes.label}>{stepMap[project.step]}</Typography>
+                <Typography variant="body2" color="textPrimary" className={classes.label}>{stepMap[project.step_process]}</Typography>
             </div>
 
            <CardContent project={project} />

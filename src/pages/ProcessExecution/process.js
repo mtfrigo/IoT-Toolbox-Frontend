@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import api from '../../services/api'
 
 import ProcessContext from '../../contexts/process'
+import { Paper } from '@material-ui/core';
 
 
 const useStyle = makeStyles((theme) => ({
@@ -26,6 +27,7 @@ const useStyle = makeStyles((theme) => ({
       flex: '1 1 auto',
       justifyContent: 'center',
       alignItems: 'center',
+      height: '100%',
     },
 
     label: {
@@ -45,15 +47,23 @@ const useStyle = makeStyles((theme) => ({
 
     tasksPanel: {
       padding: 10,
+      height: '100%',
       width: '100%'
     },
 
+    taskPanelTitle: {
+      textAlign: 'center',
+      fontSize: 20,
+      margin: '10px 0px'
+    },
+
     task: {
-      padding: 10,
+      padding: 20,
+      // background: '#3f51b5',
     },
 
     formField: {
-      width: 300
+      // width: 300
     },
     
   }))
@@ -64,17 +74,21 @@ const Task = (props) => {
 
   const [ formData, setFormData ] = useState({name: ''});
 
+  const [ variables, setVariables ] = useState([])
+
   useEffect(() => {
 
     let obj = {};
+    let variables = [];
     task.variables.map(variable => {
       obj[variable.name] = variable.value ? variable.value : '';
+
+      if(!variable.value) variables.push(variable);
     })
 
-    console.log(obj)
-
+    setVariables(variables)
     setFormData(obj)
-  }, [])
+  }, [task.variables])
 
   const handleCompleteTask = async () => {
     let body = Object.keys(formData).reduce((r, c) => {
@@ -83,7 +97,6 @@ const Task = (props) => {
     }, {'variables': {}})
 
     const res = await api.post(`process/task/${task.id}/complete`, body)
-    console.log('salve')
     setTrigger(!trigger);
   }
 
@@ -93,11 +106,15 @@ const Task = (props) => {
   }
 
   return (
-    <div className={classes.task}>
-      <Typography variant="body2" color="primary" className={classes.label}>Task name: {task.name}</Typography>
-      <Typography variant="body2" color="secondary" className={classes.label}>Variables</Typography>
+    <Paper className={classes.task}>
+      <Typography variant="body2" color="primary" className={classes.label}>{task.name}</Typography>
       {
-        task.variables.map(variable =>  (
+        variables.length ? 
+        <Typography variant="body2" color="secondary" className={classes.label}>Variables</Typography> :
+        null
+      }
+      {
+        variables.map(variable =>  (
           <div key={variable.name}>
             <TextField
                 variant="outlined"
@@ -113,7 +130,7 @@ const Task = (props) => {
         ))
       }
       <Button variant="contained" color="secondary" className={classes.completeButton} onClick={handleCompleteTask}>Complete Task</Button>  
-    </div>
+    </Paper>
   )
 }
 
@@ -128,9 +145,6 @@ const TaskPanel = (props) => {
     async function getTasks() {
       const res = await api.get(`process/${process.id_instance}/tasks`)
       let tasks = res.data;
-
-      console.log(process)
-      
 
       for(const task of tasks) {
         const res = await api.get(`process/${task.id}/form-variables`)
@@ -148,12 +162,16 @@ const TaskPanel = (props) => {
     }
 
     getTasks();
-  }, [trigger])
+  }, [process.id_instance, trigger])
 
 
   return (
     <div className={classes.tasksPanel}>
-      <Typography variant="body2" color="textPrimary" className={classes.label}>Current Tasks</Typography>
+      {
+        tasks.length ? 
+        <Typography variant="body2" color="textPrimary" className={classes.taskPanelTitle}>Current Tasks</Typography> :
+        null
+      }
       {
         tasks.length ? 
         tasks.map(task => <Task key={task.id} task={task} setTrigger={setTrigger} trigger={trigger} />) :
@@ -182,7 +200,7 @@ const ProcessEnded = (props) => {
 
   return (
     <div className={classes.centeredContainer}>
-      <Typography variant="body2" color="textPrimary" className={classes.label}>Process Ended.</Typography>
+      <Typography variant="body2" color="textPrimary" className={classes.label}>Process Ended</Typography>
       <Button variant="contained" color="secondary" className={classes.startButton} > Next Step</Button>  
     </div>
   )
@@ -199,8 +217,6 @@ export const ProcessPanel = (props) => {
         const res = await api.post(`process/${process.id}/start`, { id_definition: process.id_definition })
         setProcess(res.data);
       }
-
-    console.log(process)
 
     return (
         <div className={classes.container}>

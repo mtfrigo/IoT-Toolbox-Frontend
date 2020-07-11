@@ -28,11 +28,7 @@ export const MatchingProvider = ({children}) => {
   }
 
   async function updateProjectBlocks() {
-
-    
     let serializedBlocks = selectedBlocks.map(item => {
-
-
       let serializedBBI = item.selectedBBIs?.map(bbi => {
         return {
           id: bbi.id,
@@ -68,6 +64,7 @@ export const MatchingProvider = ({children}) => {
   }
 
   async function selectRequirement(requirement) {
+
     const alreadySelected = selectedRequirements.findIndex(item => item.id === requirement.id);
 
     if(alreadySelected >= 0) {

@@ -43,7 +43,7 @@ export default function ProcessExecutionPage() {
 
     useEffect(() => {
       setActiveStep(3);
-    }, [])
+    }, [setActiveStep])
 
     useEffect(() => {
         async function getProcess() {
@@ -55,10 +55,7 @@ export default function ProcessExecutionPage() {
           setXML(res3.data.bpmn20Xml)
         }
         getProcess()
-    }, [])
-
-    
-
+    }, [project.id, setProcess])
 
     return (
       <div className={classes.container}>

@@ -25,11 +25,9 @@ import { green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    width: '90%',
-    margin: 20,
+    width: '100%',
     height: 'auto',
     padding: 16,
-    maxWidth: 600
   },
 
   header: {
@@ -51,13 +49,15 @@ const useStyles = makeStyles((theme) => ({
 
   name: {
     fontSize: 20,
+    padding: '5px 10px',
+    fontWeight: 500
   },
 
   selections: {
     display: 'flex',
     flexDirection: 'row',
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 10,
   },
 
   item: {
@@ -112,14 +112,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
 
   buttons: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'flex-end',
     justifyContent: 'flex-end',
+
+
+    alignSelf: 'end',
+    justifySelf: 'end',
   },
 
   btn: {
@@ -259,7 +262,7 @@ const ProjectList = (props) => {
 
         )) : 
         
-        <Typography variant="body1" color="secondary" component="div" className={classes.name}>
+        <Typography variant="body1" color="secondary" component="body2" className={classes.name}>
           You don't have projects. Please create a new one.
         </ Typography>
       }
@@ -414,7 +417,7 @@ export default function HomePage() {
 
       setShowBar(false);
       getCounters();
-    }, [])
+    }, [setShowBar])
 
     const items = [
       { name: 'Projects', total: counters.Projects, icon: <ToysIcon/>, color: '#eb4d48' },
